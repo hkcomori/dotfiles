@@ -1,9 +1,0 @@
-.*~
-*~
-*
-
-!/.emacs.d/init.el
-!/.emacs.d/conf/*
-!/.zshrc
-!/.zsh.d/migemo
-!/.zsh.d/prompt
