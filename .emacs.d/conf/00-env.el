@@ -17,6 +17,13 @@
 				(if (fboundp 'normal-top-level-add-subdirs-to-load-path)
 						(normal-top-level-add-subdirs-to-load-path))))))
 
+;; Close all buffers
+(when (require 'cl nil t)
+	(defun close-all-buffers ()
+		(interactive)
+		(loop for buffer being the buffers
+					do (kill-buffer buffer))))
+
 (defun delete-word (arg)
 	(interactive "p")
 	(delete-region (point) (progn (forward-word arg) (point))))

@@ -77,12 +77,12 @@ SAVEHIST=32768
 #    cd ~/analyze/Matlab_Scripts
 #fi
 
-if [[ ! $EMACS ]]; then
+if [[ $EMACS = "" ]]; then
     if [[ $TERM != "screen" ]]; then
         # setting for no screen
-        if [ `ps uwx| grep 'emacs --daemon'| wc -l` -lt 2 ]; then
-    	/usr/bin/emacs --daemon
-        fi
+        #if [ `ps uwx| grep 'emacs --daemon'| wc -l` -lt 2 ]; then
+    	#/usr/bin/emacs --daemon
+        #fi
         if [ `pwd` = $HOME ]; then
     	screen -x || screen -R
         fi
