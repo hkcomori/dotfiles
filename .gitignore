@@ -1,0 +1,13 @@
+.*~
+*~
+*
+
+!.gitignore
+!/.emacs.d/
+!/.emacs.d/init.el
+!/.emacs.d/conf/
+!/.emacs.d/conf/*
+!/.zshrc
+!/.zsh.d/
+!/.zsh.d/migemo
+!/.zsh.d/prompt
