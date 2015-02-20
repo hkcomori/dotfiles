@@ -1,0 +1,9 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: new_function
+# key: newfunc
+# binding: direct-keybinding
+# --
+${1:MYSTATIC	}${2:void}	${3:func}( ${4:void} )
+{
+	$0
+}

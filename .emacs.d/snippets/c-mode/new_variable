@@ -1,0 +1,6 @@
+# -*- mode: snippet; require-final-newline: nil -*-
+# name: new_variable
+# key: newvar
+# binding: direct-keybinding
+# --
+${1:MYSTATIC	}${2:u_short}	${3:mi_us$0}

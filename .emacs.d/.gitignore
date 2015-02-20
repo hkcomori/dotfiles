@@ -1,0 +1,10 @@
+/*
+*~
+
+!.gitignore
+!/init.el
+!/conf/
+!/conf/*.el
+!/conf/*.elc
+!/snippets/
+!/snippets/**/*
