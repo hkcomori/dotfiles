@@ -4,15 +4,18 @@
 ;;; @ shell                                                         ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
   ;; setting for japanese
-  (set-terminal-coding-system 'cp932)
-  (set-keyboard-coding-system 'cp932)
-  (set-buffer-file-coding-system 'cp932-dos)
-  (setq file-name-coding-system 'cp932)
-  (setq default-buffer-file-coding-system 'cp932)
-  (prefer-coding-system 'cp932-dos)    ; 文字コード認識優先順位1
-  (prefer-coding-system 'utf-8)        ; 文字コード認識優先順位2
-  (set-default-coding-systems 'cp932)
-
+  (set-default-coding-systems 'cp932-dos)				;デフォルトの文字コード
+  (prefer-coding-system 'cp932-dos)							;テキストファイル／新規バッファの文字コード
+  (set-file-name-coding-system 'utf-8-unix)			;ファイル名の文字コード
+  (set-keyboard-coding-system 'utf-8-unix)			;キーボード入力の文字コード
+  ;; (set-terminal-coding-system 'cp932)
+  ;; (set-keyboard-coding-system 'cp932)
+  ;; (set-buffer-file-coding-system 'cp932-dos)
+  ;; (setq file-name-coding-system 'cp932)
+  ;; (setq default-buffer-file-coding-system 'cp932)
+  ;; (prefer-coding-system 'cp932-dos)    ; 文字コード認識優先順位1
+  ;; (prefer-coding-system 'utf-8)        ; 文字コード認識優先順位2
+  ;; (set-default-coding-systems 'cp932)
 
   (if (and (require 'shell nil t) (executable-find "zsh"))
 			(lambda ()
@@ -28,7 +31,6 @@
 		)
 
   (modify-coding-system-alist 'process ".*sh\\.exe" 'utf-8)
-
 
   ;; YaTeX-mode
   ;; (setq auto-mode-alist  (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
