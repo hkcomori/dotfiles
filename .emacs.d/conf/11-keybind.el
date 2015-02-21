@@ -1,3 +1,4 @@
+(when system-type (global-set-key (kbd "C-x C-c") 'close-all-buffers))				;バッファをすべて閉じる
 (global-set-key (kbd "C-x :") 'goto-line)				;指定行に移動する
 ;(global-set-key (kbd "C-x C-b") 'bs-show)				;bs-showでバッファ選択する。
 (global-set-key (kbd "C-z") nil)						;何もしない

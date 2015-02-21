@@ -33,8 +33,8 @@
 
 (font-lock-add-keywords
  'c-mode '(
-					 ("\\<\\(i\\|mi\\)_[a-zA-Z]+\\>" . 'font-lock-variable-name-face)
-					 ("Intcrl\\(Enable\\|Disable\\)AllInterrupt" . 'font-lock-keyword-face)
+					 ("\\<m?i_[a-zA-Z]+\\>" . 'font-lock-variable-name-face)
+					 ("\\<Intcrl\\(Enable\\|Disable\\)AllInterrupt\\>()" . 'font-lock-keyword-face)
 					 ("\\<MYSTATIC\\>" . 'font-lock-type-face)
 					 ("\\<\\(ST\\|EM\\)_[a-zA-Z_]+\\>" . 'font-lock-type-face)
 					 ("\\<[A-Z][A-Z_]+[A-Z]\\>" . 'font-lock-constant-face)
