@@ -23,7 +23,7 @@
 		(setq whitespace-space-regexp "\\(\x3000+\\)")
 		(setq whitespace-display-mappings
 					'((space-mark ?\x3000 [?\u25a1])
-						(tab-mark	 ?\t	 [?\xBB ?\t])
+						(tab-mark	 ?\t	 [?\t])
 						))
 		(set-face-foreground	'whitespace-tab (face-attribute 'font-lock-comment-face :foreground))
 		(set-face-underline	'whitespace-tab t)
