@@ -3,8 +3,9 @@
 *~
 
 !.gitignore
+
 !/.emacs.d/
-!/.zshrc
 !/.zsh.d/
-!/.zsh.d/migemo
-!/.zsh.d/prompt
+
+!/.zshrc
+!/.aliases

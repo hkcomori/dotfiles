@@ -1,0 +1,28 @@
+#!/bin/sh
+# -*- SH -*-
+
+export LC_ALL=ja_JP.UTF-8
+
+## alias
+alias ls='ls -h --color=always'
+alias la='ls -a'
+#alias rm='trash-put'
+alias emacs='/usr/bin/emacsclient -n --socket-name=~/.emacs.d/server --alternate-editor=/usr/bin/emacs24'
+alias isomount='fuseiso'
+alias sshfs='sshfs -o allow_root -o reconnect'
+alias umount='fusermount -u'
+alias akapusu='wakeonlan -i 192.168.24.255 00:24:1d:10:23:87'
+
+alias cpuinfo='watch cat /proc/cpuinfo'
+alias iostat='watch "/usr/bin/iostat | cat - /proc/mdstat"'
+alias hddtemp='watch hddtemp /dev/sd[a-e]'
+alias rtcwake='rtcwake -l'
+
+alias diced='/usr/local/bin/DiCE/diced |nkf -uw'
+
+# MATLAB R2010b
+alias matlab='/usr/local/MATLAB/R2010b/bin/matlab -nodisplay'
+alias gmatlab='/usr/local/MATLAB/R2010b/bin/matlab'
+alias lmstart='/usr/local/MATLAB/R2010b/etc/lmstart'
+
+export EDITOR=emacs
