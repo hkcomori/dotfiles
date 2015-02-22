@@ -9,5 +9,7 @@
 !/.zsh.d/
 
 !/.aliases
+!/.profile
 !/.screenrc
+!/.zlogout
 !/.zshrc
