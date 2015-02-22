@@ -3,6 +3,7 @@
 *~
 
 !.gitignore
+!.gitkeep
 
 !/.emacs.d/
 !/.mpd/

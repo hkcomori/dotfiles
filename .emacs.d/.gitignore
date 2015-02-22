@@ -1,8 +1,6 @@
 /*
 *~
 
-!.gitignore
-
 !/init.el
 !/conf/
 !/conf/*.el

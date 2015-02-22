@@ -54,11 +54,11 @@
 
 (defun my/byte-recompile-conf ()
 	(interactive)
-	(byte-recompile-file (concat user-emacs-directory "init.el") 0)
+	(byte-compile-file (concat user-emacs-directory "init.el") 0)
 	(byte-recompile-directory (concat user-emacs-directory "conf") 0)
 	(byte-recompile-directory (concat user-emacs-directory "elisp") 0)
 	)
-(add-hook 'kill-emacs-query-functions (my/byte-recompile-conf))
+(add-hook 'kill-emacs-query-functions 'my/byte-recompile-conf)
 
 (defun delete-word (arg)
 	(interactive "p")
