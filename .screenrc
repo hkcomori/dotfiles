@@ -1,0 +1,68 @@
+startup_message off
+autodetach on
+
+defencoding utf-8
+encoding utf-8 utf-8
+escape ^]t
+
+hardstatus on
+#caption always '%?%F%{= Dd}%:%{= Kk}%?[%02n]%f%07=%t%=|%`%-w[%{=r}%n %t]%{-}%+w|'
+#hardstatus alwayslastline "GNU Screen |%`%-w%{=r}%n %t%{-}%+w| %= [%l][$USER@%H]"
+#caption always "%`%-w%{= Wk}%n %t%{-}%+w | %= [%l][$USER@%H]"
+
+hardstatus alwayslastline "%{= kW}[$USER@%H] %L=%-w%45L>%{= Wk}%n %2t%{-} %<%+w%-32<%=| %l | %m/%d %02c "
+caption always "%?%F%{= ck}%:%{= kW}%?[screen #%2n] %t"
+
+altscreen on
+defmonitor off
+vbell off
+
+#maxwin 9
+defscrollback 10000
+
+shell -$SHELL
+
+# our xterm has colors! (rxvt, too)
+termcap  xterm* 'AF=\E[3%dm:AB=\E[4%dm'
+terminfo xterm* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
+termcap  kterm* 'AF=\E[3%dm:AB=\E[4%dm'
+terminfo kterm* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
+termcap  vt100 'AF=\E[3%dm:AB=\E[4%dm'
+terminfo vt100* 'AF=\E[3%p1%dm:AB=\E[4%p1%dm'
+
+################################################################
+# key bind
+################################################################
+bind r source ~/.screenrc
+bind s colon 'screen 1 ssh '
+bind w windowlist -b
+bind t screen 1
+
+bind c copy
+bind y paste .
+
+# Copy-mode as Emacs like keybinds
+markkeys h=^b:l=^f:0=^a:j=^n:k=^p:$=^e:^d=^v:' '=^@
+bindkey -m ^k stuff ' $ '
+bindkey -m ^g stuff !
+bindkey -m ^[b stuff B
+bindkey -m ^[f stuff E
+
+bindkey -k kb stuff ^H
+
+# control + left; previous screen window
+bindkey "^^[[C" prev
+# control + right; next screen window
+bindkey "^^[[D" next
+# control + up; previous split screen
+bindkey "^^[[A" focus prev
+# control + down; next split screen
+bindkey "^^[[B" focus next
+# F1 Split horizontally
+bindkey -k k1 only
+# F3 Split horizontally
+bindkey -k k2 split
+# F4 Split vertically
+bindkey -k k3 split -v
+
+screen 1

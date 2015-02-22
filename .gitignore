@@ -5,7 +5,9 @@
 !.gitignore
 
 !/.emacs.d/
+!/.mpd/
 !/.zsh.d/
 
-!/.zshrc
 !/.aliases
+!/.screenrc
+!/.zshrc

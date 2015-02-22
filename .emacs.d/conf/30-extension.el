@@ -67,7 +67,10 @@
 )
 
 ;;カーソル位置の保存
-(when (require 'saveplace nil t) (setq-default save-place t))
+(when (require 'saveplace nil t)
+	(setq-default save-place t)
+	(setq save-place-file (concat user-emacs-directory ".emacs-plases"))
+)
 
 ;; 鬼軍曹モード
 ;(when (require 'drill-instructor nil t)
