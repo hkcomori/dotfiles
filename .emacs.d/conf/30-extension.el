@@ -32,10 +32,14 @@
 
 ;; ファイルの履歴
 (when (require 'recentf nil t)
-	(recentf-mode t)
 	;;(setq recentf-exclude '("^\\.emacs\\.bmk$"))
 	(setq recentf-max-menu-items 10)
-	(setq recentf-max-saved-items 50)
+	(setq recentf-max-saved-items 2000)
+	(setq recentf-save-file (expand-file-name ".recentf" user-emacs-directory))
+	(setq recentf-exclude '(".recentf"))
+	(setq recentf-auto-cleanup 10)
+	(setq recentf-auto-save-timer (run-with-idle-timer 30 t 'recentf-save-list))
+	(recentf-mode t)
 )
 
 ;; undo履歴を強化
