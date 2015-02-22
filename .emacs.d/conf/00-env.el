@@ -19,10 +19,46 @@
 
 ;; Close all buffers
 (when (require 'cl nil t)
-	(defun close-all-buffers ()
+	(defun my/close-all-buffers ()
 		(interactive)
 		(loop for buffer being the buffers
 					do (kill-buffer buffer))))
+
+;; 変更されてないバッファを全部閉じる
+;; http://qiita.com/amanoiverse/items/a3a605015d35c37efe2b
+(defun my/close-all-unmodified-buffer ()
+	(interactive)
+	(let ((buffers (buffer-list)))
+		(mapcar
+		 #'(lambda (buf)
+				 (if (and (not (buffer-modified-p buf))
+									(not (string-match "^\\*\\(scratch\\|Messages\\|init log\\|terminal.*\\)\\*$" (buffer-name buf))))
+						 (kill-buffer buf)))
+		 buffers)
+		))
+
+(defun my/byte-compile-conf ()
+	(interactive)
+	(byte-compile-file (concat user-emacs-directory "init.el"))
+	(byte-compile-file (concat user-emacs-directory "conf/00-env.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/01-aliases.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/10-common.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/11-keybind.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/20-linux.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/21-windows.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/30-extension.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/40-cc-mode.el") 0)
+	(byte-compile-file (concat user-emacs-directory "conf/90-gui.el") 0)
+	(byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+	)
+
+(defun my/byte-recompile-conf ()
+	(interactive)
+	(byte-recompile-file (concat user-emacs-directory "init.el") 0)
+	(byte-recompile-directory (concat user-emacs-directory "conf") 0)
+	(byte-recompile-directory (concat user-emacs-directory "elisp") 0)
+	)
+(add-hook 'kill-emacs-query-functions (my/byte-recompile-conf))
 
 (defun delete-word (arg)
 	(interactive "p")
@@ -46,8 +82,8 @@
 	(let ((col (current-column)))
 		(save-excursion
 			(forward-line)
-			(transpose-lines -1))
-		(previous-line)
+			(transpose-lines -1)
+			(when nt-p (forward-line -1)))
 		(move-to-column col)))
 
 (defun file-root-p (filename)
