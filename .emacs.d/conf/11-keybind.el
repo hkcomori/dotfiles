@@ -5,7 +5,7 @@
 (global-set-key (kbd "C-h") 'delete-backward-char)		;前の文字を消す
 (global-set-key (kbd "M-d") 'delete-word)				;次の単語を消す
 (global-set-key (kbd "M-h") 'backward-delete-word)		;前の単語を消す
-(global-set-key (kbd "M-C-g") 'grep-find)				;カレントディレクトリ以下をGrep検索
+(global-set-key (kbd "M-g") 'grep-find)				;カレントディレクトリ以下をGrep検索
 (global-set-key (kbd "C-c a") 'align)					;アラインメント
 (global-set-key [f3] 'isearch-forward)
 (global-set-key [S-f3] 'isearch-backward)

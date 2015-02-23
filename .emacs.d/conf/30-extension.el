@@ -23,14 +23,9 @@
 )
 
 ;; mozc
-(when (require 'mozc nil t)
+(when (and linux-p (require 'mozc nil t))
 	(setq default-input-method "japanese-mozc")
 	(setq mozc-candidate-style 'overlay)
-)
-
-; ウィンドウ管理モードを有効にする
-(when (require 'e2wm nil t)
-	(global-set-key (kbd "M-+") 'e2wm:start-management)
 )
 
 (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
@@ -66,8 +61,8 @@ do nothing. And suppress the output from `message' and
 	(setq recentf-max-saved-items 2000)
 	(setq recentf-save-file (expand-file-name ".recentf" user-emacs-directory))
 	(setq recentf-exclude '(".recentf"))
-	(setq recentf-auto-cleanup 10)
-	(setq recentf-auto-save-timer (run-with-idle-timer 60 t 'recentf-save-list))
+	(setq recentf-auto-cleanup 60)
+	(setq recentf-auto-save-timer (run-with-idle-timer 900 t 'recentf-save-list))
 	(recentf-mode t)
 )
 
@@ -104,10 +99,6 @@ do nothing. And suppress the output from `message' and
 	(setq-default save-place t)
 	(setq save-place-file (concat user-emacs-directory ".emacs-plases"))
 )
-
-;; 鬼軍曹モード
-;(when (require 'drill-instructor nil t)
-;  (setq drill-instructor-global t))
 
 ;; diredを便利にする
 (when (require 'dired-x nil t))
