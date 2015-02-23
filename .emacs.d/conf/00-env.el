@@ -81,8 +81,8 @@
 	(let ((col (current-column)))
 		(save-excursion
 			(forward-line)
-			(transpose-lines -1)
-			(when nt-p (forward-line -1)))
+			(transpose-lines -1))
+		(when nt-p (forward-line -1))
 		(move-to-column col)))
 
 (defun file-root-p (filename)
