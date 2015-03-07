@@ -28,8 +28,18 @@
 	(setq mozc-candidate-style 'overlay)
 )
 
+;; summarye
+(when (require 'summarye nil t)
+	(define-key mode-specific-map "l" 'se/make-summary-buffer)
+	)
+
 (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
 (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
+
+;; magit
+(when (require 'magit nil t)
+	(define-key mode-specific-map "m" 'magit-status)
+	)
 
 ;; ファイルの履歴
 (when (require 'recentf nil t)
@@ -109,7 +119,9 @@ do nothing. And suppress the output from `message' and
 )
 
 ;; grep結果を編集可能にする
-(when (require 'wgrep nil t))
+(when (require 'wgrep nil t)
+	(define-key grep-mode-map "e" 'wgrep-change-to-wgrep-mode)
+)
 
 (global-unset-key "\C-t")
 (when (require 'multiple-cursors nil t)
@@ -131,30 +143,48 @@ do nothing. And suppress the output from `message' and
 	  'my/mc--insert-number-and-increase
 	  cursor)))
 	(defun my/mc--insert-number-and-increase ()
-	(interactive)
-	(insert (format my/mc/insert-numbers-pad mc--insert-numbers-number))
-	(setq mc--insert-numbers-number (+ mc--insert-numbers-number my/mc/insert-numbers-inc)))
-	;; keybind
+		(interactive)
+		(insert (format my/mc/insert-numbers-pad mc--insert-numbers-number))
+		(setq mc--insert-numbers-number (+ mc--insert-numbers-number my/mc/insert-numbers-inc)))
+	(defun mc/mark-next-like-this-and-cycle-forward ()
+		(interactive)
+		(mc/mark-next-like-this 1)
+		(mc/cycle-forward))
+	(defun mc/mark-previous-like-this-and-cycle-backward ()
+		(interactive)
+		(mc/mark-previous-like-this 1)
+		(mc/cycle-backward))
+	;; multiple-cursors使用時に一回のみ実行する関数の設定
+	(add-to-list 'mc--default-cmds-to-run-once 'my/mc/insert-numbers)
+	(add-to-list 'mc--default-cmds-to-run-once 'my/mc--insert-number-and-increase)
+	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-next-like-this-and-cycle-forward)
+	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
+	(when (require 'smartrep nil t)
+		;; smartrepによるコマンド実行中はキー入力をエコーしない
+		;; http://shakenbu.org/yanagi/d/?date=20140105
+		(defadvice smartrep-map-internal (around smartrep-silence-echo-keystrokes activate)
+			(let ((echo-keystrokes 0)) ad-do-it))
+		(declare-function smartrep-define-key "smartrep")
+		(smartrep-define-key global-map "C-t"
+			'(("C-t" . 'mc/mark-next-like-this-and-cycle-forward)
+				("n"   . 'mc/mark-next-like-this-and-cycle-forward)
+				("p"   . 'mc/mark-previous-like-this-and-cycle-backward)
+				("C-v" . 'mc/cycle-forward)
+				("M-v" . 'mc/cycle-backward)
+				("m"   . 'mc/mark-more-like-this-extended)
+				("u"   . 'mc/unmark-next-like-this)
+				("U"   . 'mc/unmark-previous-like-this)
+				("s"   . 'mc/skip-to-next-like-this)
+				("S"   . 'mc/skip-to-previous-like-this)
+				("a"   . 'mc/mark-all-like-this)
+				("d"   . 'mc/mark-all-like-this-dwim)
+				("i"   . 'my/mc/insert-numbers)
+				("o"   . 'mc/sort-regions)
+				("O"   . 'mc/reverse-regions)))
+		)
 	(global-set-key (kbd "C-M-c") 'mc/edit-lines)
 	(global-set-key (kbd "C-M-r") 'mc/mark-all-in-region)
-	(when (require 'smartrep nil t)
-		(declare-function smartrep-define-key "smartrep")
-	(smartrep-define-key global-map "C-t"
-		'(("C-t"      . 'mc/mark-next-like-this)
-			("n"        . 'mc/mark-next-like-this)
-			("p"        . 'mc/mark-previous-like-this)
-			("m"        . 'mc/mark-more-like-this-extended)
-			("u"        . 'mc/unmark-next-like-this)
-			("U"        . 'mc/unmark-previous-like-this)
-			("s"        . 'mc/skip-to-next-like-this)
-			("S"        . 'mc/skip-to-previous-like-this)
-			("a"        . 'mc/mark-all-like-this)
-			("d"        . 'mc/mark-all-like-this-dwim)
-			("i"        . 'my/mc/insert-numbers)
-			("o"        . 'mc/sort-regions)
-			("O"        . 'mc/reverse-regions)))
-  )
-)
+	)
 
 ;;Anything
 (when (require 'anything nil t)
