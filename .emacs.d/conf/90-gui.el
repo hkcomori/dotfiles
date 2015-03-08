@@ -5,12 +5,6 @@
 	(scroll-bar-mode -1)						 ;;スクロールバーを非表示
 	(setq frame-title-format (list "%b - Emacs@" (system-name)))
 
-	(load-theme 'monokai t)
-	(set-face-background 'default "black")
-	(set-face-background 'fringe (face-attribute 'default :background))
-	(set-face-background 'region "white")
-	(set-face-foreground 'region "black")
-
 	(when (require 'whitespace nil t)
 		(global-whitespace-mode 1)
 		(setq whitespace-style '(
@@ -26,16 +20,12 @@
 						(tab-mark	 ?\t	 [?\t])
 						))
 		(set-face-foreground	'whitespace-tab (face-attribute 'font-lock-comment-face :foreground))
-		(set-face-underline	'whitespace-tab t)
+		(set-face-background	'whitespace-tab (face-attribute 'default :background))
+		(set-face-underline		'whitespace-tab t)
 		(set-face-foreground	'whitespace-space (face-attribute 'font-lock-comment-face :foreground))
-		(set-face-underline	'whitespace-space t)
+		(set-face-background	'whitespace-space (face-attribute 'default :background))
+		(set-face-underline		'whitespace-space t)
 		)
-
-	(when (require 'hiwin nil t)
-		(hiwin-activate)		 ;hiwin-modeを有効化
-		(set-face-background 'hiwin-face "#272822")
-		)
-	(face-attribute 'default :background)
 
 	(when linux-p
 		(setq initial-frame-alist
@@ -45,13 +35,13 @@
 										)
 									initial-frame-alist))
 		;; デフォルト フォント
-		(set-face-attribute 'default nil							:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'default nil				:family "DejaVu Sans Mono" :height 90)
 		;; プロポーショナル フォント
-		(set-face-attribute 'variable-pitch nil			:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'variable-pitch nil	:family "DejaVu Sans Mono" :height 90)
 		;; 等幅フォント
-		(set-face-attribute 'fixed-pitch nil					:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'fixed-pitch nil		:family "DejaVu Sans Mono" :height 90)
 		;; ツールチップ表示フォント
-		(set-face-attribute 'tooltip nil							:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'tooltip nil				:family "DejaVu Sans Mono" :height 90)
 		)
 	(when nt-p
 		(setq initial-frame-alist
@@ -61,23 +51,21 @@
 										)
 									initial-frame-alist))
 		;; デフォルト フォント
-		(set-face-attribute 'default nil							:family "Migu 1M" :height 100)
+		(set-face-attribute 'default nil				:family "Migu 1M" :height 100)
 		;; プロポーショナル フォント
-		(set-face-attribute 'variable-pitch nil			:family "Migu 1M" :height 100)
+		(set-face-attribute 'variable-pitch nil	:family "Migu 1M" :height 100)
 		;; 等幅フォント
-		(set-face-attribute 'fixed-pitch nil					:family "Migu 1M" :height 100)
+		(set-face-attribute 'fixed-pitch nil		:family "Migu 1M" :height 100)
 		;; ツールチップ表示フォント
-		(set-face-attribute 'tooltip nil							:family "Migu 1M" :height 100)
+		(set-face-attribute 'tooltip nil				:family "Migu 1M" :height 100)
 
 		;; フォントサイズ調整
-		(global-set-key (kbd "C-<wheel-up>")					'(lambda() (interactive) (text-scale-increase 1)))
-		(global-set-key (kbd "C-=")									'(lambda() (interactive) (text-scale-increase 1)))
-		(global-set-key (kbd "C-<wheel-down>")				'(lambda() (interactive) (text-scale-decrease 1)))
-		(global-set-key (kbd "C--")									'(lambda() (interactive) (text-scale-decrease 1)))
+		(global-set-key (kbd "C-<wheel-up>")		'(lambda() (interactive) (text-scale-increase 1)))
+		(global-set-key (kbd "C-=")							'(lambda() (interactive) (text-scale-increase 1)))
+		(global-set-key (kbd "C-<wheel-down>")	'(lambda() (interactive) (text-scale-decrease 1)))
+		(global-set-key (kbd "C--")							'(lambda() (interactive) (text-scale-decrease 1)))
 
 		;; フォントサイズ リセット
 		(global-set-key (kbd "M-0") '(lambda() (interactive) (text-scale-set 0)))
 		)
-
-	(global-hl-line-mode)										;カーソル行をハイライト
 )
