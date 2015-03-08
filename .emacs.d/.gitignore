@@ -4,5 +4,8 @@
 !/init.el
 !/conf/
 !/conf/*.el
+!/conf/
+!/elisp/
+!/elisp/themes/
 !/snippets/
 !/snippets/**/*
