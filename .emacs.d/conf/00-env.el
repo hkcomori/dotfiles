@@ -37,6 +37,15 @@
 		 buffers)
 		))
 
+;; カレントバッファのファイルをバイトコンパイル
+;; http://ergoemacs.org/emacs/emacs_byte_compile.html
+(defun byte-compile-current-buffer ()
+	"`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
+	(interactive)
+	(when (and (eq major-mode 'emacs-lisp-mode)
+						 (file-exists-p (byte-compile-dest-file buffer-file-name)))
+		(byte-compile-file buffer-file-name)))
+
 (defun my/byte-compile-conf ()
 	(interactive)
 	(byte-compile-file (concat user-emacs-directory "init.el"))
@@ -177,14 +186,14 @@
 ;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
 (when linux-p
 	(add-to-load-path
-	 "elpa"								;ELPAでインストールしたElisp
-	 "elisp"							;手動でインストールしたElisp
+	 "elpa"																;ELPAでインストールしたElisp
+	 "elisp"															;手動でインストールしたElisp
 	 )
 	)
 (when nt-p
 	(add-to-load-path
-	 "elpa"								;ELPAでインストールしたElisp
-	 "elisp"								;手動でインストールしたElisp
-	 "site-lisp"							;gnupack標準
+	 "elpa"																;ELPAでインストールしたElisp
+	 "elisp"															;手動でインストールしたElisp
+	 "site-lisp"													;gnupack標準
 	 )
 	)
