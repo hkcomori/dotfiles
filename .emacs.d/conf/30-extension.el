@@ -89,6 +89,7 @@ do nothing. And suppress the output from `message' and
 
 ;; auto-complete
 (when (require 'auto-complete nil t)
+	(defvar myext-auto-complete t)
 	(global-auto-complete-mode t)			;自動補完を常に有効
 	(setq ac-auto-show-menu 0.3)			;候補が出るまでの時間 (default: 0.8)
 	;;(when (require 'auto-complete-clang nil t)
@@ -159,6 +160,14 @@ do nothing. And suppress the output from `message' and
 	(add-to-list 'mc--default-cmds-to-run-once 'my/mc--insert-number-and-increase)
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-next-like-this-and-cycle-forward)
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
+	;; auto-completeと併用するための設定
+	(when myext-auto-complete
+		(add-hook 'multiple-cursors-mode-enabled-hook 'auto-complete-mode)
+		(add-hook 'multiple-cursors-mode-disabled-hook 'auto-complete-mode)
+		(add-to-list 'mc--default-cmds-to-run-once 'ac-next)
+		(add-to-list 'mc--default-cmds-to-run-once 'ac-previous)
+		(add-to-list 'mc--default-cmds-to-run-once 'ac-expand)
+		)
 	(when (require 'smartrep nil t)
 		;; smartrepによるコマンド実行中はキー入力をエコーしない
 		;; http://shakenbu.org/yanagi/d/?date=20140105
