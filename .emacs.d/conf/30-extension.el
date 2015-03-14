@@ -162,11 +162,7 @@ do nothing. And suppress the output from `message' and
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
 	;; auto-completeと併用するための設定
 	(when myext-auto-complete
-		(add-hook 'multiple-cursors-mode-enabled-hook 'auto-complete-mode)
 		(add-hook 'multiple-cursors-mode-disabled-hook 'auto-complete-mode)
-		(add-to-list 'mc--default-cmds-to-run-once 'ac-next)
-		(add-to-list 'mc--default-cmds-to-run-once 'ac-previous)
-		(add-to-list 'mc--default-cmds-to-run-once 'ac-expand)
 		)
 	(when (require 'smartrep nil t)
 		;; smartrepによるコマンド実行中はキー入力をエコーしない
