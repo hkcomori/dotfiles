@@ -4,6 +4,7 @@
 	(tool-bar-mode -1)							 ;;ツールバーを非表示
 	(scroll-bar-mode -1)						 ;;スクロールバーを非表示
 	(setq frame-title-format (list "%b - Emacs@" (system-name)))
+	(set-face-background 'fringe (face-attribute 'default :background))
 
 	(when (require 'whitespace nil t)
 		(global-whitespace-mode 1)
