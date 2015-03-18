@@ -22,12 +22,6 @@
 		)
 )
 
-;; mozc
-;; (when (and linux-p (require 'mozc nil t))
-;; 	(setq default-input-method "japanese-mozc")
-;; 	(setq mozc-candidate-style 'overlay)
-;; )
-
 ;; summarye
 (when (require 'summarye nil t)
 	(define-key mode-specific-map "l" 'se/make-summary-buffer)
@@ -133,7 +127,6 @@ do nothing. And suppress the output from `message' and
 	(define-key grep-mode-map "e" 'wgrep-change-to-wgrep-mode)
 )
 
-(global-unset-key "\C-t")
 (when (require 'multiple-cursors nil t)
 	;; insert specific serial number
 	(defvar my/mc/insert-numbers-hist nil)
@@ -180,6 +173,7 @@ do nothing. And suppress the output from `message' and
 		(defadvice smartrep-map-internal (around smartrep-silence-echo-keystrokes activate)
 			(let ((echo-keystrokes 0)) ad-do-it))
 		(declare-function smartrep-define-key "smartrep")
+		(global-unset-key "\C-t")
 		(smartrep-define-key global-map "C-t"
 			'(("C-t" . 'mc/mark-next-like-this-and-cycle-forward)
 				("n"   . 'mc/mark-next-like-this-and-cycle-forward)
