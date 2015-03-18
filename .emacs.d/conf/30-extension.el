@@ -4,7 +4,7 @@
 	(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 	(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 	;; Initialize
-	(package-initialize)
+	;; (package-initialize)
 )
 
 ;; melpa.el
@@ -23,22 +23,29 @@
 )
 
 ;; mozc
-(when (and linux-p (require 'mozc nil t))
-	(setq default-input-method "japanese-mozc")
-	(setq mozc-candidate-style 'overlay)
-)
+;; (when (and linux-p (require 'mozc nil t))
+;; 	(setq default-input-method "japanese-mozc")
+;; 	(setq mozc-candidate-style 'overlay)
+;; )
 
 ;; summarye
 (when (require 'summarye nil t)
 	(define-key mode-specific-map "l" 'se/make-summary-buffer)
 	)
 
+;; Arduino
 (setq auto-mode-alist (cons '("\\.\\(pde\\|ino\\)$" . arduino-mode) auto-mode-alist))
 (autoload 'arduino-mode "arduino-mode" "Arduino editing mode." t)
 
-;; magit
+;; Magit
 (when (require 'magit nil t)
 	(define-key mode-specific-map "m" 'magit-status)
+	)
+
+;; point-undo
+(when (require 'point-undo nil t)
+	(define-key global-map [f7] 'point-undo)
+	(define-key global-map [S-f7] 'point-redo)
 	)
 
 ;; ファイルの履歴
