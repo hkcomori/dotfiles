@@ -90,10 +90,12 @@ do nothing. And suppress the output from `message' and
 ;; auto-complete
 (when (require 'auto-complete nil t)
 	(defvar myext-auto-complete t)
+	(defun my/ac-mode-enable ()
+		(auto-complete-mode t))
+	(defun my/ac-mode-disable ()
+		(auto-complete-mode -1))
 	(global-auto-complete-mode t)			;自動補完を常に有効
 	(setq ac-auto-show-menu 0.3)			;候補が出るまでの時間 (default: 0.8)
-	;;(when (require 'auto-complete-clang nil t)
-	;;)
 )
 
 ;; howm
@@ -162,7 +164,8 @@ do nothing. And suppress the output from `message' and
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
 	;; auto-completeと併用するための設定
 	(when myext-auto-complete
-		(add-hook 'multiple-cursors-mode-disabled-hook 'auto-complete-mode)
+		(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
+		(add-hook 'multiple-cursors-mode-disabled-hook 'my/ac-mode-enable)
 		)
 	(when (require 'smartrep nil t)
 		;; smartrepによるコマンド実行中はキー入力をエコーしない
