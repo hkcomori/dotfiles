@@ -52,23 +52,11 @@
   ;;(setq-default w32-ime-mode-line-state-indicator "[Aa] ")
   ;;(setq w32-ime-mode-line-state-indicator-list '("[Aa]" "[あ]" "[Aa]"))
   ;;
-;;;; IME初期化
-  ;;(w32-ime-initialize)
-  ;;
-;;;; デフォルトIME
-  ;;(setq default-input-method "W32-IME")
-  ;;
-;;;; IME変更
-  ;;(global-set-key (kbd "C-\\") 'toggle-input-method)
-  ;;
-;;;; 漢字/変換キー入力時のエラーメッセージ抑止
-  ;;(global-set-key (kbd "<A-kanji>") 'ignore)
-  ;;(global-set-key (kbd "<M-kanji>") 'ignore)
-  ;;(global-set-key (kbd "<kanji>") 'ignore)
-  ;;
-  ;;
-  ;;
-  ;;
+	;; デフォルトIME
+  (setq default-input-method "W32-IME")
+	;; IME初期化
+  (w32-ime-initialize)
+  
 ;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;;;; @ screen - frame                                                ;;;
 ;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
@@ -157,133 +145,50 @@
   ;;(setq eol-mnemonic-undecided ":??? ") 
   ;;
   ;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-;;;;; @ screen - cursor                                               ;;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-  ;;
-;;;; カーソルの点滅
-  ;;(blink-cursor-mode 0)
-  ;;
-;;;; 非アクティブウィンドウのカーソル表示
-  ;;(setq-default cursor-in-non-selected-windows t)
-  ;;
-;;;; IME無効／有効時のカーソルカラー定義
-  ;;(unless (facep 'cursor-ime-off)
-  ;;  (make-face 'cursor-ime-off)
-  ;;  (set-face-attribute 'cursor-ime-off nil
-  ;;                      :background "DarkRed" :foreground "White")
-  ;;  )
-  ;;(unless (facep 'cursor-ime-on)
-  ;;  (make-face 'cursor-ime-on)
-  ;;  (set-face-attribute 'cursor-ime-on nil
-  ;;                      :background "DarkGreen" :foreground "White")
-  ;;  )
-  ;;
-;;;; IME無効／有効時のカーソルカラー設定
-  ;;(add-hook
-  ;; 'input-method-inactivate-hook
-  ;; '(lambda()
-  ;;    (if (facep 'cursor-ime-off)
-  ;;        (let ( (fg (face-attribute 'cursor-ime-off :foreground))
-  ;;               (bg (face-attribute 'cursor-ime-off :background)) )
-  ;;          (set-face-attribute 'cursor nil :foreground fg :background bg)
-  ;;          )
-  ;;      )
-  ;;    )
-  ;; )
-  ;;(add-hook
-  ;; 'input-method-activate-hook
-  ;; '(lambda()
-  ;;    (if (facep 'cursor-ime-on)
-  ;;        (let ( (fg (face-attribute 'cursor-ime-on :foreground))
-  ;;               (bg (face-attribute 'cursor-ime-on :background)) )
-  ;;          (set-face-attribute 'cursor nil :foreground fg :background bg)
-  ;;          )
-  ;;      )
-  ;;    )
-  ;; )
-  ;;
-;;;; バッファ切り替え時の状態引継ぎ設定
-  ;;(setq w32-ime-buffer-switch-p nil)
-  ;;
-  ;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-;;;;; @ search - isearch                                              ;;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-  ;;
-;;;; 大文字・小文字を区別しないでサーチ
-  ;;(setq-default case-fold-search nil)
-  ;;
-;;;; インクリメント検索時に縦スクロールを有効化
-  ;;(setq isearch-allow-scroll nil)
-  ;;
-;;;; C-dで検索文字列を一文字削除
-  ;;(define-key isearch-mode-map (kbd "C-d") 'isearch-delete-char)
-  ;;
-;;;; C-yで検索文字列にヤンク貼り付け
-  ;;(define-key isearch-mode-map (kbd "C-y") 'isearch-yank-kill)
-  ;;
-;;;; C-eで検索文字列を編集
-  ;;(define-key isearch-mode-map (kbd "C-e") 'isearch-edit-string)
-  ;;
-;;;; Tabで検索文字列を補完
-  ;;(define-key isearch-mode-map (kbd "TAB") 'isearch-yank-word)
-  ;;
-;;;; C-gで検索を終了
-  ;;(define-key isearch-mode-map (kbd "C-g")
-  ;;  '(lambda() (interactive) (isearch-done)))
-  ;;
-;;;; 日本語の検索文字列をミニバッファに表示
-  ;;(define-key isearch-mode-map (kbd "<compend>")
-  ;;  '(lambda() (interactive) (isearch-update)))
-  ;;(define-key isearch-mode-map (kbd "<kanji>")
-  ;;  'isearch-toggle-input-method)
-  ;;(add-hook
-  ;; 'isearch-mode-hook
-  ;; '(lambda() (setq w32-ime-composition-window (minibuffer-window)))
-  ;; )
-  ;;(add-hook
-  ;; 'isearch-mode-end-hook
-  ;; '(lambda() (setq w32-ime-composition-window nil))
-  ;; )
-  ;;
-  ;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-;;;;; @ file - backup                                                 ;;;
-;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-  ;;
-;;;; ファイルオープン時のバックアップ（~）
-  ;;(setq make-backup-files   t)  ;; 自動バックアップの実行有無
-  ;;(setq version-control     t)  ;; バックアップファイルへの番号付与
-  ;;(setq kept-new-versions   3)  ;; 最新バックアップファイルの保持数
-  ;;(setq kept-old-versions   0)  ;; 最古バックアップファイルの保持数
-  ;;(setq delete-old-versions t)  ;; バックアップファイル削除の実行有無
-  ;;
-;;;; ファイルオープン時のバックアップ（~）の格納ディレクトリ
-  ;;(setq backup-directory-alist
-  ;;      (cons (cons "\\.*$" (expand-file-name "/tmp/emacsbk"))
-  ;;            backup-directory-alist))
-  ;;
-;;;; 編集中ファイルの自動バックアップ
-  ;;(setq backup-inhibited nil)
-  ;;
-;;;; 終了時に自動バックアップファイルを削除
-  ;;(setq delete-auto-save-files nil)
-  ;;
-;;;; 編集中ファイルのバックアップ
-  ;;(setq auto-save-list-file-name nil)
-  ;;(setq auto-save-list-file-prefix nil)
-  ;;
-;;;; 編集中ファイルのバックアップ間隔（秒）
-  ;;(setq auto-save-timeout 3)
-  ;;
-;;;; 編集中ファイルのバックアップ間隔（打鍵）
-  ;;(setq auto-save-interval 100)
-  ;;
-;;;; 編集中ファイル（##）の格納ディレクトリ
-  ;;(setq auto-save-file-name-transforms
-  ;;      `((".*" ,(expand-file-name "/tmp/emacsbk") t)))
-  ;;
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+;;; @ screen - cursor                                               ;;;
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+	(setq-default cursor-in-non-selected-windows t) ; 非アクティブウィンドウのカーソル表示
+	
+	;; IME無効／有効時のカーソルカラー定義
+	(unless (facep 'cursor-ime-off)
+		(make-face 'cursor-ime-off)
+		(set-face-attribute 'cursor-ime-off nil
+												:background "DarkRed" :foreground "White")
+		)
+	(unless (facep 'cursor-ime-on)
+		(make-face 'cursor-ime-on)
+		(set-face-attribute 'cursor-ime-on nil
+												:background "DarkGreen" :foreground "White")
+		)
+	
+	;; IME無効／有効時のカーソルカラー設定
+	(add-hook
+	 'input-method-inactivate-hook
+	 '(lambda()
+			(if (facep 'cursor-ime-off)
+					(let ( (fg (face-attribute 'cursor-ime-off :foreground))
+								 (bg (face-attribute 'cursor-ime-off :background)) )
+						(set-face-attribute 'cursor nil :foreground fg :background bg)
+						)
+				)
+			)
+	 )
+	(add-hook
+	 'input-method-activate-hook
+	 '(lambda()
+			(if (facep 'cursor-ime-on)
+					(let ( (fg (face-attribute 'cursor-ime-on :foreground))
+								 (bg (face-attribute 'cursor-ime-on :background)) )
+						(set-face-attribute 'cursor nil :foreground fg :background bg)
+						)
+				)
+			)
+	 )
+	
+	;; バッファ切り替え時の状態引継ぎ設定
+	(setq w32-ime-buffer-switch-p nil)
+  
   ;;
 ;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;;;; @ file - lockfile                                               ;;;

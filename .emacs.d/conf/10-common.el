@@ -19,8 +19,6 @@
 (add-hook 'c-mode-common-hook '(lambda () (c-set-style "CC-MODE")))			;;自動インデントのスタイルを変更
 (global-font-lock-mode t)																								;プログラムの予約後に色をつける
 (setq-default indent-tabs-mode t)																				;インデントにタブ文字を使う
-(setq make-backup-files nil)																						;*.~などのバックアップファイルを作らない
-(setq auto-save-default nil)																						;.#*などのバックアップファイルを作らない
 (setq require-final-newline t)																					;ファイルの最後に改行を挿入する
 (put 'upcase-region 'disabled nil)																			;リージョンの大文字変換を有効にする
 (put 'downcase-region 'disabled nil)																		;リージョンの小文字変換を有効にする
@@ -28,7 +26,7 @@
 ;;====================================
 ;; Tab Width
 ;;====================================
-(setq-default tab-width 4)		  ;タブ幅の既定値を4にする
+(setq-default tab-width 4)
 (add-hook 'emacs-lisp-mode-hook '(lambda () (setq tab-width 2)))
 
 ;;====================================
@@ -50,6 +48,16 @@
 ;;====================================
 (add-hook 'after-save-hook
 					'executable-make-buffer-file-executable-if-script-p)
+
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+;;; @ search - isearch                                              ;;;
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+(define-key isearch-mode-map (kbd "C-d") 'isearch-delete-char)	;C-dで検索文字列を一文字削除
+(define-key isearch-mode-map (kbd "C-y") 'isearch-yank-kill)		;C-yで検索文字列にヤンク貼り付け
+(define-key isearch-mode-map (kbd "C-e") 'isearch-edit-string)	;C-eで検索文字列を編集
+(define-key isearch-mode-map (kbd "TAB") 'isearch-yank-word)		;Tabで検索文字列を補完
+(define-key isearch-mode-map (kbd "C-g")												;C-gで検索を終了
+	'(lambda() (interactive) (isearch-done)))
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ screen - mode line                                            ;;;
@@ -76,6 +84,43 @@
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 (show-paren-mode 1)			;対応する括弧を光らせる（グラフィック環境のみ作用）
 (setq show-paren-style 'mixed)	;ウィンドウ内に収まらない時だけ括弧内も光らせる
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+;;@ file - backup                                                 ;;;
+;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+
+;; ファイルオープン時のバックアップ（~）
+(setq make-backup-files   t)  ;; 自動バックアップの実行有無
+(setq version-control     t)  ;; バックアップファイルへの番号付与
+(setq kept-new-versions   3)  ;; 最新バックアップファイルの保持数
+(setq kept-old-versions   0)  ;; 最古バックアップファイルの保持数
+(setq delete-old-versions t)  ;; バックアップファイル削除の実行有無
+
+;; ファイルオープン時のバックアップ（~）の格納ディレクトリ
+(setq backup-directory-alist
+			(cons (cons "\\.*$" (expand-file-name "/tmp/emacsbk"))
+						backup-directory-alist))
+
+;; 編集中ファイルの自動バックアップ
+(setq backup-inhibited nil)
+
+;; 終了時に自動バックアップファイルを削除
+(setq delete-auto-save-files nil)
+
+;; 編集中ファイルのバックアップ
+(setq auto-save-list-file-name nil)
+(setq auto-save-list-file-prefix nil)
+
+;; 編集中ファイルのバックアップ間隔（秒）
+(setq auto-save-timeout 3)
+
+;; 編集中ファイルのバックアップ間隔（打鍵）
+(setq auto-save-interval 100)
+
+;; 編集中ファイル（##）の格納ディレクトリ
+(setq auto-save-file-name-transforms
+			`((".*" ,(expand-file-name "/tmp/emacsbk") t)))
+  
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ search - migemo                                               ;;;
