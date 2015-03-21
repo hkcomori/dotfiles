@@ -37,13 +37,13 @@
 										)
 									initial-frame-alist))
 		;; デフォルト フォント
-		(set-face-attribute 'default nil				:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'default nil				:family "Migu 2M" :height 100)
 		;; プロポーショナル フォント
-		(set-face-attribute 'variable-pitch nil	:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'variable-pitch nil	:family "Migu 2M" :height 100)
 		;; 等幅フォント
-		(set-face-attribute 'fixed-pitch nil		:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'fixed-pitch nil		:family "Migu 2M" :height 100)
 		;; ツールチップ表示フォント
-		(set-face-attribute 'tooltip nil				:family "DejaVu Sans Mono" :height 90)
+		(set-face-attribute 'tooltip nil				:family "Migu 2M" :height 100)
 		)
 	(when nt-p
 		(setq initial-frame-alist
