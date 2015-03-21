@@ -92,6 +92,7 @@ do nothing. And suppress the output from `message' and
 (when (require 'auto-complete nil t)
 	(defvar myext-auto-complete t)
 	(defun my/ac-mode-enable ()
+		(auto-complete-mode -1)
 		(auto-complete-mode t))
 	(defun my/ac-mode-disable ()
 		(auto-complete-mode -1))
