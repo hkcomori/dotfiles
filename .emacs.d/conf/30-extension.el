@@ -211,19 +211,52 @@ do nothing. And suppress the output from `message' and
 ;;カーソル位置の保存
 (when (require 'saveplace nil t)
 	(setq-default save-place t)
-	(setq save-place-file (concat user-emacs-directory ".emacs-plases"))
+	(setq save-place-file (concat user-emacs-directory ".emacs-places"))
 )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ファイル操作                                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; diredを便利にする
-(when (require 'dired-x nil t))
-
-;; diredから"r"でファイル名をインライン編集する
-(when (require 'wdired nil t)
-	(define-key dired-mode-map "r" 'wdired-change-to-wdired-mode)
-)
+;; dired関係の設定
+(when (require 'dired nil t)
+	(require 'dired-x nil t)
+	(when (require 'wdired nil t)
+		(define-key dired-mode-map (kbd "r")				'wdired-change-to-wdired-mode))	;diredから"r"でファイル名をインライン編集する
+	(when nt-p (setq ls-lisp-dirs-first t))																				;ディレクトリを先に表示する(Windows)
+	(when linux-p (setq dired-listing-switches
+											"-AFhl --group-directories-first --time-style=long-iso"))	;ディレクトリを先に表示する(Linux)
+	(defadvice dired-up-directory
+		(before kill-up-dired-buffer activate)
+		(setq my-dired-before-buffer (current-buffer)))
+	(defadvice dired-up-directory
+		(after kill-up-dired-buffer-after activate)
+		(if (eq major-mode 'dired-mode)
+				(kill-buffer my-dired-before-buffer)))
+	(defun dired-toggle-mark (arg)
+		"Toggle the current (or next ARG) files."
+		;; S.Namba Sat Aug 10 12:20:36 1996
+		(interactive "P")
+		(let ((dired-marker-char
+					 (if (save-excursion (beginning-of-line)
+															 (looking-at " "))
+							 dired-marker-char ?\040)))
+			(dired-mark arg)))
+	(setq dired-dwim-target t)							;左右分割時に他方を転送先にする
+	(setq dired-recursive-copies  'always)	;常に再帰コピー
+	(setq dired-recursive-deletes 'always)	;常に再帰削除
+	(put 'dired-find-alternate-file 'disabled nil)
+	;; RET 標準の dired-find-file では dired バッファが複数作られるので
+	;; dired-find-alternate-file を代わりに使う
+	(define-key dired-mode-map (kbd "<RET>")		'dired-open-in-accordance-with-situation)
+	(define-key dired-mode-map (kbd "<left>")		'dired-up-directory)
+	(define-key dired-mode-map (kbd "<right>")	'dired-open-in-accordance-with-situation)
+	(define-key dired-mode-map (kbd "<SPC>")		'dired-toggle-mark)
+	(define-key dired-mode-map (kbd "<DEL>")		'dired-up-directory)
+	(define-key dired-mode-map (kbd "k")				'dired-create-directory)
+	(define-key dired-mode-map (kbd "c")				'dired-do-copy)
+	(define-key dired-mode-map (kbd "d")				'dired-do-delete)
+	(define-key dired-mode-map (kbd "m")				'dired-do-rename)
+	)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Grep                                                                  ;;
