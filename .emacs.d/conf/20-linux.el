@@ -19,27 +19,10 @@
   (setq x-select-enable-clipboard t)
 
   ;;====================================
-  ;; Extension
-  ;;====================================
-;;; sr-speedbar.el
-  ;;(require 'sr-speedbar)
-  ;;(sr-speedbar-open)
-
-
-  ;;====================================
   ;; Keybind
   ;;====================================
   (global-set-key "\M-[1;2A" 'windmove-up)
   (global-set-key "\M-[1;2B" 'windmove-down)
   (global-set-key "\M-[1;2C" 'windmove-right)
   (global-set-key "\M-[1;2D" 'windmove-left)
-  ;;(global-set-key "\C-x\C-c" 'kill-buffer)
-
-  ;;====================================
-  ;; Edit
-  ;;====================================
-
-  ;;====================================
-  ;; Misc
-  ;;====================================
 )
