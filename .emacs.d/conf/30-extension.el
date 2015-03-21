@@ -124,6 +124,8 @@
 	(add-to-list 'mc--default-cmds-to-run-once 'my/mc--insert-number-and-increase)
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-next-like-this-and-cycle-forward)
 	(add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
+	(add-to-list 'mc--default-cmds-to-run-once 'point-undo)
+	(add-to-list 'mc--default-cmds-to-run-once 'point-redo)
 	;; auto-completeと併用するための設定
 	(when myext-auto-complete
 		(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
