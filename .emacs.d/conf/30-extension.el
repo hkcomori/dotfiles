@@ -67,8 +67,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; カーソル履歴
 (when (require 'point-undo nil t)
-	(define-key global-map [f7] 'point-undo)
-	(define-key global-map [S-f7] 'point-redo)
+	(define-key global-map (kbd "M-/") 'point-undo)
+	(define-key global-map (kbd "M-\\") 'point-redo)
 	)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
