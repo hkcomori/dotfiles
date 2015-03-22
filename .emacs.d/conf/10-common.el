@@ -73,7 +73,7 @@
 (setq truncate-partial-width-windows t)	;ウィンドウ縦分割時は折り返さない
 
 ;; ファイル名が重複していたらディレクトリ名を追加する。
-(eval-when-compile (require 'uniquify nil t)
+(when (require 'uniquify nil t)
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-ignore-buffers-re "*[^*]+*")
@@ -142,7 +142,7 @@
 ;;; @ server                                                        ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;; emacs-server起動
-(eval-when-compile (require 'server nil t)
+(when (require 'server nil t)
 	(defun server-ensure-safe-dir (dir) "Noop" t)
 	(setq server-socket-dir "~/.emacs.d")
 	(unless (server-running-p) (server-start))
