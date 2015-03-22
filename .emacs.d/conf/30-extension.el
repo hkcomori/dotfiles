@@ -348,14 +348,4 @@ do nothing. And suppress the output from `message' and
 (add-to-list 'load-path "elisp/howm")
 (when (require 'howm nil t)
 	(global-set-key "\C-c,," 'howm-menu)
-)
-
-;; Yasnippet
-(when (require 'yasnippet nil t)
-	(yas-global-mode 1)
-	(custom-set-variables '(yas-trigger-key "TAB"))
-	(add-hook 'term-mode-hook '(lambda () (yas-minor-mode -1) ))
-	(define-key yas-minor-mode-map (kbd "C-x i i") 'yas-insert-snippet)
-	(define-key yas-minor-mode-map (kbd "C-x i n") 'yas-new-snippet)
-	(define-key yas-minor-mode-map (kbd "C-x i v") 'yas-visit-snippet-file)
-)
+	)
