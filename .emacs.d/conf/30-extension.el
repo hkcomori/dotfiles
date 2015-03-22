@@ -293,8 +293,10 @@ do nothing. And suppress the output from `message' and
 	(define-key mode-specific-map "m" 'magit-status)
 	)
 
-(setq ediff-window-setup-function 'ediff-setup-windows-plain)	; コントロール用のバッファを同一フレーム内に表示
-(setq ediff-split-window-function 'split-window-horizontally)	; diffのバッファを上下ではなく左右に並べる
+(when (require 'ediff nil t)
+	(setq ediff-window-setup-function 'ediff-setup-windows-plain)	; コントロール用のバッファを同一フレーム内に表示
+	(setq ediff-split-window-function 'split-window-horizontally)	; diffのバッファを上下ではなく左右に並べる
+	)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 端末                                                                   ;;
