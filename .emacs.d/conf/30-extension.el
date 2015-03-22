@@ -377,3 +377,7 @@ do nothing. And suppress the output from `message' and
 	(add-to-list 'load-path "elisp/howm")
 	(global-set-key "\C-c,," 'howm-menu)
 	)
+
+(when (require 'flycheck nil t)
+	(add-hook 'after-init-hook #'global-flycheck-mode)
+	)
