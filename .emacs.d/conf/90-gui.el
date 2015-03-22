@@ -6,6 +6,11 @@
 	(setq frame-title-format (list "%b - Emacs@" (system-name)))
 	(set-face-background 'fringe (face-attribute 'default :background))
 	(set-face-foreground 'font-lock-comment-face "gray")
+	;; モードライン
+	(set-face-background 'mode-line "black")
+	(set-face-foreground 'mode-line "white")
+	(set-face-foreground 'which-func "cyan")
+	(setq smartrep-mode-line-active-bg "forest green")
 	(set-face-background 'magit-item-highlight (face-attribute 'default :background))
 
 	(when (require 'whitespace nil t)
