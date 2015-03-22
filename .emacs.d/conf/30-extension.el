@@ -342,10 +342,10 @@ do nothing. And suppress the output from `message' and
 	)
 
 ;; howm
-(setq howm-directory (concat user-emacs-directory "howm"))
-(setq howm-menu-lang 'ja)
-(setq howm-file-name-format "%Y-%m.howm")
-(add-to-list 'load-path "elisp/howm")
 (when (require 'howm nil t)
+	(setq howm-directory (concat user-emacs-directory "howm"))
+	(setq howm-menu-lang 'ja)
+	(setq howm-file-name-format "%Y-%m.howm")
+	(add-to-list 'load-path "elisp/howm")
 	(global-set-key "\C-c,," 'howm-menu)
 	)
