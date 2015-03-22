@@ -221,7 +221,8 @@ do nothing. And suppress the output from `message' and
 (when (require 'dired nil t)
 	(when (require 'dired-x nil t)
 		(when (require 'wdired nil t)
-			(define-key dired-mode-map (kbd "r") 'wdired-change-to-wdired-mode))	;diredから"r"でファイル名をインライン編集する
+			(define-key dired-mode-map (kbd "r") 'wdired-change-to-wdired-mode)	;diredから"r"でファイル名をインライン編集する
+			(setq wdired-allow-to-change-permissions t)) ;パーミッションの編集を許可する
 		(when linux-p
 			(setq dired-listing-switches
 						"-ADGFLhl --group-directories-first --time-style=long-iso")
