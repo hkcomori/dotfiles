@@ -8,7 +8,7 @@
 	(set-face-foreground 'font-lock-comment-face "gray")
 	(set-face-background 'magit-item-highlight (face-attribute 'default :background))
 
-	(when (require 'whitespace nil t)
+	(eval-when-compile (require 'whitespace nil t)
 		(global-whitespace-mode 1)
 		(setq whitespace-style '(
 														 face			;可視化

@@ -42,7 +42,7 @@
 ;; バッファ操作                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Close all buffers
-(when (require 'cl nil t)
+(eval-when-compile (require 'cl nil t)
 	(defun my/close-all-buffers ()
 		(interactive)
 		(loop for buffer being the buffers

@@ -2,7 +2,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; パッケージ管理                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'package nil t)
+(eval-when-compile (require 'package nil t)
 	;; Add package-archives
 	(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/") t)
 	(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
@@ -11,12 +11,12 @@
 )
 
 ;; melpa.el
-(when (require 'melpa nil t))
+(eval-when-compile (require 'melpa nil t))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Anything                                                              ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'anything nil t)
+(eval-when-compile (require 'anything nil t)
 	(global-set-key (kbd "C-x C-b") 'anything-for-files)
 	(global-set-key (kbd "M-y") 'anything-show-kill-ring)
 	(setq
@@ -51,7 +51,7 @@
 
 ;; HTML 中の Java Script
 (autoload 'javascript-mode "javascript" "JavaScript mode" t)
-(when (require 'mmm-mode nil t)
+(eval-when-compile (require 'mmm-mode nil t)
 	(setq mmm-global-mode 'maybe nil t)
 	(setq mmm-submode-decoration-level 2)
 	;; js in html
@@ -66,7 +66,7 @@
 ;; カーソル操作                                                            ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; カーソル履歴
-(when (require 'point-undo nil t)
+(eval-when-compile (require 'point-undo nil t)
 	(define-key global-map (kbd "M-/") 'point-undo)
 	(define-key global-map (kbd "M-\\") 'point-redo)
 	)
@@ -78,7 +78,7 @@
 (cua-mode t)                                                                                 
 (setq cua-enable-cua-keys nil) ; そのままだと C-x が切り取りになってしまったりするので無効化
 
-(when (require 'auto-complete nil t)
+(eval-when-compile (require 'auto-complete nil t)
 	(defvar myext-auto-complete t)
 	(defun my/ac-mode-enable ()
 		(auto-complete-mode -1)
@@ -89,7 +89,7 @@
 	(setq ac-auto-show-menu 0.3)			;候補が出るまでの時間 (default: 0.8)
 )
 
-(when (require 'multiple-cursors nil t)
+(eval-when-compile (require 'multiple-cursors nil t)
 	;; insert specific serial number
 	(defvar my/mc/insert-numbers-hist nil)
 	(defvar my/mc/insert-numbers-inc 1)
@@ -131,7 +131,7 @@
 		(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
 		(add-hook 'multiple-cursors-mode-disabled-hook 'my/ac-mode-enable)
 		)
-	(when (require 'smartrep nil t)
+	(eval-when-compile (require 'smartrep nil t)
 		;; smartrepによるコマンド実行中はキー入力をエコーしない
 		;; http://shakenbu.org/yanagi/d/?date=20140105
 		(defadvice smartrep-map-internal (around smartrep-silence-echo-keystrokes activate)
@@ -163,8 +163,8 @@
 ;; 履歴                                                                   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ファイルの履歴
-(when (require 'recentf nil t)
-	(when (require 'cl nil t)
+(eval-when-compile (require 'recentf nil t)
+	(eval-when-compile (require 'cl nil t)
 		(defvar my-recentf-list-prev nil)
 		(defadvice recentf-save-list
 			(around no-message activate)
@@ -198,7 +198,7 @@ do nothing. And suppress the output from `message' and
 )
 
 ;; undo履歴をツリー表示
-(when (require 'undo-tree nil t)
+(eval-when-compile (require 'undo-tree nil t)
 	(global-undo-tree-mode)
 	(setq undo-tree-auto-save-history t)
 	(setq undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo-tree"))))
@@ -209,7 +209,7 @@ do nothing. And suppress the output from `message' and
 )
 
 ;;カーソル位置の保存
-(when (require 'saveplace nil t)
+(eval-when-compile (require 'saveplace nil t)
 	(setq-default save-place t)
 	(setq save-place-file (concat user-emacs-directory ".emacs-places"))
 )
@@ -218,9 +218,9 @@ do nothing. And suppress the output from `message' and
 ;; ファイル操作                                                             ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired関係の設定
-(when (require 'dired nil t)
-	(when (require 'dired-x nil t)
-		(when (require 'wdired nil t)
+(eval-when-compile (require 'dired nil t)
+	(eval-when-compile (require 'dired-x nil t)
+		(eval-when-compile (require 'wdired nil t)
 			(define-key dired-mode-map (kbd "r") 'wdired-change-to-wdired-mode)	;diredから"r"でファイル名をインライン編集する
 			(setq wdired-allow-to-change-permissions t)) ;パーミッションの編集を許可する
 		(when linux-p
@@ -295,7 +295,7 @@ do nothing. And suppress the output from `message' and
 ;; Grep                                                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; grepの日本語対応
-(when (require 'grep nil t)
+(eval-when-compile (require 'grep nil t)
 	(when linux-p
 		(grep-apply-setting 'grep-find-command '("find . -type f -exec lgrep -n -Au8 -Ia  {} +" . 40))
 		(grep-apply-setting 'grep-command "lgrep -n -Au8 -Ia ")
@@ -307,7 +307,7 @@ do nothing. And suppress the output from `message' and
 )
 
 ;; grep結果を編集可能にする
-(when (require 'wgrep nil t)
+(eval-when-compile (require 'wgrep nil t)
 	(define-key grep-mode-map "e" 'wgrep-change-to-wgrep-mode)
 )
 
@@ -315,11 +315,11 @@ do nothing. And suppress the output from `message' and
 ;; Git                                                                   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Magit
-(when (require 'magit nil t)
+(eval-when-compile (require 'magit nil t)
 	(define-key mode-specific-map "m" 'magit-status)
 	)
 
-(when (require 'ediff nil t)
+(eval-when-compile (require 'ediff nil t)
 	(setq ediff-window-setup-function 'ediff-setup-windows-plain)	; コントロール用のバッファを同一フレーム内に表示
 	(setq ediff-split-window-function 'split-window-horizontally)	; diffのバッファを上下ではなく左右に並べる
 	)
@@ -327,7 +327,7 @@ do nothing. And suppress the output from `message' and
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 端末                                                                   ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(when (require 'multi-term nil t)
+(eval-when-compile (require 'multi-term nil t)
 	(setq multi-term-program shell-file-name)
 	(defun toggle-term-view () (interactive)
 		(cond ((eq major-mode 'term-mode)
@@ -365,12 +365,12 @@ do nothing. And suppress the output from `message' and
 ;; その他                                                                 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 関数一覧
-(when (require 'summarye nil t)
+(eval-when-compile (require 'summarye nil t)
 	(define-key mode-specific-map "l" 'se/make-summary-buffer)
 	)
 
 ;; howm
-(when (require 'howm nil t)
+(eval-when-compile (require 'howm nil t)
 	(setq howm-directory (concat user-emacs-directory "howm"))
 	(setq howm-menu-lang 'ja)
 	(setq howm-file-name-format "%Y-%m.howm")
@@ -378,6 +378,6 @@ do nothing. And suppress the output from `message' and
 	(global-set-key "\C-c,," 'howm-menu)
 	)
 
-(when (require 'flycheck nil t)
+(eval-when-compile (require 'flycheck nil t)
 	(add-hook 'after-init-hook #'global-flycheck-mode)
 	)
