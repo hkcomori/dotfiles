@@ -50,17 +50,17 @@
 (setq auto-mode-alist (append '(("\\.exe\\'" . hexl-mode)) auto-mode-alist))
 
 ;; HTML 中の Java Script
-(autoload 'javascript-mode "javascript" "JavaScript mode" t)
-(eval-when-compile (require 'mmm-mode nil t)
-	(setq mmm-global-mode 'maybe nil t)
-	(setq mmm-submode-decoration-level 2)
-	;; js in html
-	(mmm-add-classes
-	 '((js-in-html
-			:submode javascript-mode
-			:front "<script[^>]*>\n<!--\n"
-			:back  "// ?-->\n</script>")))
-	(mmm-add-mode-ext-class nil "\\.s?html?\\(\\..+\\)?$" 'js-in-html))
+;; (autoload 'javascript-mode "javascript" "JavaScript mode" t)
+;; (eval-when-compile (require 'mmm-mode nil t)
+;; 	(setq mmm-global-mode 'maybe nil t)
+;; 	(setq mmm-submode-decoration-level 2)
+;; 	;; js in html
+;; 	(mmm-add-classes
+;; 	 '((js-in-html
+;; 			:submode javascript-mode
+;; 			:front "<script[^>]*>\n<!--\n"
+;; 			:back  "// ?-->\n</script>")))
+;; 	(mmm-add-mode-ext-class nil "\\.s?html?\\(\\..+\\)?$" 'js-in-html))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; カーソル操作                                                            ;;
