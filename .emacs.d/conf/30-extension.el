@@ -229,8 +229,9 @@ do nothing. And suppress the output from `message' and
 			)
 		(when nt-p
 			(setq ls-lisp-dirs-first t)																									;ディレクトリを先に表示する
-			(setq ls-lisp-format-time-list (quote ("%y-%m-%d %H:%M" "%y-%m-%d %H:%M")))	;日付フォーマット
+			(setq ls-lisp-format-time-list (quote ("%Y-%m-%d %H:%M" "%Y-%m-%d %H:%M")))	;日付フォーマット
 			)
+		;; フォルダ移動でバッファを新しく作らない
 		(defadvice dired-up-directory
 			(before kill-up-dired-buffer activate)
 			(setq my-dired-before-buffer (current-buffer)))
@@ -238,6 +239,7 @@ do nothing. And suppress the output from `message' and
 			(after kill-up-dired-buffer-after activate)
 			(if (eq major-mode 'dired-mode)
 					(kill-buffer my-dired-before-buffer)))
+		;; マーク操作を同じ関数でトグル
 		(defun dired-toggle-mark (arg)
 			"Toggle the current (or next ARG) files."
 			;; S.Namba Sat Aug 10 12:20:36 1996
