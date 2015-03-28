@@ -78,6 +78,8 @@
 	(when (eq major-mode 'emacs-lisp-mode)
 		(byte-compile-file buffer-file-name)))
 
+(add-hook 'after-save-hook 'byte-recompile-current-buffer)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ファイル操作                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
