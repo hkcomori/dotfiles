@@ -23,7 +23,7 @@ do nothing. And suppress the output from `message' and
 			ad-do-it))
 	)
 ;;(setq recentf-exclude '("^\\.emacs\\.bmk$"))
-(setq recentf-max-menu-items 10)
+(setq recentf-max-menu-items 20)
 (setq recentf-max-saved-items 2000)
 (setq recentf-save-file (expand-file-name ".recentf" user-emacs-directory))
 (setq recentf-exclude '(".recentf"))

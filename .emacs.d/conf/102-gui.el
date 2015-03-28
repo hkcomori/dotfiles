@@ -11,32 +11,8 @@
 	(set-face-foreground 'mode-line "white")
 	(set-face-foreground 'which-func "cyan")
 	(setq smartrep-mode-line-active-bg "forest green")
-	(when (require 'magit nil t)
-		(set-face-background 'magit-item-highlight (face-attribute 'default :background)))
 
-	(when (require 'whitespace nil t)
-		(global-whitespace-mode 1)
-		(setq whitespace-style '(
-														 face			;可視化
-														 tabs			;タブ
-														 spaces			;スペース
-														 tab-mark		;タブ表示のマッピング
-														 space-mark		;スペース表示のマッピング
-														 ))
-		(setq whitespace-space-regexp "\\(\x3000+\\)")
-		(setq whitespace-display-mappings
-					'((space-mark ?\x3000 [?\u25a1])
-						(tab-mark	 ?\t	 [?\t])
-						))
-		(set-face-foreground	'whitespace-tab (face-attribute 'font-lock-comment-face :foreground))
-		(set-face-background	'whitespace-tab (face-attribute 'default :background))
-		(set-face-underline		'whitespace-tab t)
-		(set-face-foreground	'whitespace-space (face-attribute 'font-lock-comment-face :foreground))
-		(set-face-background	'whitespace-space (face-attribute 'default :background))
-		(set-face-underline		'whitespace-space t)
-		)
-
-	(when linux-p
+	(when (eq system-type 'gnu/linux)
 		(setq initial-frame-alist
 					(append '(
 										(width . 125) ; フレーム幅(文字数)
@@ -52,7 +28,7 @@
 		;; ツールチップ表示フォント
 		(set-face-attribute 'tooltip nil				:family "Migu 2M" :height 100)
 		)
-	(when nt-p
+	(when (eq system-type 'cygwin)
 		(setq initial-frame-alist
 					(append '(
 										(width . 125) ; フレーム幅(文字数)
@@ -77,4 +53,4 @@
 		;; フォントサイズ リセット
 		(define-key global-map (kbd "M-0") '(lambda() (interactive) (text-scale-set 0)))
 		)
-)
+	)

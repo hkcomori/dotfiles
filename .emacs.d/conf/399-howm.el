@@ -1,0 +1,6 @@
+(require 'howm)
+(setq howm-directory (concat user-emacs-directory "howm"))
+(setq howm-menu-lang 'ja)
+(setq howm-file-name-format "%Y-%m.howm")
+(add-to-list 'load-path "elisp/howm")
+(define-key global-map "\C-c,," 'howm-menu)

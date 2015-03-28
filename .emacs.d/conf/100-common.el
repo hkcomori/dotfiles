@@ -22,6 +22,16 @@
 (setq require-final-newline t)																					;ファイルの最後に改行を挿入する
 (put 'upcase-region 'disabled nil)																			;リージョンの大文字変換を有効にする
 (put 'downcase-region 'disabled nil)																		;リージョンの小文字変換を有効にする
+(cua-mode t)														; 矩形選択を有効化
+(setq cua-enable-cua-keys nil)	; そのままだと C-x が切り取りになってしまったりするので無効化
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; 履歴                                                                  ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;カーソル位置の保存
+(require 'saveplace)
+(setq-default save-place t)
+(setq save-place-file (concat user-emacs-directory ".emacs-places"))
 
 ;;====================================
 ;; Tab Width
@@ -32,6 +42,7 @@
 ;;====================================
 ;; Misc
 ;;====================================
+(require 'windmove)
 (setq windmove-wrap-around t)         ;バッファ移動をShift+矢印で
 (windmove-default-keybindings)        ;バッファ移動をShift+矢印で
 (setq inhibit-startup-message t)      ;起動時のメッセージを消す
@@ -46,8 +57,7 @@
 ;;====================================
 ;; File
 ;;====================================
-(add-hook 'after-save-hook
-					'executable-make-buffer-file-executable-if-script-p)
+(add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ search - isearch                                              ;;;
@@ -72,16 +82,21 @@
 (setq truncate-lines nil)								;折り返し表示
 (setq truncate-partial-width-windows t)	;ウィンドウ縦分割時は折り返さない
 
+(require 'ediff nil t)
+(setq ediff-window-setup-function 'ediff-setup-windows-plain)	; コントロール用のバッファを同一フレーム内に表示
+(setq ediff-split-window-function 'split-window-horizontally)	; diffのバッファを上下ではなく左右に並べる
+
 ;; ファイル名が重複していたらディレクトリ名を追加する。
-(when (require 'uniquify nil t)
-  (setq uniquify-buffer-name-style 'forward)
-  (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
-  (setq uniquify-ignore-buffers-re "*[^*]+*")
-)
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
+(setq uniquify-ignore-buffers-re "*[^*]+*")
+
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ screen - cursor                                               ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
+(require 'paren)
 (show-paren-mode 1)			;対応する括弧を光らせる（グラフィック環境のみ作用）
 (setq show-paren-style 'mixed)	;ウィンドウ内に収まらない時だけ括弧内も光らせる
 
@@ -123,27 +138,10 @@
   
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-;;; @ search - migemo                                               ;;;
-;;;   https://github.com/emacs-jp/migemo                            ;;;
-;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-(when (and (executable-find "cmigemo") (require 'migemo nil t))
-  (setq migemo-command "cmigemo")
-  (setq migemo-options '("-q" "--emacs"))
-  (when nt-p (setq migemo-dictionary "/usr/local/share/migemo/utf-8/migemo-dict"))
-  (when linux-p (setq migemo-dictionary "/usr/share/cmigemo/utf-8/migemo-dict"))
-  (defvar migemo-user-dictionary nil)
-  (defvar migemo-regex-dictionary nil)
-  (setq migemo-coding-system 'utf-8-unix)
-  (load-library "migemo")
-  (migemo-init)
-)
-
-;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ server                                                        ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;; emacs-server起動
-(when (require 'server nil t)
-	(defun server-ensure-safe-dir (dir) "Noop" t)
-	(setq server-socket-dir "~/.emacs.d")
-	(unless (server-running-p) (server-start))
-)
+(require 'server)
+(defun server-ensure-safe-dir (dir) "Noop" t)
+(setq server-socket-dir "~/.emacs.d")
+(unless (server-running-p) (server-start))

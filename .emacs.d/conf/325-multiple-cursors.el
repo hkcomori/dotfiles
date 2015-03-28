@@ -28,18 +28,23 @@
 	(interactive)
 	(mc/mark-previous-like-this 1)
 	(mc/cycle-backward))
+
 ;; multiple-cursors使用時に一回のみ実行する関数の設定
 (add-to-list 'mc--default-cmds-to-run-once 'my/mc/insert-numbers)
 (add-to-list 'mc--default-cmds-to-run-once 'my/mc--insert-number-and-increase)
 (add-to-list 'mc--default-cmds-to-run-once 'mc/mark-next-like-this-and-cycle-forward)
 (add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
-(add-to-list 'mc--default-cmds-to-run-once 'point-undo)
-(add-to-list 'mc--default-cmds-to-run-once 'point-redo)
+(add-to-list 'mc--default-cmds-to-run-for-all 'point-undo)
+(add-to-list 'mc--default-cmds-to-run-for-all 'point-redo)
+
 ;; auto-completeと併用するための設定
-(when (require 'auto-complete nil t)
-	(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
-	(add-hook 'multiple-cursors-mode-disabled-hook 'my/ac-mode-enable)
-	)
+;; (when (require 'auto-complete nil t)
+;; 	(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
+;; 	(add-hook 'multiple-cursors-mode-disabled-hook 'my/ac-mode-enable)
+;; 	)
+
+(define-key global-map (kbd "C-M-c") 'mc/edit-lines)
+(define-key global-map (kbd "C-M-r") 'mc/mark-all-in-region)
 (when (require 'smartrep nil t)
 	;; smartrepによるコマンド実行中はキー入力をエコーしない
 	;; http://shakenbu.org/yanagi/d/?date=20140105
@@ -64,5 +69,11 @@
 			("o"   . 'mc/sort-regions)
 			("O"   . 'mc/reverse-regions)))
 	)
-(define-key global-map (kbd "C-M-c") 'mc/edit-lines)
-(define-key global-map (kbd "C-M-r") 'mc/mark-all-in-region)
+
+(define-key mc/keymap (kbd "RET") 'newline-and-indent)
+
+(when (require 'phi-search-migemo nil t)
+	(define-key phi-search-default-map (kbd "M-m") 'phi-search-migemo-toggle)
+	(define-key mc/keymap (kbd "C-s") 'phi-search-migemo)
+	(define-key mc/keymap (kbd "C-r") 'phi-search-migemo-backward)
+	)
