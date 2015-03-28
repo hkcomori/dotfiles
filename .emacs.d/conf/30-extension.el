@@ -219,18 +219,12 @@ do nothing. And suppress the output from `message' and
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; dired関係の設定
 (when (require 'dired nil t)
+	(eval-after-load "dired-aux" '(require 'dired-async))
 	(when (require 'dired-x nil t)
 		(when (require 'wdired nil t)
 			(define-key dired-mode-map (kbd "r") 'wdired-change-to-wdired-mode)	;diredから"r"でファイル名をインライン編集する
 			(setq wdired-allow-to-change-permissions t)) ;パーミッションの編集を許可する
-		(when linux-p
-			(setq dired-listing-switches
-						"-ADGFLhl --group-directories-first --time-style=long-iso")
-			)
-		(when nt-p
-			(setq ls-lisp-dirs-first t)																									;ディレクトリを先に表示する
-			(setq ls-lisp-format-time-list (quote ("%Y-%m-%d %H:%M" "%Y-%m-%d %H:%M")))	;日付フォーマット
-			)
+		(setq dired-listing-switches "-ADGFLhl --group-directories-first --time-style=long-iso")
 		;; フォルダ移動でバッファを新しく作らない
 		(defadvice dired-up-directory
 			(before kill-up-dired-buffer activate)
