@@ -280,8 +280,6 @@ do nothing. And suppress the output from `message' and
 		;; RET 標準の dired-find-file では dired バッファが複数作られるので
 		;; dired-find-alternate-file を代わりに使う
 		(define-key dired-mode-map (kbd "<RET>")		'dired-open-in-accordance-with-situation)
-		(define-key dired-mode-map (kbd "<left>")		'dired-up-directory)
-		(define-key dired-mode-map (kbd "<right>")	'dired-open-in-accordance-with-situation)
 		(define-key dired-mode-map (kbd "<SPC>")		'dired-toggle-mark)
 		(define-key dired-mode-map (kbd "<DEL>")		'dired-up-directory)
 		(define-key dired-mode-map (kbd "k")				'dired-create-directory)
