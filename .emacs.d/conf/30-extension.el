@@ -344,6 +344,7 @@ do nothing. And suppress the output from `message' and
 							(define-key term-raw-map (kbd "C-y") 'term-paste)
 							(define-key term-raw-map (kbd "C-h") 'term-send-backspace)
 							(define-key term-raw-map (kbd "M-d") 'term-send-forward-kill-word)
+							(define-key term-raw-map (kbd "M-h") 'term-send-backward-kill-word)
 							(define-key term-raw-map (kbd "C-r") 'term-send-reverse-search-history)
 							(define-key term-raw-map (kbd "C-s") 'term-send-reverse-search-history)
 							(define-key term-raw-map (kbd "M-<backspace>") 'term-send-backward-kill-word)
