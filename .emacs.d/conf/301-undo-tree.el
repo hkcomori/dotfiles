@@ -1,0 +1,8 @@
+(require 'undo-tree)
+(global-undo-tree-mode)
+(setq undo-tree-auto-save-history t)
+(setq undo-tree-history-directory-alist `(("." . ,(concat user-emacs-directory "undo-tree"))))
+(setq undo-limit 600000)
+(setq undo-strong-limit 900000)
+(global-set-key (kbd "C-/") 'undo-tree-undo)
+(global-set-key (kbd "C-\\") 'undo-tree-redo)
