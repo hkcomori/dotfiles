@@ -11,7 +11,8 @@
 	(set-face-foreground 'mode-line "white")
 	(set-face-foreground 'which-func "cyan")
 	(setq smartrep-mode-line-active-bg "forest green")
-	(set-face-background 'magit-item-highlight (face-attribute 'default :background))
+	(when (require 'magit nil t)
+		(set-face-background 'magit-item-highlight (face-attribute 'default :background)))
 
 	(when (require 'whitespace nil t)
 		(global-whitespace-mode 1)
