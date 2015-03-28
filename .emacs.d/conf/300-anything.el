@@ -1,6 +1,6 @@
 (require 'anything)
-(global-set-key (kbd "C-x C-b") 'anything-for-files)
-(global-set-key (kbd "M-y") 'anything-show-kill-ring)
+(define-key global-map (kbd "C-x C-b") 'anything-for-files)
+(define-key global-map (kbd "M-y") 'anything-show-kill-ring)
 (setq
  anything-idle-delay 0.1							;候補表示までの待ち時間
  anything-input-idle-delay 0.1				;再描画までの待ち時間

@@ -87,7 +87,7 @@
   ;;(setq inhibit-startup-screen nil)
   ;;
 ;;;; フルスクリーン化
-  ;;(global-set-key (kbd "<A-return>") 'toggle-frame-fullscreen)
+  ;;(define-key global-map (kbd "<A-return>") 'toggle-frame-fullscreen)
   ;;
   ;;
 ;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
@@ -230,7 +230,7 @@
   ;;(setq hscroll-step 1)
   ;;
 ;;;; スクロールダウン
-  ;;(global-set-key (kbd "C-z") 'scroll-down)
+  ;;(define-key global-map (kbd "C-z") 'scroll-down)
   ;;
 ;;;; バッファの最後までスクロールダウン
   ;;(defadvice scroll-down (around scroll-down activate compile)

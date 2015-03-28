@@ -120,7 +120,7 @@
 	(setq howm-menu-lang 'ja)
 	(setq howm-file-name-format "%Y-%m.howm")
 	(add-to-list 'load-path "elisp/howm")
-	(global-set-key "\C-c,," 'howm-menu)
+	(define-key global-map "\C-c,," 'howm-menu)
 	)
 
 (when (require 'flycheck nil t)

@@ -9,6 +9,6 @@
 (add-hook 'kill-emacs-hook '(lambda nil
                               (bm-buffer-save-all)
                               (bm-repository-save)))
-(global-set-key (kbd "M-SPC") 'bm-toggle)
-(global-set-key (kbd "M-[") 'bm-previous)
-(global-set-key (kbd "M-]") 'bm-next)
+(define-key global-map (kbd "M-SPC") 'bm-toggle)
+(define-key global-map (kbd "M-[") 'bm-previous)
+(define-key global-map (kbd "M-]") 'bm-next)

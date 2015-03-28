@@ -21,8 +21,8 @@
   ;;====================================
   ;; Keybind
   ;;====================================
-  (global-set-key "\M-[1;2A" 'windmove-up)
-  (global-set-key "\M-[1;2B" 'windmove-down)
-  (global-set-key "\M-[1;2C" 'windmove-right)
-  (global-set-key "\M-[1;2D" 'windmove-left)
+  (define-key global-map "\M-[1;2A" 'windmove-up)
+  (define-key global-map "\M-[1;2B" 'windmove-down)
+  (define-key global-map "\M-[1;2C" 'windmove-right)
+  (define-key global-map "\M-[1;2D" 'windmove-left)
 )

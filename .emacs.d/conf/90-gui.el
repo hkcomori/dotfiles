@@ -69,12 +69,12 @@
 		(set-face-attribute 'tooltip nil				:family "Migu 1M" :height 100)
 
 		;; フォントサイズ調整
-		(global-set-key (kbd "C-<wheel-up>")		'(lambda() (interactive) (text-scale-increase 1)))
-		(global-set-key (kbd "C-=")							'(lambda() (interactive) (text-scale-increase 1)))
-		(global-set-key (kbd "C-<wheel-down>")	'(lambda() (interactive) (text-scale-decrease 1)))
-		(global-set-key (kbd "C--")							'(lambda() (interactive) (text-scale-decrease 1)))
+		(define-key global-map (kbd "C-<wheel-up>")		'(lambda() (interactive) (text-scale-increase 1)))
+		(define-key global-map (kbd "C-=")							'(lambda() (interactive) (text-scale-increase 1)))
+		(define-key global-map (kbd "C-<wheel-down>")	'(lambda() (interactive) (text-scale-decrease 1)))
+		(define-key global-map (kbd "C--")							'(lambda() (interactive) (text-scale-decrease 1)))
 
 		;; フォントサイズ リセット
-		(global-set-key (kbd "M-0") '(lambda() (interactive) (text-scale-set 0)))
+		(define-key global-map (kbd "M-0") '(lambda() (interactive) (text-scale-set 0)))
 		)
 )
