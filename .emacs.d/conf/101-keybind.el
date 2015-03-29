@@ -8,6 +8,8 @@
 (define-key global-map (kbd "C-c a") 'align)																		;アラインメント
 (define-key global-map [f3] 'isearch-forward)
 (define-key global-map [S-f3] 'isearch-backward)
+(define-key global-map (kbd "C-M-<right>") 'forward-sexp)												;次のS式
+(define-key global-map (kbd "C-M-<left>")  'backward-sexp)											;前のS式
 
 (define-key global-map (kbd "C-m") 'newline-and-indent)		;改行と同時にインデント
 (add-hook 'c-mode-common-hook		'(lambda () (local-set-key (kbd "C-m") 'reindent-then-newline-and-indent)))
