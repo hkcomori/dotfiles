@@ -1,5 +1,5 @@
 ;;-*- coding: utf-8; -*-
-(when linux-p
+(when (eq system-type 'gnu/linux)
   ;; setting for japanese
   (set-default-coding-systems 'utf-8-unix)				;デフォルトの文字コード
   (prefer-coding-system 'utf-8-unix)							;テキストファイル／新規バッファの文字コード

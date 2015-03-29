@@ -4,17 +4,64 @@
 
 (setq dired-listing-switches "-ADGFLhl --group-directories-first --time-style=long-iso")
 
-;; diredでWindowsに関連付けられたアプリを起動する 
-(when (or (eq system-type 'windows-nt) (eq system-type 'cygwin))
-					(defun my-dired-w32-open () 
-						"Type '[my-dired-w32-open]': win-start the current line's file." 
-						(interactive) 
-						(if (eq major-mode 'dired-mode) 
-								(let ((fname (dired-get-filename))) 
-									(w32-shell-execute "open" fname) 
-									(message "win-started %s" fname)))) 
+(cond ((eq system-type 'gnu/linux)
+			 ;; 関連付けられたアプリを起動する(Linux)
+			 (defun my-dired-related-open () 
+				 "Type '[my-dired-related-open]': open the current line's file." 
+				 (interactive) 
+				 (if (eq major-mode 'dired-mode) 
+						 (let ((flist (dired-get-marked-files)))
+							 (dired-do-shell-command "exo-open" nil flist) 
+							 (message "exo-open %s" flist)))))
 
-					(define-key dired-mode-map "z" 'my-dired-w32-open))
+			;; 関連付けられたアプリを起動する(Windows)
+			((or (eq system-type 'windows-nt) (eq system-type 'cygwin))
+			 (defun my-dired-related-open () 
+				 "Type '[my-dired-related-open]': open the current line's file." 
+				 (interactive) 
+				 (if (eq major-mode 'dired-mode) 
+						 (let ((fname (dired-get-filename))) 
+							 (w32-shell-execute "open" fname) 
+							 (message "open %s" fname)))
+				 ))
+
+			;; それ以外の場合はDiredで開く
+			(t
+			 (defun my-dired-related-open () 
+				 "Type '[my-dired-related-open]': open the current line's file." 
+				 (interactive) 
+				 (dired-find-file)))
+			 )
+
+;; ファイルは関連付けで、ディレクトリは同じバッファで開く
+(defun dired-open-in-accordance-with-situation ()
+  (interactive)
+  (let ((file (dired-get-filename)))
+    (cond ((file-directory-p file)
+					 (dired-find-alternate-file))
+					(t
+					 (my-dired-related-open)))
+		))
+
+;; ファイルは別バッファで、ディレクトリは同じバッファで開く
+(defun dired-edit-in-accordance-with-situation ()
+  (interactive)
+  (let ((file (dired-get-filename)))
+    (cond ((file-directory-p file)
+					 (dired-find-alternate-file))
+					(t
+					 (dired-find-file)))
+		))
+
+;; すべてのファイル一括でマーク状態のトグルを行う
+(defun dired-mark-all-files ()
+  (interactive)
+	(let ((flist (dired-get-marked-files)))
+		(cond ((null flist)
+					 (dired-toggle-marks))
+					(t
+					 (dired-unmark-all-marks)))
+		))
 
 ;; フォルダ移動でバッファを新しく作らない
 (defadvice dired-up-directory
@@ -72,10 +119,13 @@
 
 ;; RET 標準の dired-find-file では dired バッファが複数作られるので
 ;; dired-find-alternate-file を代わりに使う
-(define-key dired-mode-map (kbd "<RET>")		'dired-open-in-accordance-with-situation)
-(define-key dired-mode-map (kbd "<SPC>")		'dired-toggle-mark)
-(define-key dired-mode-map (kbd "<DEL>")		'dired-up-directory)
-(define-key dired-mode-map (kbd "k")				'dired-create-directory)
-(define-key dired-mode-map (kbd "c")				'dired-do-copy)
-(define-key dired-mode-map (kbd "d")				'dired-do-delete)
-(define-key dired-mode-map (kbd "m")				'dired-do-rename)
+(define-key dired-mode-map (kbd "<RET>")			'dired-open-in-accordance-with-situation)
+(define-key dired-mode-map (kbd "<mouse-1>")	'dired-open-in-accordance-with-situation)
+(define-key dired-mode-map (kbd "e")					'dired-edit-in-accordance-with-situation)
+(define-key dired-mode-map (kbd "<SPC>")			'dired-toggle-mark)
+(define-key dired-mode-map (kbd "<DEL>")			'dired-up-directory)
+(define-key dired-mode-map (kbd "k")					'dired-create-directory)
+(define-key dired-mode-map (kbd "c")					'dired-do-copy)
+(define-key dired-mode-map (kbd "d")					'dired-do-delete)
+(define-key dired-mode-map (kbd "m")					'dired-do-rename)
+(define-key dired-mode-map (kbd "*")					'dired-mark-all-files)

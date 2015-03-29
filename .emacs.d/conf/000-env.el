@@ -20,16 +20,8 @@
 						(normal-top-level-add-subdirs-to-load-path))))))
 
 ;; 引数のディレクトリとそのサブディレクトリをload-pathに追加
-(cond ((eq system-type 'gnu/linux)
-			(add-to-load-path
-			 "elpa"																;ELPAでインストールしたElisp
-			 "elisp"															;手動でインストールしたElisp
-			 ))
-
-			((eq system-type 'cygwin)
-			 (add-to-load-path
-				"elpa"																;ELPAでインストールしたElisp
-				"elisp"															;手動でインストールしたElisp
-				"site-lisp"													;gnupack標準
-				))
-			)
+(add-to-load-path
+ "elpa"																;ELPAでインストールしたElisp
+ "elisp"															;自作のElisp
+ "site-lisp"													;gnupack標準 & ダウンロードしたElisp
+ )
