@@ -1,3 +1,4 @@
+;;; Code:
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ search - migemo                                               ;;;
 ;;;   https://github.com/emacs-jp/migemo                            ;;;
@@ -14,3 +15,9 @@
   (load-library "migemo")
   (migemo-init)
 )
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 321-migemo.el ends here

@@ -1,4 +1,6 @@
 ;-*- coding: utf-8; -*-
+;;; Code:
+
 ;; Emacs 23より前のバージョンでは
 ;; user-emacs-directory変数が未定義のため次の設定を追加
 (when (< emacs-major-version 23)
@@ -145,3 +147,9 @@
 (defun server-ensure-safe-dir (dir) "Noop" t)
 (setq server-socket-dir "~/.emacs.d")
 (unless (server-running-p) (server-start))
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 100-common.el ends here

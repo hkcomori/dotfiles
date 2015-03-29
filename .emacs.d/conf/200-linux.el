@@ -1,4 +1,5 @@
 ;;-*- coding: utf-8; -*-
+;;; Code:
 (when (eq system-type 'gnu/linux)
   ;; setting for japanese
   (set-default-coding-systems 'utf-8-unix)				;デフォルトの文字コード
@@ -26,3 +27,9 @@
   (define-key global-map "\M-[1;2C" 'windmove-right)
   (define-key global-map "\M-[1;2D" 'windmove-left)
 )
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 200-linux.el ends here

@@ -1,4 +1,5 @@
 ;-*- coding: utf-8; -*-
+;;; Code:
 (when (eq system-type 'cygwin)
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
 ;;; @ shell                                                         ;;;
@@ -257,3 +258,9 @@
   ;;        (goto-char (point-max))
   ;;      ad-do-it) ))
 )
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 201-windows.el ends here

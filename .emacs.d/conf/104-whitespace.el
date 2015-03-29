@@ -1,3 +1,4 @@
+;;; Code:
 (require 'whitespace)
 (global-whitespace-mode 1)
 (setq whitespace-style '(
@@ -18,3 +19,9 @@
 (set-face-foreground	'whitespace-space (face-attribute 'font-lock-comment-face :foreground))
 (set-face-background	'whitespace-space (face-attribute 'default :background))
 (set-face-underline		'whitespace-space t)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 104-whitespace.el ends here

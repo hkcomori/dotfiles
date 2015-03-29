@@ -1,3 +1,4 @@
+;;; Code:
 (setq-default bm-buffer-persistence nil)
 (setq bm-restore-repository-on-load t)
 (require 'bm)
@@ -12,3 +13,9 @@
 (define-key global-map (kbd "M-SPC") 'bm-toggle)
 (define-key global-map (kbd "M-[") 'bm-previous)
 (define-key global-map (kbd "M-]") 'bm-next)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 321-bm.el ends here

@@ -1,3 +1,4 @@
+;;; Code:
 (require 'multiple-cursors)
 ;; insert specific serial number
 (defvar my/mc/insert-numbers-hist nil)
@@ -77,3 +78,9 @@
 	(define-key mc/keymap (kbd "C-s") 'phi-search-migemo)
 	(define-key mc/keymap (kbd "C-r") 'phi-search-migemo-backward)
 	)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 325-multiple-cursors.el ends here

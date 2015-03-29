@@ -1,3 +1,4 @@
+;;; Code:
 (require 'magit)
 ;; キーバインド
 (define-key mode-specific-map "m" 'magit-status)
@@ -18,3 +19,9 @@
 (set-face-background 'magit-diff-file-header		(face-attribute 'default :background)) ; Diffのファイル名部分
 (set-face-background 'magit-diff-hunk-header		(face-attribute 'default :background)) ; Diffのhunk部分
 (set-face-background 'magit-section-title				(face-attribute 'default :background)) ; 見出し部分
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 371-magit.el ends here

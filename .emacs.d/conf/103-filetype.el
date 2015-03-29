@@ -1,4 +1,5 @@
 ;;-*- coding: utf-8; -*-
+;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ファイルタイプ                                                            ;;
@@ -29,3 +30,9 @@
 ;; 		:front "<script[^>]*>\n<!--\n"
 ;; 		:back  "// ?-->\n</script>")))
 ;; (mmm-add-mode-ext-class nil "\\.s?html?\\(\\..+\\)?$" 'js-in-html)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 103-filetype.el ends here

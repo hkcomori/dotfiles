@@ -1,3 +1,4 @@
+;;; Code:
 (require 'recentf)
 (when (require 'cl nil t)
 	(defvar my-recentf-list-prev nil)
@@ -30,3 +31,9 @@ do nothing. And suppress the output from `message' and
 (setq recentf-auto-cleanup 60)
 (setq recentf-auto-save-timer (run-with-idle-timer 900 t 'recentf-save-list))
 (recentf-mode t)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 311-recentf.el ends here

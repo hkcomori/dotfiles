@@ -1,3 +1,4 @@
+;;; Code:
 ;; Syntaxハイライト設定
 (font-lock-add-keywords
  'c-mode '(
@@ -8,3 +9,9 @@
 					 ("\\<[A-Z][A-Z0-9_]+[A-Z0-9]\\>" . 'font-lock-constant-face)
 					 ("\\<\\(VALID\\|INVALID\\)\\>" . 'font-lock-constant-face)
 					 ))
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 111-c-mode.el ends here

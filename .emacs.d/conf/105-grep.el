@@ -1,3 +1,4 @@
+;;; Code:
 (require 'grep)
 (when (eq system-type 'gnu/linux)
 	(grep-apply-setting 'grep-find-command '("find . -type f -exec lgrep -n -Au8 -Ia  {} +" . 40))
@@ -12,3 +13,9 @@
 (when (require 'wgrep nil t)
 	(define-key grep-mode-map "e" 'wgrep-change-to-wgrep-mode)
 )
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 105-grep.el ends here

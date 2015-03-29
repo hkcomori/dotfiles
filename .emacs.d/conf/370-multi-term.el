@@ -1,3 +1,5 @@
+;;; Code:
+
 (require 'multi-term)
 (setq multi-term-program shell-file-name)
 (defun toggle-term-view () (interactive)
@@ -30,3 +32,9 @@
 						(define-key term-raw-map (kbd "M-<left>") 'term-send-backward-word)
 						(define-key term-raw-map (kbd "C-<left>") 'term-send-backward-word)
 						))
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 370-multi-term.el ends here

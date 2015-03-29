@@ -1,14 +1,15 @@
 ;;-*- coding: utf-8; -*-
+;;; Code:
+(eval-when-compile (require 'cl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; バッファ操作                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Close all buffers
-(when (require 'cl nil t)
-	(defun my/close-all-buffers ()
-		(interactive)
-		(loop for buffer being the buffers
-					do (kill-buffer buffer))))
+(defun my/close-all-buffers ()
+	(interactive)
+	(loop for buffer being the buffers
+				do (kill-buffer buffer)))
 
 ;; 変更されてないバッファを全部閉じる
 ;; http://qiita.com/amanoiverse/items/a3a605015d35c37efe2b
@@ -86,6 +87,10 @@
 	(interactive "p")
 	(delete-word (- arg)))
 
+(defun file-name-insert (arg)
+  (interactive "p")
+  (insert (file-name-nondirectory buffer-file-name)))
+
 (defun move-line-down ()
 	(interactive)
 	(let ((col (current-column)))
@@ -101,7 +106,7 @@
 		(save-excursion
 			(forward-line)
 			(transpose-lines -1))
-		(when nt-p (forward-line -1))
+		(when (eq system-type 'cygwin) (forward-line -1))
 		(move-to-column col)))
 
 (define-key global-map (kbd "M-N")							'move-line-down)				;行を一行下へ
@@ -169,3 +174,9 @@
 	(interactive "e")
 	(mouse-set-point click)
 	(mark-current-sexp))
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 003-func.el ends here

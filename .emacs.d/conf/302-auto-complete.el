@@ -1,3 +1,4 @@
+;;; Code:
 (require 'auto-complete)
 (require 'auto-complete-config)
 (defun my/ac-mode-enable ()
@@ -8,3 +9,9 @@
 ;;(global-auto-complete-mode t)			;自動補完を常に有効
 (ac-config-default)
 (setq ac-auto-show-menu 0.1)			;候補が出るまでの時間 (default: 0.8)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 302-auto-complete.el ends here

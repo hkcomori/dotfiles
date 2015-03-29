@@ -1,3 +1,4 @@
+;;; Code:
 ;; dired関係の設定
 (require 'dired-x)
 (eval-after-load "dired-aux" '(require 'dired-async))
@@ -129,3 +130,9 @@
 (define-key dired-mode-map (kbd "d")					'dired-do-delete)
 (define-key dired-mode-map (kbd "m")					'dired-do-rename)
 (define-key dired-mode-map (kbd "*")					'dired-mark-all-files)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 310-dired.el ends here

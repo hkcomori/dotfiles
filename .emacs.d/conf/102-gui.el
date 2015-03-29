@@ -1,3 +1,4 @@
+;;; Code:
 (when window-system
 	(modify-frame-parameters nil '((wait-for-wm . nil)))	 ;;GUI起動を高速化
 	(menu-bar-mode -1)							 ;;メニューバーを非表示
@@ -48,3 +49,9 @@
 				 )															;system-type 'cygwin
 				)																;cond
 	)																			;window-system
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 102-gui.el ends here

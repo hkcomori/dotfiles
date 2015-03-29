@@ -1,3 +1,5 @@
+;;; Code:
+
 ;; カーソル移動
 (define-key global-map (kbd "C-x :")						'goto-line)							;指定行に移動する
 (define-key global-map (kbd "C-M-<right>")			'forward-sexp)					;次のS式
@@ -31,3 +33,9 @@
 (define-key global-map [C-down-mouse-1] 'mouse/mark-current-sexp)
 (define-key global-map [C-mouse-1] 'mouse/mark-current-sexp)
 (define-key global-map [C-double-mouse-1] 'mouse/mark-current-sexp)
+
+;; Local Variables:
+;; coding: utf-8
+;; End:
+
+;;; 002-keybind.el ends here
