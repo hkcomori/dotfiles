@@ -60,7 +60,7 @@
 		(cond ((null flist)
 					 (dired-toggle-marks))
 					(t
-					 (dired-unmark-all-marks)))
+					 (dired-toggle-marks)))
 		))
 
 ;; フォルダ移動でバッファを新しく作らない
