@@ -7,4 +7,4 @@
 	(auto-complete-mode -1))
 ;;(global-auto-complete-mode t)			;自動補完を常に有効
 (ac-config-default)
-(setq ac-auto-show-menu 0.3)			;候補が出るまでの時間 (default: 0.8)
+(setq ac-auto-show-menu 0.1)			;候補が出るまでの時間 (default: 0.8)
