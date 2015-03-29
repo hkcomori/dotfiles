@@ -21,6 +21,7 @@
 (define-key global-map (kbd "M-N") 'move-line-down)						;行を一行下へ
 (define-key global-map (kbd "M-P") 'move-line-up)							;行を一行上へ
 
+(define-key minibuffer-inactive-mode-map [mouse-1] 'ignore)
 (define-key global-map [C-down-mouse-1] 'mouse/mark-current-sexp)
 (define-key global-map [C-mouse-1] 'mouse/mark-current-sexp)
 (define-key global-map [C-double-mouse-1] 'mouse/mark-current-sexp)
