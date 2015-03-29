@@ -111,14 +111,6 @@
  (interactive "F")
  (set-buffer (find-file (concat "/sudo::" file))))
 
-;; ファイルなら別バッファで、ディレクトリなら同じバッファで開く
-(defun dired-open-in-accordance-with-situation ()
-  (interactive)
-  (let ((file (dired-get-filename)))
-    (if (file-directory-p file)
-        (dired-find-alternate-file)
-      (dired-find-file))))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 編集                                                                  ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
