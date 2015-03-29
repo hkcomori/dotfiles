@@ -12,7 +12,7 @@
 				 (interactive) 
 				 (if (eq major-mode 'dired-mode) 
 						 (let ((flist (dired-get-marked-files)))
-							 (dired-do-shell-command "exo-open" nil flist) 
+							 (dired-do-async-shell-command "exo-open" nil flist)
 							 (message "exo-open %s" flist)))))
 
 			;; 関連付けられたアプリを起動する(Windows)
