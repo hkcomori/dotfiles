@@ -7,6 +7,13 @@
   (set-file-name-coding-system 'utf-8-unix)			;ファイル名の文字コード
   (set-keyboard-coding-system 'utf-8-unix)			;キーボード入力の文字コード
 
+	(add-hook 'minibuffer-setup-hook	'fcitx-disable)
+	(defun fcitx-disable ()
+		"Turn off fcitx ime."
+		(interactive)
+		(let ((shell-command-no-message t))
+			(shell-command "fcitx-remote -c")))
+
   ;; YaTeX-mode
   (setq auto-mode-alist  (cons (cons "\\.tex$" 'yatex-mode) auto-mode-alist))
   (autoload 'yatex-mode "yatex" "Yet Another LaTeX mode" t)

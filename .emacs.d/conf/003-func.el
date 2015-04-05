@@ -3,16 +3,24 @@
 (eval-when-compile (require 'cl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Elisp拡張                                                             ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun concat-string-list (list) 
+	"Return a string which is a concatenation of all elements of the list separated by spaces" 
+	(mapconcat '(lambda (obj) (format "\"%s\"" obj)) list " "))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; バッファ操作                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Close all buffers
 (defun my/close-all-buffers ()
+	"Close all buffers."
 	(interactive)
 	(loop for buffer being the buffers
 				do (kill-buffer buffer)))
 
 ;; 変更されてないバッファを全部閉じる
 ;; http://qiita.com/amanoiverse/items/a3a605015d35c37efe2b
+(define-key global-map (kbd "C-x C-c") 'my/close-all-unmodified-buffer)
 (defun my/close-all-unmodified-buffer ()
 	(interactive)
 	(let ((buffers (buffer-list)))
@@ -23,8 +31,6 @@
 						 (kill-buffer buf)))
 		 buffers)
 		))
-
-(define-key global-map (kbd "C-x C-c") 'my/close-all-unmodified-buffer)	;バッファをすべて閉じる
 
 ;; カレントバッファのファイルをバイトコンパイル
 ;; http://ergoemacs.org/emacs/emacs_byte_compile.html
@@ -48,6 +54,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; ファイル操作                                                           ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun exec-command (command &optional args)
+	"Run external COMMAND at background."
+	(let* ((process-connection-type nil))
+		(apply 'start-process command nil command args))
+	)
+
+(defvar shell-command-no-message nil)
+(defadvice shell-command
+	(after no-message activate)
+	"suppress the output from `message' to minibuffer"
+	(if shell-command-no-message (message "")))
+
 (defun file-root-p (filename)
  "Return t if file FILENAME created by root."
  (eq 0 (nth 2 (file-attributes filename))))

@@ -1,24 +1,44 @@
-;;; Code:
+;;; Commentary:
 ;; dired関係の設定
+
+;;; Code:
+
 (require 'dired-x)
+(require 'wdired)
 (eval-after-load "dired-aux" '(require 'dired-async))
 
-(setq dired-listing-switches "-ADGFLhl --group-directories-first --time-style=long-iso")
+(setq dired-dwim-target t)							;左右分割時に他方を転送先にする
+(setq dired-recursive-copies  'always)	;常に再帰コピー
+(setq dired-recursive-deletes 'always)	;常に再帰削除
+(setq wdired-allow-to-change-permissions t) ;パーミッションの編集を許可する
+(put 'dired-find-alternate-file 'disabled nil)
+
+(setq dired-listing-switches "-DGFLhl --group-directories-first --time-style=long-iso")
+
+(define-minor-mode my-dired-display-all-mode
+  ""
+  :init-value nil
+  (if my-dired-display-all-mode
+      (setq dired-actual-switches
+            (concat "-A "
+                    dired-actual-switches))
+    (setq dired-actual-switches
+          (replace-regexp-in-string "-A " "" dired-actual-switches)))
+  (when (eq major-mode 'dired-mode)
+    (revert-buffer)))
 
 (cond ((eq system-type 'gnu/linux)
-			 ;; 関連付けられたアプリを起動する(Linux)
-			 (defun my-dired-related-open () 
-				 "Type '[my-dired-related-open]': open the current line's file." 
+			 (defun dired-open-dwim () 
+				 "Open each of the marked files, or the file under the point with default application." 
 				 (interactive) 
 				 (if (eq major-mode 'dired-mode) 
-						 (let ((flist (dired-get-marked-files)))
-							 (dired-do-async-shell-command "exo-open" nil flist)
-							 (message "exo-open %s" flist)))))
+						 (let* ((fn-list (dired-get-marked-files)))
+							 (exec-command "exo-open" fn-list)))
+				 ))
 
-			;; 関連付けられたアプリを起動する(Windows)
 			((or (eq system-type 'windows-nt) (eq system-type 'cygwin))
-			 (defun my-dired-related-open () 
-				 "Type '[my-dired-related-open]': open the current line's file." 
+			 (defun dired-open-dwim () 
+				 "Open file under the cursor." 
 				 (interactive) 
 				 (if (eq major-mode 'dired-mode) 
 						 (let ((fname (dired-get-filename))) 
@@ -26,13 +46,15 @@
 							 (message "open %s" fname)))
 				 ))
 
-			;; それ以外の場合はDiredで開く
 			(t
-			 (defun my-dired-related-open () 
-				 "Type '[my-dired-related-open]': open the current line's file." 
+			 (defun dired-open-dwim () 
+				 "." 
 				 (interactive) 
-				 (dired-find-file)))
-			 )
+				 (if (eq major-mode 'dired-mode) 
+						 (let* ((fn-list (dired-get-marked-files)))
+							 (dired-x-find-file-other-window fn-list)))
+			 ))
+			)
 
 ;; ファイルは関連付けで、ディレクトリは同じバッファで開く
 (defun dired-open-in-accordance-with-situation ()
@@ -41,7 +63,7 @@
     (cond ((file-directory-p file)
 					 (dired-find-alternate-file))
 					(t
-					 (my-dired-related-open)))
+					 (dired-open-dwim)))
 		))
 
 ;; ファイルは別バッファで、ディレクトリは同じバッファで開く
@@ -52,6 +74,22 @@
 					 (dired-find-alternate-file))
 					(t
 					 (dired-find-file)))
+		))
+
+(define-key dired-mode-map (kbd "u")					'dired-unpack-files)
+(defun dired-unpack-files ()
+	"Unpack each of the marked files, or the file under the point."
+	(interactive)
+	(let* ((fn-list (dired-get-marked-files)))
+		(async-shell-command (concat "unar " (concat-string-list fn-list)))))
+
+(define-key dired-mode-map (kbd "p")					'dired-pack-files)
+(defun dired-pack-files (fn-dest)
+	"Archive each of the marked files, or the file under the point."
+	(interactive
+	 (list (read-file-name "Archive file name: ")))
+	(let* ((fn-list (dired-get-marked-files)))
+		(async-shell-command (concat "zip -r \"" (expand-file-name fn-dest) "\" " (concat-string-list fn-list)))
 		))
 
 ;; diredでマークをつけたファイルを開く
@@ -73,8 +111,8 @@
 ;; すべてのファイル一括でマーク状態のトグルを行う
 (defun dired-mark-all-files ()
   (interactive)
-	(let ((flist (dired-get-marked-files)))
-		(cond ((null flist)
+	(let ((fn-list (dired-get-marked-files)))
+		(cond ((null fn-list)
 					 (dired-toggle-marks))
 					(t
 					 (dired-toggle-marks)))
@@ -100,7 +138,7 @@
 						 dired-marker-char ?\040)))
 		(dired-mark arg)))
 
-;; 更新日が今日であるファイルを色分けする
+;; 本日更新のファイルの日付を色分けする
 (defface dired-todays-face '((t (:foreground "blue"))) nil)
 (defvar dired-todays-face 'dired-todays-face)
 (defconst month-name-alist
@@ -124,27 +162,22 @@
 		'dired-mode
 		(list '(dired-today-search . dired-todays-face))))
 
-(when (require 'wdired nil t)
-	(define-key dired-mode-map (kbd "r") 'wdired-change-to-wdired-mode)	;diredから"r"でファイル名をインライン編集する
-	(setq wdired-allow-to-change-permissions t)) ;パーミッションの編集を許可する
-
-;; Diredの設定
-(setq dired-dwim-target t)							;左右分割時に他方を転送先にする
-(setq dired-recursive-copies  'always)	;常に再帰コピー
-(setq dired-recursive-deletes 'always)	;常に再帰削除
-(put 'dired-find-alternate-file 'disabled nil)
 
 ;; RET 標準の dired-find-file では dired バッファが複数作られるので
 ;; dired-find-alternate-file を代わりに使う
 (define-key dired-mode-map (kbd "<RET>")			'dired-open-in-accordance-with-situation)
-(define-key dired-mode-map (kbd "<mouse-1>")	'dired-open-in-accordance-with-situation)
+(define-key dired-mode-map (kbd "<mouse-1>")	'ignore)													;ファイル行のクリック動作
+(define-key dired-mode-map (kbd "<mouse-2>")	'ignore)													;ファイル名のクリック動作
 (define-key dired-mode-map (kbd "e")					'dired-edit-in-accordance-with-situation)
-(define-key dired-mode-map (kbd "<SPC>")			'dired-toggle-mark)
-(define-key dired-mode-map (kbd "<DEL>")			'dired-up-directory)
-(define-key dired-mode-map (kbd "k")					'dired-create-directory)
-(define-key dired-mode-map (kbd "c")					'dired-do-copy)
-(define-key dired-mode-map (kbd "d")					'dired-do-delete)
-(define-key dired-mode-map (kbd "m")					'dired-do-rename)
+(define-key dired-mode-map (kbd "<SPC>")			'dired-toggle-mark)								;マークをオン/オフする
+(define-key dired-mode-map (kbd "<DEL>")			'dired-up-directory)							;上のディレクトリへ移動
+(define-key dired-mode-map (kbd "k")					'dired-create-directory)					;ディレクトリを作成
+(define-key dired-mode-map (kbd "c")					'dired-do-copy)										;ファイルをコピー
+(define-key dired-mode-map (kbd "d")					'dired-do-delete)									;ファイルを削除
+(define-key dired-mode-map (kbd "r")					'wdired-change-to-wdired-mode)		;ファイル名をインライン編集
+(define-key dired-mode-map (kbd "m")					'dired-do-rename)									;ファイルを移動
+(define-key dired-mode-map (kbd "h")					'my-dired-display-all-mode)				;ファイルを移動
+(define-key dired-mode-map (kbd ".")					'my-dired-display-all-mode)				;ファイルを移動
 (define-key dired-mode-map (kbd "*")					'dired-mark-all-files)
 
 ;; Local Variables:
