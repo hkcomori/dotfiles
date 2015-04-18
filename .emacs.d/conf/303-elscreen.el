@@ -2,13 +2,23 @@
 
 (require 'elscreen)
 
+;; Anythingを使ってelscreenを切り替える
+(define-key global-map (kbd "C-z") 'anything-for-elscreen)
+(defun anything-for-elscreen ()
+  "preconfigured `anything' for anything-for-elscreen"
+  (interactive)
+  (anything anything-c-source-elscreen
+						nil nil nil nil "*anything for elscreen*"))
+
 ;;; プレフィクスキーはC-z
-(setq elscreen-prefix-key (kbd "C-z"))
+;; (setq elscreen-prefix-key (kbd "C-z"))
 (elscreen-start)
+;; タブを非表示
+(setq elscreen-display-tab nil)
 ;;; タブの先頭に[X]を表示しない
-(setq elscreen-tab-display-kill-screen nil)
+;; (setq elscreen-tab-display-kill-screen nil)
 ;;; header-lineの先頭に[<->]を表示しない
-(setq elscreen-tab-display-control nil)
+;; (setq elscreen-tab-display-control nil)
 ;;; バッファ名・モード名からタブに表示させる内容を決定する(デフォルト設定)
 (setq elscreen-buffer-to-nickname-alist
       '(("^dired-mode$" .
