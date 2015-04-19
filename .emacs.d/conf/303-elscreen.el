@@ -2,16 +2,8 @@
 
 (require 'elscreen)
 
-;; Anythingを使ってelscreenを切り替える
-(define-key global-map (kbd "C-z") 'anything-for-elscreen)
-(defun anything-for-elscreen ()
-  "preconfigured `anything' for anything-for-elscreen"
-  (interactive)
-  (anything anything-c-source-elscreen
-						nil nil nil nil "*anything for elscreen*"))
-
 ;;; プレフィクスキーはC-z
-;; (setq elscreen-prefix-key (kbd "C-z"))
+(setq elscreen-prefix-key (kbd "C-z"))
 (elscreen-start)
 ;; タブを非表示
 (setq elscreen-display-tab nil)
@@ -40,6 +32,15 @@
         ("-telnet" . "telnet")
         ("dict" . "OnlineDict")
         ("*WL:Message*" . "Wanderlust")))
+
+;; Anythingを使ってelscreenを切り替える
+(require 'anything)
+(define-key global-map (kbd "C-x C-z") 'anything-for-elscreen)
+(defun anything-for-elscreen ()
+  "preconfigured `anything' for anything-for-elscreen"
+  (interactive)
+  (anything anything-c-source-elscreen
+						nil nil nil nil "*anything for elscreen*"))
 
 ;; Local Variables:
 ;; coding: utf-8

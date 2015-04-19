@@ -5,7 +5,7 @@
 (define-key global-map (kbd "C-x C-b") 'anything-for-files)
 (define-key global-map (kbd "M-y") 'anything-show-kill-ring)
 
-(define-key global-map (kbd "M-x") 'anything-execute-emacs-commands)
+(define-key global-map (kbd "M-X") 'anything-execute-emacs-commands)
 (defun anything-execute-emacs-commands ()
 	"Execute emacs commands in anything"
 	(interactive)
