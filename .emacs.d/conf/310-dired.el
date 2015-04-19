@@ -87,7 +87,9 @@
 (defun dired-pack-files (fn-dest)
 	"Archive each of the marked files, or the file under the point."
 	(interactive
-	 (list (read-file-name "Archive file name: ")))
+	 (let* ((fn-list (dired-get-marked-files))
+					(default-fn (concat (file-name-sans-extension (file-name-nondirectory (car fn-list))) ".zip")))
+		 (list (read-file-name "Archive file name: " nil nil nil default-fn))))
 	(let* ((fn-list (dired-get-marked-files)))
 		(async-shell-command (concat "zip -r \"" (expand-file-name fn-dest) "\" " (concat-string-list fn-list)))
 		))
@@ -138,6 +140,13 @@
 						 dired-marker-char ?\040)))
 		(dired-mark arg)))
 
+(defun dired-toggle-mark-and-prev (arg)
+	"Toggle the current (or next ARG) files."
+	;; S.Namba Sat Aug 10 12:20:36 1996
+	(interactive "P")
+	(dired-toggle-mark arg)
+	(dired-previous-line 2))
+
 ;; 本日更新のファイルの日付を色分けする
 (defface dired-todays-face '((t (:foreground "blue"))) nil)
 (defvar dired-todays-face 'dired-todays-face)
@@ -170,6 +179,7 @@
 (define-key dired-mode-map (kbd "<mouse-2>")	'ignore)													;ファイル名のクリック動作
 (define-key dired-mode-map (kbd "e")					'dired-edit-in-accordance-with-situation)
 (define-key dired-mode-map (kbd "<SPC>")			'dired-toggle-mark)								;マークをオン/オフする
+(define-key dired-mode-map (kbd "<S-SPC>")		'dired-toggle-mark-and-prev)			;マークをオン/オフする
 (define-key dired-mode-map (kbd "<DEL>")			'dired-up-directory)							;上のディレクトリへ移動
 (define-key dired-mode-map (kbd "k")					'dired-create-directory)					;ディレクトリを作成
 (define-key dired-mode-map (kbd "c")					'dired-do-copy)										;ファイルをコピー
