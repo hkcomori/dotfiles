@@ -90,8 +90,11 @@
 	 (let* ((fn-list (dired-get-marked-files))
 					(default-fn (concat (file-name-sans-extension (file-name-nondirectory (car fn-list))) ".zip")))
 		 (list (read-file-name "Archive file name: " nil nil nil default-fn))))
-	(let* ((fn-list (dired-get-marked-files)))
-		(async-shell-command (concat "zip -r \"" (expand-file-name fn-dest) "\" " (concat-string-list fn-list)))
+	(let* ((fn-list (dired-get-marked-files))
+				 (rfn-list))
+		(dolist (fn fn-list)
+			(add-to-list 'rfn-list (file-relative-name fn)))
+		(async-shell-command (concat "zip -r \"" (expand-file-name fn-dest) "\" " (concat-string-list rfn-list)))
 		))
 
 ;; diredでマークをつけたファイルを開く
