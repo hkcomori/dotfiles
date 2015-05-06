@@ -7,7 +7,7 @@
   (set-file-name-coding-system 'utf-8-unix)			;ファイル名の文字コード
   (set-keyboard-coding-system 'utf-8-unix)			;キーボード入力の文字コード
 
-	(add-hook 'minibuffer-setup-hook	'fcitx-disable)
+	(add-hook 'isearch-mode-hook	'fcitx-disable)
 	(defun fcitx-disable ()
 		"Turn off fcitx ime."
 		(interactive)
