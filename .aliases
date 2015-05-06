@@ -13,7 +13,7 @@ alias umount='fusermount -u'
 
 alias cpuinfo='watch cat /proc/cpuinfo'
 alias iostat='watch "/usr/bin/iostat | cat - /proc/mdstat"'
-alias hddtemp='watch hddtemp /dev/sd[a-e]'
+alias hddtemp='watch sudo hddtemp /dev/sd[a-e]'
 alias rtcwake='rtcwake -l'
 
 alias diced='/usr/local/bin/DiCE/diced |nkf -uw'
