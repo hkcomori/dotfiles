@@ -10,6 +10,7 @@
 !/.zsh.d/
 
 !/.aliases
+!/.bashrc
 !/.profile
 !/.screenrc
 !/.zlogout
