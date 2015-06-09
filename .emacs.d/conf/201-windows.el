@@ -9,6 +9,8 @@
   (prefer-coding-system 'cp932-dos)							;テキストファイル／新規バッファの文字コード
   (set-file-name-coding-system 'utf-8-unix)			;ファイル名の文字コード
   (set-keyboard-coding-system 'utf-8-unix)			;キーボード入力の文字コード
+	(set-language-environment 'utf-8)							;ターミナルで日本語入力を可能にする
+  (setq default-process-coding-system '(undecided-dos . utf-8-unix))
 
   (if (and (require 'shell nil t) (executable-find "zsh"))
 			(lambda ()
