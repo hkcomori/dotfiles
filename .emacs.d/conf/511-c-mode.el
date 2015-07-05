@@ -13,6 +13,15 @@
 					 ("\\<\\(VALID\\|INVALID\\)\\>" . 'font-lock-constant-face)
 					 ))
 
+(when (require 'color-moccur nil t)
+	(add-hook 'c-mode-common-hook '(lambda () (setq moccur-grep-default-mask "\\.[ch]$")))
+	)
+
+(defun c-func-list ()
+	(interactive)
+	(occur-by-moccur "^[_a-zA-Z][^()+-=;:]*\\s-+[_a-zA-Z][_a-zA-Z0-9]*(.*$" " ")
+	)
+
 ;; Local Variables:
 ;; coding: utf-8
 ;; End:
