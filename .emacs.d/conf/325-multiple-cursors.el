@@ -37,6 +37,8 @@
 (add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
 (add-to-list 'mc--default-cmds-to-run-for-all 'point-undo)
 (add-to-list 'mc--default-cmds-to-run-for-all 'point-redo)
+(add-to-list 'mc--default-cmds-to-run-for-all 'indent-for-tab-command)
+(add-to-list 'mc--default-cmds-to-run-for-all 'comment-dwim)
 
 ;; auto-completeと併用するための設定
 ;; (when (require 'auto-complete nil t)
@@ -71,7 +73,9 @@
 			("O"   . 'mc/reverse-regions)))
 	)
 
-(define-key mc/keymap (kbd "RET") 'newline-and-indent)
+(define-key mc/keymap [return] 'newline-and-indent)
+(define-key mc/keymap [zenkaku-hankaku] 'toggle-input-method)
+(define-key mc/keymap [kanji] 'toggle-input-method)
 
 (when (require 'phi-search-migemo nil t)
 	(define-key phi-search-default-map (kbd "M-m") 'phi-search-migemo-toggle)

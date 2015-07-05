@@ -2,6 +2,8 @@
 (require 'anything)
 (require 'anything-config)
 
+(define-key anything-command-map [zenkaku-hankaku] 'toggle-input-method)
+
 (define-key global-map (kbd "C-x C-b") 'anything-for-files)
 (define-key global-map (kbd "M-y") 'anything-show-kill-ring)
 
@@ -26,6 +28,7 @@
 
 (when (and (executable-find "cmigemo") (require 'migemo nil t))
 	(require 'anything-migemo nil t)
+	(setq anything-use-migemo t)
 	)
 
 ;; Local Variables:
