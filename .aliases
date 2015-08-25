@@ -3,11 +3,20 @@
 
 export LC_ALL=ja_JP.UTF-8
 
+cygwin=false
+case "$(uname)" in
+CYGWIN*) cygwin=true;;
+esac
+
 ## alias
 alias ls='ls -h --color=always'
 alias la='ls -a'
 #alias rm='trash-put'
-alias emacs='/usr/bin/emacsclient -n --socket-name=~/.emacs.d/server --alternate-editor=/usr/bin/emacs24'
+if $cygwin; then
+	alias emacs='/app/cygwin/emacs/bin/emacsclient -n --socket-name=~/.emacs.d/server --alternate-editor=/app/cygwin/emacs/bin/emacs'
+else
+	alias emacs='/usr/bin/emacsclient -n --socket-name=~/.emacs.d/server --alternate-editor=/usr/bin/emacs24'
+fi
 alias isomount='fuseiso'
 alias umount='fusermount -u'
 
