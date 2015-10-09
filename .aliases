@@ -27,6 +27,16 @@ alias rtcwake='rtcwake -l'
 
 alias diced='/usr/local/bin/DiCE/diced |nkf -uw'
 
+# Git
+alias 'git-log'='git log --graph --all'
+alias 'git-add'='git add'
+alias 'git-commit'='git commit -m'
+alias 'git-merge'='git merge --squash'
+alias 'git-checkout'='git checkout'
+alias 'git-push'='git push'
+alias 'git-branch'='git branch'
+alias 'git-status'='git status'
+
 # MATLAB R2010b
 alias matlab='/usr/local/MATLAB/R2010b/bin/matlab -nodisplay'
 alias gmatlab='/usr/local/MATLAB/R2010b/bin/matlab'
