@@ -39,6 +39,8 @@
 (add-to-list 'mc--default-cmds-to-run-for-all 'point-redo)
 (add-to-list 'mc--default-cmds-to-run-for-all 'indent-for-tab-command)
 (add-to-list 'mc--default-cmds-to-run-for-all 'comment-dwim)
+(add-to-list 'mc--default-cmds-to-run-for-all 'delete-word)
+(add-to-list 'mc--default-cmds-to-run-for-all 'cua-paste)
 
 ;; auto-completeと併用するための設定
 ;; (when (require 'auto-complete nil t)
