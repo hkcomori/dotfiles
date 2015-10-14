@@ -1,0 +1,14 @@
+[core]
+	autocrlf = true
+	editor = nano
+	pager = lv
+[alias]
+	la = log --graph --all --color --pretty='%x09%h %cn%x09%s %Cred%d%Creset'
+	ci = commit
+	cm = commit
+	st = status
+	br = branch
+	co = checkout
+	df = diff --word-diff
+[include]
+	path = .gitconfig.local
