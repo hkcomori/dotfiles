@@ -2,10 +2,10 @@ bindkey -e
 PATH=$HOME/bin:$HOME/bin/copy:/sbin:/usr/sbin:/usr/local/sbin:$PATH
 #PS1=$'%n@%m:%~\n%(!.#.$) '
 
-#[ -f ~/.zsh.d/prompt ] && source ~/.zsh.d/prompt
+[ -f ~/.zsh.d/prompt ] && source ~/.zsh.d/prompt
 [ -f ~/.zsh.d/functions ] && source ~/.zsh.d/functions
 
-PROMPT='['${USER}'@'${HOST}'] %~ '$'\n''%(!.#.$) '
+#PROMPT='['${USER}'@'${HOST}'] %~ '$'\n''%(!.#.$) '
 
 REPORTTIME=5      #N秒以上かかったプロセスの所要CPU時間を表示
 
