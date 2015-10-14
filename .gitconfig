@@ -9,6 +9,6 @@
 	st = status
 	br = branch
 	co = checkout
-	df = diff --word-diff
+	df = diff
 [include]
 	path = .gitconfig.local
