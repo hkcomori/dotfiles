@@ -2,8 +2,8 @@
 
 ## プロンプトの作成
 ### ↓のようにする。
-###   -(user@debian)-(0)-<2011/09/01 00:54>--------------------[/home/user]-
-###   -[84](0)%                                                         [~]
+###   -[user@debian][00:54][0][~/Documents/Projects/dotfiles]
+###   -[84](2)$                                                [git][office]
 
 ## バージョン管理システムの情報も表示する
 autoload -Uz vcs_info
@@ -14,36 +14,30 @@ zstyle ':vcs_info:*' actionformats \
 
 ### プロンプトバーの左側
 ###   %{%B%}...%{%b%}: 「...」を太字にする。
-###   %{%F{cyan}%}...%{%f%}: 「...」をシアン色の文字にする。
 ###   %n: ユーザ名
 ###   %m: ホスト名（完全なホスト名ではなくて短いホスト名）
-###   %{%B%F{white}%(?.%K{green}.%K{red})%}%?%{%f%k%b%}:
-###                           最後に実行したコマンドが正常終了していれば
-###                           太字で白文字で緑背景にして異常終了していれば
-###                           太字で白文字で赤背景にする。
+###   %{%B%(?.%F{black}.%F{white}%K{red})%}%?%{%f%k%b%}:
+###                           最後に実行したコマンドが
+###                           正常終了していれば太字の黒文字・白背景
+###                           異常終了していれば太字の白文字・赤背景
 ###   %{%F{white}%}: 白文字にする。
+###   %{%F{black}%}: 黒文字にする。
 ###     %(x.true-text.false-text): xが真のときはtrue-textになり
 ###                                偽のときはfalse-textになる。
 ###       ?: 最後に実行したコマンドの終了ステータスが0のときに真になる。
-###       %K{green}: 緑景色にする。
 ###       %K{red}: 赤景色を赤にする。
 ###   %?: 最後に実行したコマンドの終了ステータス
 ###   %{%k%}: 背景色を元に戻す。
 ###   %{%f%}: 文字の色を元に戻す。
 ###   %{%b%}: 太字を元に戻す。
-###   %D{%Y/%m/%d %H:%M}: 日付。「年/月/日 時:分」というフォーマット。
-prompt_bar_left_self="[%n@%m]"
-prompt_bar_left_status="[%?]"
-#prompt_bar_left_date="<%D{%Y/%m/%d %H:%M}>"
-prompt_bar_left_date="[%D{%H:%M}]"
-prompt_bar_left="${prompt_bar_left_self}${prompt_bar_left_date}${prompt_bar_left_status}[%{%B%F{white}%K{black}%}%(5~,%-2~/.../%3~,%~)%{%b%f%k%}]"
-### プロンプトバーの右側
-###   %{%B%K{magenta}%F{white}%}...%{%f%k%b%}:
-###       「...」を太字のマジェンタ背景の白文字にする。
-###   %d: カレントディレクトリのフルパス（省略しない）
-prompt_bar_right=""
+###   %D{%H:%M}: 時間。「時:分」というフォーマット。
+prompt_bar_self="[%n@%m]"
+prompt_bar_status="[%{%B%(?.%F{black}.%F{white}%K{red})%}%?%{%f%k%b%}]"
+prompt_bar_date="[%D{%H:%M}]"
+prompt_bar_directory="[%{%B%F{white}%K{black}%}%(5~,%-2~/.../%3~,%~)%{%b%f%k%}]"
+
 ### プロンプトバー
-prompt_bar="${prompt_bar_left}${prompt_bar_right}"
+prompt_bar="${prompt_bar_self}${prompt_bar_date}${prompt_bar_status}${prompt_bar_directory}"
 
 ### 2行目左にでるプロンプト。
 ###   %h: ヒストリ数。
@@ -54,10 +48,13 @@ prompt_bar="${prompt_bar_left}${prompt_bar_right}"
 prompt_left="[%h]%(1j,(%j),)%(!.#.$) "
 
 ### プロンプトバーと左プロンプトを設定
-###   "${bar_left}${bar_right}": プロンプトバー
+###   "${prompt_bar}": プロンプトバー
 ###   $'\n': 改行
 ###   "${prompt_left}": 2行目左のプロンプト
 PROMPT="-${prompt_bar}"$'\n'"-${prompt_left}"
+
+### 右プロンプトを設定
+###   "%1(v|%1v|)" の部分がVCS情報 (psvarの長さが1以上なら表示)
 RPROMPT="%1(v|%1v|)"
 
 ## 右プロンプトを更新する。
