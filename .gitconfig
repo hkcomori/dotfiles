@@ -3,7 +3,8 @@
 	editor = nano
 	pager = lv
 [alias]
-	la = log --graph --all --color --pretty='%x09%h %cn%x09%s %Cred%d%Creset'
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	la = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	ci = commit
 	cm = commit
 	st = status
