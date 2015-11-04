@@ -1,15 +1,19 @@
 [core]
 	autocrlf = true
 	editor = nano
-	pager = lv
+	pager = nkf -w | LESSCHARSET=utf-8 less -x4
+[merge]
+	ff = false
+[branch]
+	autosetuprebase = always
 [alias]
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	la = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	ci = commit
-	cm = commit
+	cm = commit -m
 	st = status
 	br = branch
 	co = checkout
-	df = diff
+	df = diff -w
 [include]
 	path = .gitconfig.local
