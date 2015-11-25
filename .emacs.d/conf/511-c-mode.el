@@ -4,7 +4,7 @@
 (defface font-lock-c-ei-face '((t (:foreground "red" :bold t))) nil)
 (font-lock-add-keywords
  'c-mode '(
-					 ("\\<m?i_[a-zA-Z0-9]+\\>" . 'font-lock-variable-name-face)
+					 ("\\<m?i_[a-zA-Z0-9_]+\\>" . 'font-lock-variable-name-face)
 					 ("\\<IntcrlDisableAllInterrupt\\>()" . 'font-lock-c-di-face)
 					 ("\\<IntcrlEnableAllInterrupt\\>()" . 'font-lock-c-ei-face)
 					 ("\\<MYSTATIC\\>" . 'font-lock-keyword-face)
