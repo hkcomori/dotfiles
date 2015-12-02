@@ -2,6 +2,8 @@
 	autocrlf = true
 	editor = nano
 	pager = nkf -w | LESSCHARSET=utf-8 less -x4
+[diff]
+	algorithm = histogram
 [merge]
 	ff = false
 [branch]
