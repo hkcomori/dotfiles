@@ -2,6 +2,7 @@
 *~
 
 !/init.el
+!/init-mini.el
 !/conf/
 !/conf/*.el
 !/conf/
