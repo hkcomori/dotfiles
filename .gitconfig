@@ -1,6 +1,6 @@
 [core]
 	autocrlf = true
-	editor = nano
+	editor = /app/cygwin/emacs/bin/emacs -q -nw -l ${HOME}/.emacs.d/init-mini.el
 	pager = nkf -w | LESSCHARSET=utf-8 less -x4
 [diff]
 	algorithm = histogram
