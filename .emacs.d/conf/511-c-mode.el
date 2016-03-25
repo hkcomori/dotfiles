@@ -22,6 +22,9 @@
 	(occur-by-moccur "^[_a-zA-Z][^()+-=;:]*\\s-+[_a-zA-Z][_a-zA-Z0-9]*(.*$" " ")
 	)
 
+;;コメントスタイル変更
+(add-hook 'c-mode-common-hook '(lambda () (setq comment-style 'box-multi)))
+
 ;; Local Variables:
 ;; coding: utf-8
 ;; End:
