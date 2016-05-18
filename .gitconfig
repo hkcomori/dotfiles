@@ -28,4 +28,4 @@
 	update = add --update
 	delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|master'|xargs git branch -d; };f"
 [include]
-	path = .gitconfig.local
+	path = .gitconfig_local
