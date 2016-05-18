@@ -2,6 +2,9 @@
 	autocrlf = true
 	editor = /app/cygwin/emacs/bin/emacs -q -nw -l ${HOME}/.emacs.d/init-mini.el
 	pager = nkf -w | LESSCHARSET=utf-8 less -x4
+[i18n]
+	commitencoding = utf-8
+	logoutputencoding = utf-8
 [diff]
 	algorithm = histogram
 [merge]
