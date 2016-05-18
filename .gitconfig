@@ -20,7 +20,7 @@
 	la = log --graph --all --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	ci = commit
 	cm = commit -m
-	st = status
+	st = status --short --branch
 	br = branch
 	co = checkout
 	df = diff -w
