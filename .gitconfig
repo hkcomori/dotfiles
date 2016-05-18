@@ -1,4 +1,5 @@
 [core]
+	attributesfile = ~/.gitattributes_global
 	autocrlf = true
 	editor = /app/cygwin/emacs/bin/emacs -q -nw -l ${HOME}/.emacs.d/init-mini.el
 	pager = nkf -w | LESSCHARSET=utf-8 less -x4
@@ -8,6 +9,8 @@
 [diff]
 	algorithm = histogram
 	renames = copies
+[diff "wordx"]
+	textconv = ~/bin/docx2txt/docx2txt
 [merge]
 	ff = false
 [branch]
