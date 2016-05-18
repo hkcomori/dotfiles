@@ -21,6 +21,7 @@
 	br = branch
 	co = checkout
 	df = diff -w
+	wd = diff -w --color-words
 	update = add --update
 	delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|master'|xargs git branch -d; };f"
 [include]
