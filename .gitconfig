@@ -7,6 +7,7 @@
 	logoutputencoding = utf-8
 [diff]
 	algorithm = histogram
+	renames = copies
 [merge]
 	ff = false
 [branch]
