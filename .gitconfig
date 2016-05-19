@@ -26,6 +26,7 @@
 	co = checkout
 	df = diff -w
 	dw = diff -w --color-words
+	dwr = diff -w --color-words --word-diff-regex='\\w+|[^[:space:]]'
 	update = add --update
 	delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|master'|xargs git branch -d; };f"
 [include]
