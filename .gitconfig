@@ -10,7 +10,7 @@
 [diff]
 	algorithm = histogram
 	renames = copies
-[diff "wordx"]
+[diff "docx"]
 	textconv = ~/bin/docx2txt/docx2txt
 [merge]
 	ff = false
