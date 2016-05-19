@@ -11,7 +11,11 @@
 	algorithm = histogram
 	renames = copies
 [diff "docx"]
+	binary = true
 	textconv = ~/bin/docx2txt/docx2txt
+[diff "xlsx"]
+	binary = true
+	textconv = ~/bin/git-xlsx-textconv/git-xlsx-textconv.pl
 [merge]
 	ff = false
 [branch]
