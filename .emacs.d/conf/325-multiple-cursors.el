@@ -41,6 +41,8 @@
 (add-to-list 'mc--default-cmds-to-run-for-all 'comment-dwim)
 (add-to-list 'mc--default-cmds-to-run-for-all 'delete-word)
 (add-to-list 'mc--default-cmds-to-run-for-all 'cua-paste)
+(add-to-list 'mc--default-cmds-to-run-for-all 'beginning-of-defun)
+(add-to-list 'mc--default-cmds-to-run-for-all 'visual-basic-beginning-of-defun)
 
 ;; auto-completeと併用するための設定
 ;; (when (require 'auto-complete nil t)
