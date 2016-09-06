@@ -33,14 +33,9 @@
         ("dict" . "OnlineDict")
         ("*WL:Message*" . "Wanderlust")))
 
-;; Anythingを使ってelscreenを切り替える
-(require 'anything)
-(define-key global-map (kbd "C-x C-z") 'anything-for-elscreen)
-(defun anything-for-elscreen ()
-  "preconfigured `anything' for anything-for-elscreen"
-  (interactive)
-  (anything anything-c-source-elscreen
-						nil nil nil nil "*anything for elscreen*"))
+;; helmを使ってelscreenを切り替える
+(require 'helm)
+(define-key global-map (kbd "C-x C-z") 'helm-elscreen)
 
 ;; Local Variables:
 ;; coding: utf-8
