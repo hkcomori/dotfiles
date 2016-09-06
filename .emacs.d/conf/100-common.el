@@ -60,7 +60,6 @@
 ;; File
 ;;====================================
 (add-hook 'after-save-hook 'executable-make-buffer-file-executable-if-script-p)
-(add-hook 'find-file-hook 'view-mode)
 (global-auto-revert-mode 1)
 
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
