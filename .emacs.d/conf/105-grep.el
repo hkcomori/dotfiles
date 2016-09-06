@@ -9,9 +9,10 @@
 	(grep-apply-setting 'grep-command "lgrep -n -Asjis -Ia ")
 	)
 
-;; grep結果を編集可能にする
 (when (require 'wgrep nil t)
 	(define-key grep-mode-map "e" 'wgrep-change-to-wgrep-mode)
+	(setq wgrep-auto-save-buffer t)	; 編集完了と同時に保存
+	(setq wgrep-enable-key "r")			; "r" キーで編集モードに
 )
 
 ;; Local Variables:
