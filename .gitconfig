@@ -7,24 +7,36 @@
 [i18n]
 	commitencoding = utf-8
 	logoutputencoding = utf-8
+
 [diff]
 	algorithm = histogram
 	renames = copies
+[color "diff"]
+	meta = normal dim
+	frag = black cyan ul
+	old = red reverse
+	new = green reverse
+[diff "cpp"]
+	wordRegex = "[a-zA-Z_][a-zA-Z0-9_]*|[-+0-9.e]+[fFlL]?|0[xXbB]?[0-9a-fA-F]+[lLuU]*|[-+*/<>%&^|=!]=|--|\\+\\+|<<=?|>>=?|&&|\\|\\||::|->\\*?|\\.\\*|[^[:space:]]"
 [diff "docx"]
 	binary = true
 	textconv = ~/bin/docx2txt/docx2txt
 [diff "xlsx"]
 	binary = true
 	textconv = ~/bin/git-xlsx-textconv/git-xlsx-textconv.pl
+
 [merge]
 	ff = false
 [branch]
 	autosetuprebase = always
 [alias]
-	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
-	la = log --all --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
-	lgu = log -p --encoding=utf-8 --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
-	lgs = log -p --encoding=shift-jis --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short
+	lg = log --pretty=format:'%x09%C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s' --abbrev-commit --date=short --graph
+	la = log --pretty=format:'%x09%C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s' --abbrev-commit --date=short --all --graph
+	lf = log --pretty=format:'■ %C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -p --name-status
+	lgu = log --pretty=format:'Commit: %C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -p --encoding=utf-8
+	lgs = log --pretty=format:'Commit: %C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -p --encoding=shift-jis
+	s = log -p --name-status --pretty=format:'■ %C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -S
+	g = log -p --name-status --pretty=format:'■ %C(ul red)%h%Creset %C(green)%cd%Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -G
 	ci = commit
 	cm = commit -m
 	st = status --short --branch
@@ -33,7 +45,7 @@
 	df = diff -w
 	dw = diff -w --color-words
 	dwr = diff -w --color-words --word-diff-regex='\\w+|[^[:space:]]'
-	update = add --update
-	delete-merged-branch = "!f () { git checkout $1; git branch --merged|egrep -v '\\*|develop|master'|xargs git branch -d; };f"
+	update = "!if [ $(git diff --cached --name-only | wc --line) -eq 0 ]; then git add --update; else echo already stageed; fi"
+	delete-merged-branch = "!git checkout $1; git branch --merged|egrep -v '\\*|develop|master'|xargs git branch -d;"
 [include]
 	path = .gitconfig_local
