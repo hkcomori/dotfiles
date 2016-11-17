@@ -1,6 +1,5 @@
 ;;-*- coding: utf-8; -*-
 ;;; Code:
-(eval-when-compile (require 'cl))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Elisp拡張                                                             ;;
@@ -9,50 +8,32 @@
 	"Return a string which is a concatenation of all elements of the list separated by spaces" 
 	(mapconcat '(lambda (obj) (format "\"%s\"" obj)) list " "))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; バッファ操作                                                           ;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun my/close-all-buffers ()
-	"Close all buffers."
-	(interactive)
-	(loop for buffer being the buffers
-				do (kill-buffer buffer)))
+(defun enable-reindent ()
+	(local-set-key (kbd "C-m") 'reindent-then-newline-and-indent))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; バッファ操作                                                          ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; 変更されてないバッファを全部閉じる
 ;; http://qiita.com/amanoiverse/items/a3a605015d35c37efe2b
 (define-key global-map (kbd "C-x C-c") 'my/close-all-unmodified-buffer)
 (defun my/close-all-unmodified-buffer ()
 	(interactive)
-	(let ((buffers (buffer-list)))
-		(mapcar
-		 #'(lambda (buf)
-				 (if (and (not (buffer-modified-p buf))
-									(not (string-match "^\\*\\(scratch\\|Messages\\|init log\\|terminal.*\\)\\*$" (buffer-name buf))))
-						 (kill-buffer buf)))
-		 buffers)
-		))
-
-;; カレントバッファのファイルをバイトコンパイル
-;; http://ergoemacs.org/emacs/emacs_byte_compile.html
-(defun byte-recompile-current-buffer ()
-	"`byte-compile' current buffer if it's emacs-lisp-mode and compiled file exists."
-	(interactive)
-	(when (and (eq major-mode 'emacs-lisp-mode)
-						 (file-exists-p (byte-compile-dest-file buffer-file-name)))
-		(byte-compile-file buffer-file-name)))
-
-;; カレントバッファのファイルをバイトコンパイル
-;; http://ergoemacs.org/emacs/emacs_byte_compile.html
-(defun byte-compile-current-buffer ()
-	"`byte-compile' current buffer if it's emacs-lisp-mode."
-	(interactive)
-	(when (eq major-mode 'emacs-lisp-mode)
-		(byte-compile-file buffer-file-name)))
-
-(add-hook 'after-save-hook 'byte-recompile-current-buffer)
+	(if (not (string= "No server editing buffers exist" (server-edit)))
+			;; emacsclient経由のバッファが残っている場合は、それをすべて閉じる
+			(while (not (string= "No server editing buffers exist" (server-edit))))
+		;; 残っていない場合は、変更されていないバッファをすべて閉じる
+		(let ((buffers (buffer-list)))
+			(mapcar
+			 #'(lambda (buf)
+					 (if (and (not (buffer-modified-p buf))
+										(not (string-match "^\\*\\(scratch\\|Messages\\|init log\\|terminal.*\\)\\*$" (buffer-name buf))))
+							 (kill-buffer buf)))
+			 buffers)
+			)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; ファイル操作                                                           ;;
+;; ファイル操作                                                          ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun exec-command (command &optional args)
 	"Run external COMMAND at background."

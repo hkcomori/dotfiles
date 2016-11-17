@@ -7,9 +7,11 @@
 (define-key global-map (kbd "M-o")	'occur-by-moccur)
 (define-key global-map (kbd "M-g")	'moccur-grep-find)
 
-(when (and (executable-find "cmigemo")
-					 (require 'migemo nil t))
-	(setq moccur-use-migemo t))
+(setq moccur-use-migemo t)
+
+(set-face-attribute 'moccur-face nil
+										:foreground "unspecified"
+										:background my-color-darkgray)
 
 ;; Local Variables:
 ;; coding: utf-8

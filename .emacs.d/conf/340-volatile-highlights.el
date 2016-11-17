@@ -1,5 +1,6 @@
 ;;; Code:
 (require 'volatile-highlights)
+
 (volatile-highlights-mode)
 
 ;; Local Variables:

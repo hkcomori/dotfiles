@@ -44,12 +44,6 @@
 (add-to-list 'mc--default-cmds-to-run-for-all 'beginning-of-defun)
 (add-to-list 'mc--default-cmds-to-run-for-all 'visual-basic-beginning-of-defun)
 
-;; auto-completeと併用するための設定
-;; (when (require 'auto-complete nil t)
-;; 	(add-hook 'multiple-cursors-mode-enabled-hook 'my/ac-mode-disable)
-;; 	(add-hook 'multiple-cursors-mode-disabled-hook 'my/ac-mode-enable)
-;; 	)
-
 (define-key global-map (kbd "C-M-c") 'mc/edit-lines)
 (define-key global-map (kbd "C-M-r") 'mc/mark-all-in-region)
 (when (require 'smartrep nil t)
@@ -86,6 +80,8 @@
 	(define-key mc/keymap (kbd "C-s") 'phi-search-migemo)
 	(define-key mc/keymap (kbd "C-r") 'phi-search-migemo-backward)
 	)
+
+(setq smartrep-mode-line-active-bg my-color-darkgreen)
 
 ;; Local Variables:
 ;; coding: utf-8

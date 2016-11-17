@@ -3,7 +3,7 @@
 ;;; @ search - migemo                                               ;;;
 ;;;   https://github.com/emacs-jp/migemo                            ;;;
 ;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; ;;;
-(require 'migemo nil t)
+(require 'migemo)
 (when (executable-find "cmigemo")
   (setq migemo-command "cmigemo")
   (setq migemo-options '("-q" "--emacs"))
