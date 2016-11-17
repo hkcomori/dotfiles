@@ -32,9 +32,9 @@ zstyle ':vcs_info:*' actionformats \
 ###   %{%b%}: 太字を元に戻す。
 ###   %D{%H:%M}: 時間。「時:分」というフォーマット。
 prompt_bar_self="[%n@%m]"
-prompt_bar_status="[%{%B%(?.%F{black}.%F{white}%K{red})%}%?%{%f%k%b%}]"
+prompt_bar_status="[%{%(?.%F{white}.%F{black}%K{red})%}%?%{%f%k%b%}]"
 prompt_bar_date="[%D{%H:%M}]"
-prompt_bar_directory="[%{%B%F{white}%K{black}%}%(5~,%-2~/.../%3~,%~)%{%b%f%k%}]"
+prompt_bar_directory="[%{%F{black}%K{white}%}%(5~,%-2~/.../%3~,%~)%{%b%f%k%}]"
 
 ### プロンプトバー
 prompt_bar="${prompt_bar_self}${prompt_bar_date}${prompt_bar_status}${prompt_bar_directory}"
