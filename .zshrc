@@ -9,8 +9,6 @@ PATH=$HOME/bin:$HOME/bin/copy:/sbin:/usr/sbin:/usr/local/sbin:$PATH
 
 REPORTTIME=5      #N秒以上かかったプロセスの所要CPU時間を表示
 
-export EDITOR='/usr/bin/emacs -nw'
-
 preexec () {
   [ ${STY} ] &&   
 }
@@ -26,7 +24,7 @@ zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'so=32' 'ex=31' 'bd=46;34' 'c
 ## 補完時に大小文字を区別しない
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' menu select=1
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # ファイルリスト補完でもlsと同様に色をつける｡
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS} # ファイルリスト補完でもlsと同様に色をつける。
 #zstyle ':completion:*::::' completer _complete _migemo_complete # migemo日本語補完
 zstyle ':completion:*:default' menu select # arrow keyで候補間移動
 setopt extended_history # 履歴ファイルに時刻を記録
