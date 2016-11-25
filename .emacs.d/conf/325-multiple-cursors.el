@@ -35,6 +35,9 @@
 (add-to-list 'mc--default-cmds-to-run-once 'my/mc--insert-number-and-increase)
 (add-to-list 'mc--default-cmds-to-run-once 'mc/mark-next-like-this-and-cycle-forward)
 (add-to-list 'mc--default-cmds-to-run-once 'mc/mark-previous-like-this-and-cycle-backward)
+(add-to-list 'mc--default-cmds-to-run-once 'toggle-input-method)
+
+;; multiple-cursors使用時にすべてのカーソルで実行する関数の設定
 (add-to-list 'mc--default-cmds-to-run-for-all 'point-undo)
 (add-to-list 'mc--default-cmds-to-run-for-all 'point-redo)
 (add-to-list 'mc--default-cmds-to-run-for-all 'indent-for-tab-command)
