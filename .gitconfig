@@ -16,5 +16,6 @@
 	br = branch
 	co = checkout
 	df = diff -w
-[include]
-	path = .gitconfig.local
+[user]
+	name = hkcomori
+	email = hkcomori@gmail.com
