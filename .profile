@@ -32,3 +32,28 @@ if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
 fi
 
+# set ssh-agent and add private keys
+SSH_ENV="$HOME/.ssh/agent-environment"
+
+start_agent() {
+    echo "Initialising new SSH agent..."
+    ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    echo Agent pid ${SSH_AGENT_PID}
+    find "$HOME/.ssh" -type f -name "id_*" ! -name "*.pub" -exec ssh-add {} +
+}
+
+# Source SSH settings, if applicable
+if [ -d "$HOME/.ssh" ] ; then
+    if [ -f "${SSH_ENV}" ]; then
+        . "${SSH_ENV}" > /dev/null
+        ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+            start_agent;
+        }
+    else
+        start_agent;
+    fi
+fi
+
+unset -f start_agent
