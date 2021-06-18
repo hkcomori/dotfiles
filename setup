@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Setup dotfiles
+
+DOTFILES=(
+    .aliases
+    .bash_logout
+    .bashrc
+    .gitconfig
+    .gitconfig_mainuser
+    .profile
+    .zshrc
+    .zprofile
+    .zsh.d
+)
+
+cd "$(dirname $0)"
+
+for file in ${DOTFILES[@]}; do
+    ln -fsT "$(pwd)"/"${file}" "${HOME}"/"${file}"
+done
