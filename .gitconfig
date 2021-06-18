@@ -16,6 +16,7 @@
 	br = branch
 	co = checkout
 	df = diff -w
-[user]
-	name = hkcomori
-	email = hkcomori@gmail.com
+[includeIf "gitdir:~/repos/"]
+	path = ~/.gitconfig_mainuser
+[includeIf "gitdir:~/subrepos/"]
+	path = ~/.gitconfig_subuser
