@@ -24,3 +24,8 @@ alias l='ls -CF'
 
 alias isomount='fuseiso'
 alias umount='fusermount -u'
+
+if uname -a | grep -q WSL; then
+    alias clip='clip.exe'
+    alias getclip='powershell.exe -command "Get-Clipboard" 2> /dev/null'
+fi
