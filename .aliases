@@ -22,25 +22,5 @@ alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-## alias
 alias isomount='fuseiso'
 alias umount='fusermount -u'
-
-alias cpuinfo='watch cat /proc/cpuinfo'
-alias iostat='watch "/usr/bin/iostat | cat - /proc/mdstat"'
-alias hddtemp='watch sudo hddtemp /dev/sd[a-e]'
-alias rtcwake='rtcwake -l'
-
-# Git
-alias 'git-log'='git log --graph --all'
-alias 'git-add'='git add'
-alias 'git-commit'='git commit -m'
-alias 'git-merge'='git merge --squash'
-alias 'git-checkout'='git checkout'
-alias 'git-push'='git push'
-alias 'git-branch'='git branch'
-alias 'git-status'='git status'
