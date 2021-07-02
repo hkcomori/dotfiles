@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Setup dotfiles
 
-DOTFILES=(
+LINKFILES=(
     .aliases
     .bash_logout
     .bashrc
@@ -9,15 +9,22 @@ DOTFILES=(
     .gitconfig_mainuser
     .gnupg/gpg-agent.conf
     .gnupg/gpg.conf
-    .gnupg/sshcontrol
     .profile
     .zshrc
     .zprofile
     .zsh.d
 )
 
+COPYFILES=(
+    .gnupg/sshcontrol
+)
+
 cd "$(dirname $0)"
 
-for file in ${DOTFILES[@]}; do
+for file in ${LINKFILES[@]}; do
     ln -fsT "$(pwd)"/"${file}" "${HOME}"/"${file}"
+done
+
+for file in ${COPYFILES[@]}; do
+    cp --preserve=mode "$(pwd)"/"${file}" "${HOME}"/"${file}"
 done
