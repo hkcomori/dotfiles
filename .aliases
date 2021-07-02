@@ -25,6 +25,12 @@ alias l='ls -CF'
 alias isomount='fuseiso'
 alias umount='fusermount -u'
 
+# GnuPG aliases
+alias encrypt='gpg -es'
+alias decrypt='gpg -d'
+alias enc='encrypt'
+alias dec='decrypt'
+
 if uname -a | grep -q WSL; then
     alias clip='clip.exe'
     alias getclip='powershell.exe -command "Get-Clipboard" 2> /dev/null'

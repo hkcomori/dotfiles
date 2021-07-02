@@ -8,6 +8,7 @@ DOTFILES=(
     .gitconfig
     .gitconfig_mainuser
     .gnupg/gpg-agent.conf
+    .gnupg/gpg.conf
     .gnupg/sshcontrol
     .profile
     .zshrc
