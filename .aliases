@@ -30,6 +30,14 @@ alias encrypt='gpg -es'
 alias decrypt='gpg -d'
 alias enc='encrypt'
 alias dec='decrypt'
+# Delete key files not in keybox.
+alias gpg-clean='(\
+    cd $(gpgconf --list-dir homedir)/private-keys-v1.d; \
+    comm \
+        <(gpg --list-secret-keys --with-keygrip | grep Keygrip | awk "{ print \$3 \".key\" }" | sort) \
+        <(ls) -13 \
+    | xargs -I{} rm "$(pwd)/{}"\
+)'
 
 if uname -a | grep -q WSL; then
     alias clip='clip.exe'
