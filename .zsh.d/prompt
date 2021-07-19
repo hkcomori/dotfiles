@@ -24,6 +24,5 @@ zstyle ':vcs_info:git:*' formats ":%b%u%c"
 ## set the unstaged string to "+"
 zstyle ':vcs_info:git*:*' unstagedstr "+"
 
-PROMPT=$'
-%(?..%{%K{red}%F{black}%} %? %{%f%k%}:)%{%F{green}%}%n@%m%{%f%k%}:%{%F{#00FFFF}%}%(5~,%-2~/.../%3~,%~)%{%f%k%}$vcs_info_msg_0_
+PROMPT=$'%(?..%{%K{red}%F{black}%} %? %{%f%k%}:)%{%F{green}%}%n@%m%{%f%k%}:%{%F{#00FFFF}%}%(5~,%-2~/.../%3~,%~)%{%f%k%}$vcs_info_msg_0_
 %(!.#.$) '
