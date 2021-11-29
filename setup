@@ -6,6 +6,7 @@ LINKFILES=(
     .bash_logout
     .bashrc
     .config/flake8
+    .config/pep8
     .gitconfig
     .gitconfig_mainuser
     .gnupg/gpg-agent.conf
