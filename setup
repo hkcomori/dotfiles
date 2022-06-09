@@ -24,9 +24,13 @@ COPYFILES=(
 cd "$(dirname $0)"
 
 for file in ${LINKFILES[@]}; do
-    ln -fsT "$(pwd)"/"${file}" "${HOME}"/"${file}"
+    target="${HOME}"/"${file}"
+    mkdir -p $(dirname "${target}")
+    ln -fsT "$(pwd)"/"${file}" "${target}"
 done
 
 for file in ${COPYFILES[@]}; do
-    cp --preserve=mode "$(pwd)"/"${file}" "${HOME}"/"${file}"
+    target="${HOME}"/"${file}"
+    mkdir -p $(dirname "${target}")
+    cp --preserve=mode "$(pwd)"/"${file}" "${target}"
 done
