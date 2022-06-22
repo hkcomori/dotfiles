@@ -12,6 +12,7 @@ LINKFILES=(
     .gnupg/gpg-agent.conf
     .gnupg/gpg.conf
     .profile
+    .ssh/config
     .zshrc
     .zprofile
     .zsh.d
