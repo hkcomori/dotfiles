@@ -25,6 +25,8 @@ alias l='ls -CF'
 alias isomount='fuseiso'
 alias umount='fusermount -u'
 
+alias g='git'
+
 # GnuPG aliases
 alias encrypt='gpg -es'
 alias decrypt='gpg -d'
