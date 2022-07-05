@@ -1,0 +1,28 @@
+---
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+      - name: Setup
+        run: |
+          ./setup
+      - name: Install dependencies
+        run: |
+          sudo apt install git language-pack-ja zsh
+      - name: Test
+        run: |
+          bash -e -o pipefail .profile
+          bash -e -o pipefail .bash_logout
+          zsh -e -o pipefail .zprofile
