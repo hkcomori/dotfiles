@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env -S bash -e -o pipefail
 # Setup dotfiles
 
 LINKFILES=(
@@ -35,3 +35,9 @@ for file in ${COPYFILES[@]}; do
     mkdir -p $(dirname "${target}")
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
 done
+
+sudo apt update && sudo apt install \
+    language-pack-ja \
+    zsh
+
+sudo chsh -s "$(which zsh)" "$(whoami)"

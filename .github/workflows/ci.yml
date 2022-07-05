@@ -18,9 +18,6 @@ jobs:
       - name: Setup
         run: |
           ./setup
-      - name: Install dependencies
-        run: |
-          sudo apt install git language-pack-ja zsh
       - name: Test
         run: |
           bash -e -o pipefail .profile
