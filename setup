@@ -22,6 +22,12 @@ COPYFILES=(
     .gnupg/sshcontrol
 )
 
+install_common() {
+    sudo apt install -y \
+        language-pack-ja \
+        zsh
+}
+
 cd "$(dirname $0)"
 
 for file in ${LINKFILES[@]}; do
@@ -36,8 +42,8 @@ for file in ${COPYFILES[@]}; do
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
 done
 
-sudo apt update && sudo apt install \
-    language-pack-ja \
-    zsh
+sudo apt update
+
+install_common
 
 sudo chsh -s "$(which zsh)" "$(whoami)"
