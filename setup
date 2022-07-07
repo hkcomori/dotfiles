@@ -33,6 +33,13 @@ install_common() {
         zsh
 }
 
+install_ansible() {
+    ansible --version && return 0 || echo "Setup Ansible"
+    pip3 --version || sudo apt-get install -y python3-pip
+    pip3 install ansible ansible-lint
+    ansible --version
+}
+
 install_nodejs() {
     node -v && return 0 || echo "Setup Node.js"
 
@@ -73,6 +80,7 @@ done
 sudo apt-get update
 
 install_common
+install_ansible
 install_nodejs
 
 sudo chsh -s "$(which zsh)" "$(whoami)"
