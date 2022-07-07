@@ -23,7 +23,7 @@ COPYFILES=(
 )
 
 install_common() {
-    sudo apt install -y \
+    sudo apt-get install -y \
         language-pack-ja \
         zsh
 }
@@ -31,14 +31,14 @@ install_common() {
 install_nodejs() {
     node -v && return 0 || echo "Setup Node.js"
 
-    sudo apt install -y \
+    sudo apt-get install -y \
         nodejs \
         npm
 
     sudo npm install n --location=global
     sudo n stable
 
-    sudo apt purge -y \
+    sudo apt-get purge -y \
         nodejs \
         npm
 
@@ -61,7 +61,7 @@ for file in ${COPYFILES[@]}; do
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
 done
 
-sudo apt update
+sudo apt-get update
 
 install_common
 install_nodejs
