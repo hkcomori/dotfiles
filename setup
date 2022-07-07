@@ -22,6 +22,11 @@ COPYFILES=(
     .gnupg/sshcontrol
 )
 
+declare -A PERMISSIONS=(
+    [".ssh"]="700"
+    [".gnupg"]="700"
+)
+
 install_common() {
     sudo apt-get install -y \
         language-pack-ja \
@@ -59,6 +64,10 @@ for file in ${COPYFILES[@]}; do
     target="${HOME}"/"${file}"
     mkdir -p $(dirname "${target}")
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
+done
+
+for target in "${!PERMISSIONS[@]}"; do
+    chmod "${PERMISSIONS[${target}]}" "${target}"
 done
 
 sudo apt-get update
