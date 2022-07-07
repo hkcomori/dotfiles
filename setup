@@ -28,6 +28,25 @@ install_common() {
         zsh
 }
 
+install_nodejs() {
+    node -v && return 0 || echo "Setup Node.js"
+
+    sudo apt install -y \
+        nodejs \
+        npm
+
+    sudo npm install n --location=global
+    sudo n stable
+
+    sudo apt purge -y \
+        nodejs \
+        npm
+
+    exec $SHELL -l
+
+    node -v
+}
+
 cd "$(dirname $0)"
 
 for file in ${LINKFILES[@]}; do
@@ -45,5 +64,6 @@ done
 sudo apt update
 
 install_common
+install_nodejs
 
 sudo chsh -s "$(which zsh)" "$(whoami)"
