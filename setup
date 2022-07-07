@@ -1,6 +1,8 @@
 #!/usr/bin/env -S bash -e -o pipefail
 # Setup dotfiles
 
+umask 022
+
 LINKFILES=(
     .aliases
     .bash_logout
@@ -16,6 +18,11 @@ LINKFILES=(
     .zshrc
     .zprofile
     .zsh.d
+)
+
+DIRECTORIES=(
+    repos
+    subrepos
 )
 
 COPYFILES=(
@@ -79,6 +86,11 @@ for file in ${COPYFILES[@]}; do
     target="${HOME}"/"${file}"
     mkdir -p $(dirname "${target}")
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
+done
+
+for dir in ${DIRECTORIES[@]}; do
+    target="${HOME}"/"${dir}"
+    mkdir -p "${target}"
 done
 
 for target in "${!PERMISSIONS[@]}"; do
