@@ -44,15 +44,12 @@ install_python() {
     flake8 --version && mypy --version && return 0 || echo "Setup Python"
     sudo apt-get install -y python3 python3-pip
     pip3 install flake8 mypy
-    flake8 --version
-    mypy --version
 }
 
 install_ansible() {
     ansible --version && return 0 || echo "Setup Ansible"
     pip3 --version || sudo apt-get install -y python3-pip
     pip3 install ansible ansible-lint
-    ansible --version
 }
 
 install_nodejs() {
@@ -68,27 +65,23 @@ install_nodejs() {
     sudo apt-get purge -y \
         nodejs \
         npm
-
-    exec $SHELL -l
-
-    node -v
 }
 
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
-for file in ${LINKFILES[@]}; do
+for file in "${LINKFILES[@]}"; do
     target="${HOME}"/"${file}"
-    mkdir -p $(dirname "${target}")
+    mkdir -p "$(dirname "${target}")"
     ln -fsT "$(pwd)"/"${file}" "${target}"
 done
 
-for file in ${COPYFILES[@]}; do
+for file in "${COPYFILES[@]}"; do
     target="${HOME}"/"${file}"
-    mkdir -p $(dirname "${target}")
+    mkdir -p "$(dirname "${target}")"
     cp --preserve=mode "$(pwd)"/"${file}" "${target}"
 done
 
-for dir in ${DIRECTORIES[@]}; do
+for dir in "${DIRECTORIES[@]}"; do
     target="${HOME}"/"${dir}"
     mkdir -p "${target}"
 done
