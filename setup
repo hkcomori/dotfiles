@@ -41,9 +41,9 @@ install_common() {
 }
 
 install_python() {
-    flake8 --version && mypy --version && return 0 || echo "Setup Python"
+    autopep8 --version && flake8 --version && mypy --version && return 0 || echo "Setup Python"
     sudo apt-get install -y python3 python3-pip
-    pip3 install flake8 mypy
+    pip3 install autopep8 flake8 mypy
 }
 
 install_ansible() {
