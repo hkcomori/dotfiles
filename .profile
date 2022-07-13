@@ -29,6 +29,12 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# if running on WSL
+if which wslpath &>/dev/null; then
+    export WIN_USER="$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')"
+    export WIN_HOME="$(wslpath "$(powershell.exe '$env:USERPROFILE' | sed -e 's/\r//g')")"
+fi
+
 export ANSIBLE_ENABLE_TASK_DEBUGGER=yes
 export ANSIBLE_COLLECTIONS_PATHS=./.ansible/collections:~/.ansible/collections:/usr/share/ansible/collections
 export ANSIBLE_ROLES_PATH=./.ansible/roles:~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
