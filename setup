@@ -90,6 +90,11 @@ for target in "${!PERMISSIONS[@]}"; do
     chmod "${PERMISSIONS[${target}]}" "${target}"
 done
 
+# if running on WSL
+if which wslpath &>/dev/null; then
+    cp -rf "$(pwd)/win_home"/* "${WIN_HOME}"/
+fi
+
 sudo apt-get update
 
 install_common
