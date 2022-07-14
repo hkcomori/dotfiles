@@ -29,9 +29,9 @@ COPYFILES=(
     .gnupg/sshcontrol
 )
 
-declare -A PERMISSIONS=(
-    [".ssh"]="700"
-    [".gnupg"]="700"
+PERMISSIONS=(
+    .ssh
+    .gnupg
 )
 
 install_common() {
@@ -86,9 +86,9 @@ for dir in "${DIRECTORIES[@]}"; do
     mkdir -pv "${target}"
 done
 
-for file in "${!PERMISSIONS[@]}"; do
+for file in "${PERMISSIONS[@]}"; do
     target="${HOME}"/"${file}"
-    chmod -v "${PERMISSIONS[${file}]}" "${target}"
+    chmod -v "$(stat -c '%a' "${file}")" "${target}"
 done
 
 # if running on WSL
