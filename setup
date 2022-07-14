@@ -71,31 +71,31 @@ cd "$(dirname "$0")"
 
 for file in "${LINKFILES[@]}"; do
     target="${HOME}"/"${file}"
-    mkdir -p "$(dirname "${target}")"
-    ln -fsT "$(pwd)"/"${file}" "${target}"
+    mkdir -pv "$(dirname "${target}")"
+    ln -fsTv "$(pwd)"/"${file}" "${target}"
 done
 
 for file in "${COPYFILES[@]}"; do
     target="${HOME}"/"${file}"
-    mkdir -p "$(dirname "${target}")"
-    cp --preserve=mode "$(pwd)"/"${file}" "${target}"
+    mkdir -pv "$(dirname "${target}")"
+    cp --preserve=mode -nv "$(pwd)"/"${file}" "${target}"
 done
 
 for dir in "${DIRECTORIES[@]}"; do
     target="${HOME}"/"${dir}"
-    mkdir -p "${target}"
+    mkdir -pv "${target}"
 done
 
 for target in "${!PERMISSIONS[@]}"; do
-    chmod "${PERMISSIONS[${target}]}" "${target}"
+    chmod -v "${PERMISSIONS[${target}]}" "${target}"
 done
 
 # if running on WSL
 if which wslpath &>/dev/null; then
     find "$(pwd)/win_home" -mindepth 2 -maxdepth 2 \
-        | xargs -I{} bash -x -c 'cp -rf "{}"  "${WIN_HOME}/$(basename $(dirname {}))"/'
+        | xargs -I{} bash -c 'cp -rfv "{}"  "${WIN_HOME}/$(basename $(dirname {}))"/'
     find "$(pwd)/win_home" -mindepth 1 -maxdepth 1 -type f \
-        | xargs -t -I{} cp -f "{}"  "${WIN_HOME}/"
+        | xargs -I{} cp -fv "{}"  "${WIN_HOME}/"
 fi
 
 sudo apt-get update
