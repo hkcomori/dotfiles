@@ -71,7 +71,7 @@ cd "$(dirname "$0")"
 for file in "${LINKFILES[@]}"; do
     target="${HOME}"/"${file}"
     mkdir -pv "$(dirname "${target}")"
-    ln -fsTv "$(pwd)"/"${file}" "${target}"
+    [ -e "${target}" ] || ln -sTv "$(pwd)"/"${file}" "${target}"
 done
 
 for file in "${COPYFILES[@]}"; do
