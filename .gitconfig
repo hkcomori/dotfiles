@@ -37,6 +37,6 @@
 	pl = pull
 	st = status
 [includeIf "gitdir:~/repos/"]
-	path = ~/.gitconfig_mainuser
-[includeIf "gitdir:~/subrepos/"]
-	path = ~/.gitconfig_subuser
+	path = ~/repos/.gitconfig
+[includeIf "gitdir:~/work/"]
+	path = ~/work/.gitconfig

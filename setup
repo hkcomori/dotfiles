@@ -10,7 +10,7 @@ LINKFILES=(
     .config/flake8
     .config/pep8
     .gitconfig
-    .gitconfig_mainuser
+    repos/.gitconfig
     .gnupg/gpg-agent.conf
     .gnupg/gpg.conf
     .profile
@@ -21,8 +21,7 @@ LINKFILES=(
 )
 
 DIRECTORIES=(
-    repos
-    subrepos
+    work
 )
 
 COPYFILES=(
