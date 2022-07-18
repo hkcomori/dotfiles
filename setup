@@ -92,7 +92,10 @@ done
 
 # if running on WSL
 if which wslpath &>/dev/null; then
-    cp -rf "$(pwd)/win_home"/* "${WIN_HOME}"/
+    find "$(pwd)/win_home" -mindepth 2 -maxdepth 2 \
+        | xargs -I{} bash -x -c 'cp -rf "{}"  "${WIN_HOME}/$(basename $(dirname {}))"/'
+    find "$(pwd)/win_home" -mindepth 1 -maxdepth 1 -type f \
+        | xargs -t -I{} cp -f "{}"  "${WIN_HOME}/"
 fi
 
 sudo apt-get update
