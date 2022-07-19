@@ -97,6 +97,7 @@ if which wslpath &>/dev/null; then
         | xargs -I{} bash -c 'cp -rfv "{}"  "${WIN_HOME}/$(basename $(dirname {}))"/'
     find "$(pwd)/win_home" -mindepth 1 -maxdepth 1 -type f \
         | xargs -I{} cp -fv "{}"  "${WIN_HOME}/"
+    run-parts -v --regex '[0-9]{2}-.+$' win_setup
 fi
 
 sudo apt-get update
