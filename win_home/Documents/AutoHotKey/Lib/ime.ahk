@@ -26,22 +26,23 @@ ime_isRoman(hWindow)
     Return 0
 }
 
-ime_off(hWindow)
+ime_set(hWindow, isOn)
 {
     If ( !api_IsWindow(hWindow))
         Return 0
-    If ( !ime_isOn(hWindow) )
+    If ( ime_isOn(hWindow) == isOn )
         Return 1
-    Return ( !api_SendMessage(api_ImmGetDefaultIMEWnd(hWindow), 0x283, 0x6, 0x0) )
+    Return ( !api_SendMessage(api_ImmGetDefaultIMEWnd(hWindow), 0x283, 0x6, isOn) )
+}
+
+ime_off(hWindow)
+{
+    Return ime_set(hWindow, 0x0)
 }
 
 ime_on(hWindow)
 {
-    If ( !api_IsWindow(hWindow))
-        Return 0
-    If ( ime_isOn(hWindow) )
-        Return 1
-    Return ( !api_SendMessage(api_ImmGetDefaultIMEWnd(hWindow), 0x283, 0x6, 0x1) )
+    Return ime_set(hWindow, 0x1)
 }
 
 ime_setConv(hWindow,ConversionMode)
