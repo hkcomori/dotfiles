@@ -12,6 +12,11 @@ SendMode, Input
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
+; Office
+GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
+GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
+GroupAdd, office, ahk_exe POWERPNT.EXE  ; Microsoft PowerPoint
+
 ; Browser
 GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
 GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
@@ -54,6 +59,7 @@ AppsKey Up:: Send, {AppsKey}
 AppsKey & Left:: Send, {Volume_Mute}
 AppsKey & Down:: Send, {Volume_Down}
 AppsKey & Right:: Send, {Volume_Up}
+AppsKey & Up:: Send, {Media_Play_Pause}
 
 ; Fast scroll
 AppsKey & WheelUp:: Send, {WheelUp %fastScrollSensitivity%}
