@@ -1,3 +1,9 @@
+; Browser
+GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
+GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
+GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
+GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
+
 ;--------------------------------------------------------------------------------
 ; Global
 ;--------------------------------------------------------------------------------
@@ -48,9 +54,9 @@ AppsKey & Right:: Send, {Volume_Up}
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
-; Vivaldi
+; Browser
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe vivaldi.exe
+#IfWinActive ahk_group browser
 ~^e::
 ~^l::
 ~^t::
