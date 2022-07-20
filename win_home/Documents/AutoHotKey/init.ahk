@@ -1,8 +1,14 @@
+;--------------------------------------------------------------------------------
+; Auto-execute section
+;--------------------------------------------------------------------------------
 ; Browser
 GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
 GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
 GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
 GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
+
+; Fast scroll
+fastScrollSensitivity := 10
 
 ;--------------------------------------------------------------------------------
 ; Global
@@ -12,6 +18,10 @@ AppsKey Up:: Send, {AppsKey}
 AppsKey & Left:: Send, {Volume_Mute}
 AppsKey & Down:: Send, {Volume_Down}
 AppsKey & Right:: Send, {Volume_Up}
+
+; Fast scroll
+AppsKey & WheelUp:: Send, {WheelUp %fastScrollSensitivity%}
+AppsKey & WheelDown:: Send, {WheelDown %fastScrollSensitivity%}
 
 ; Turn off IME when opening start menu
 ~LWin Up::
