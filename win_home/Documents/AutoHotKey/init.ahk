@@ -13,6 +13,9 @@ fastScrollSensitivity := 10
 ;--------------------------------------------------------------------------------
 ; Global
 ;--------------------------------------------------------------------------------
+; Disable Insert
+Insert:: Return
+
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up:: Send, {AppsKey}
 AppsKey & Left:: Send, {Volume_Mute}
