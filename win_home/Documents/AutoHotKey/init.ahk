@@ -21,6 +21,28 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 ; Fast scroll
 fastScrollSensitivity := 10
 
+; Auto reload this script
+FileGetTime scriptModTime, %A_ScriptFullPath%
+SetTimer CheckScriptUpdate, 1000
+CheckScriptUpdate() {
+    ListLines, Off
+    global scriptModTime
+    FileGetTime currentModTime, %A_ScriptFullPath%
+    If (currentModTime == scriptModTime)
+        return
+    SetTimer CheckScriptUpdate, Off
+    Loop
+    {
+        reload
+        Sleep 300 ; ms
+        MsgBox 0x2, %A_ScriptName%, Reload failed. ; 0x2 = Abort/Retry/Ignore
+        IfMsgBox Abort
+            ExitApp
+        IfMsgBox Ignore
+            break
+    } ; loops reload on "Retry"
+}
+
 ;--------------------------------------------------------------------------------
 ; Global
 ;--------------------------------------------------------------------------------
