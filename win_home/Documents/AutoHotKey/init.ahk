@@ -1,6 +1,17 @@
 ;--------------------------------------------------------------------------------
 ; Auto-execute section
 ;--------------------------------------------------------------------------------
+#Persistent
+#SingleInstance, Force
+#NoEnv
+#UseHook
+#HotkeyInterval, 2000
+#MaxHotkeysPerInterval, 200
+Process, Priority,, Realtime
+SendMode, Input
+SetWorkingDir %A_ScriptDir%
+SetTitleMatchMode, 2
+
 ; Browser
 GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
 GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
