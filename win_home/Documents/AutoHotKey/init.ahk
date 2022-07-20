@@ -103,6 +103,9 @@ AppsKey & WheelDown:: Send, {WheelDown %fastScrollSensitivity%}
 ; Browser
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_group browser
++WheelDown::WheelRight
++WheelUp::WheelLeft
+
 ~^e::
 ~^l::
 ~^t::
