@@ -30,15 +30,7 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 fastScrollSensitivity := 10
 
 ; Detect AppsKey long press
-AppsKeyPressedTime := 0
-SetTimer detectAppsKeyLongPress, 100
-detectAppsKeyLongPress()
-{
-    ListLines, Off
-    global AppsKeyPressedTime
-    If (GetKeyState("AppsKey", "P"))
-        AppsKeyPressedTime++
-}
+key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
 FileGetTime scriptModTime, %A_ScriptFullPath%
@@ -73,9 +65,8 @@ Insert:: Return
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
-    If (AppsKeyPressedTime < 3)
+    If !key_isLongPressed("AppsKey", True)
         Send, {AppsKey}
-    AppsKeyPressedTime := 0
     Return
 AppsKey & Left:: Send, {Volume_Mute}
 AppsKey & Down:: Send, {Volume_Down}
