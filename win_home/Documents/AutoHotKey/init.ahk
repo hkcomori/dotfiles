@@ -134,9 +134,12 @@ AppsKey & WheelDown:: Send, {WheelDown %fastScrollSensitivity%}
 +WheelUp::WheelLeft
 
 ~^e::
+~^f::
 ~^l::
 ~^t::
 ~F1::
+~F3::
+~+F3::
 ~^+p::
     Sleep, 100
     ime_off(WinExist("A"))
