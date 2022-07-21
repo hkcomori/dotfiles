@@ -63,6 +63,8 @@ Insert:: Return
 ; Global hot keys for Explorer
 #e::Run, %A_UserProfile%\Downloads
 
+#z:: Winset, AlwaysOnTop, Toggle, A
+
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
     If !key_isLongPressed("AppsKey", True)
