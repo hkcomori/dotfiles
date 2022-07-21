@@ -12,6 +12,9 @@ SendMode, Input
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
+; Get environment variables
+EnvGet, A_UserProfile, USERPROFILE
+
 ; Office
 GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
 GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
@@ -64,6 +67,9 @@ CheckScriptUpdate() {
 ;--------------------------------------------------------------------------------
 ; Disable Insert
 Insert:: Return
+
+; Global hot keys for Explorer
+#e::Run, %A_UserProfile%\Downloads
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
