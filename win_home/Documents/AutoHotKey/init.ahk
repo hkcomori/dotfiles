@@ -29,7 +29,10 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 ; Fast scroll
 fastScrollSensitivity := 10
 
-; Detect AppsKey long press
+; Detect long press
+key_startDetectLongPress("vk1D")    ; Muhenkan
+key_startDetectLongPress("vk1C")    ; Henkan
+key_startDetectLongPress("vkF2")    ; Kana
 key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
@@ -64,6 +67,21 @@ Insert:: Return
 #e::Run, %A_UserProfile%\Downloads
 
 #z:: Winset, AlwaysOnTop, Toggle, A
+
+vk1D Up::   ; Muhenkan
+    If !key_isLongPressed("vk1D", True)
+        ime_off(WinExist("A"))
+    Return
+
+vk1C Up::   ; Henkan
+    If !key_isLongPressed("vk1C", True)
+        ime_on(WinExist("A"))
+    Return
+
+vkF2 Up::   ; Kana
+    If !key_isLongPressed("vkF2", True)
+        ime_on(WinExist("A"))
+    Return
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
