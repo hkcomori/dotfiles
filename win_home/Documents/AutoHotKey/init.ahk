@@ -65,6 +65,9 @@ CheckScriptUpdate() {
 ; Disable Insert
 Insert:: Return
 
+; Use CapsLock as Ctrl
+CapsLock:: LCtrl
+
 ; Global hot keys for Explorer
 #e::Run, %A_UserProfile%\Downloads
 
