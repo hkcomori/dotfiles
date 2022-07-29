@@ -73,6 +73,10 @@ CapsLock:: LCtrl
 
 #z:: Winset, AlwaysOnTop, Toggle, A
 
+~*XButton1:: mouse_activateUnderCursor()
+~*XButton2:: mouse_activateUnderCursor()
+~*WheelDown:: mouse_activateUnderCursor()
+~*WheelUp:: mouse_activateUnderCursor()
 vk1D Up::   ; Muhenkan
     If !key_isLongPressed("vk1D", True)
         ime_off(WinExist("A"))
@@ -99,8 +103,12 @@ AppsKey & Right:: Send, {Volume_Up}
 AppsKey & Up:: Send, {Media_Play_Pause}
 
 ; Fast scroll
-AppsKey & WheelUp:: Send, {WheelUp %fastScrollSensitivity%}
-AppsKey & WheelDown:: Send, {WheelDown %fastScrollSensitivity%}
+AppsKey & WheelUp::
+AppsKey & WheelDown::
+    mouse_activateUnderCursor()
+    key := StrSplit(A_ThisHotkey, "&", " ")[2]
+    Send, {%key% %fastScrollSensitivity%}
+    Return
 
 ; Turn off IME when opening start menu
 ~LWin Up::
