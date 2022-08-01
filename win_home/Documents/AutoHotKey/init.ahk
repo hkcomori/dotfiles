@@ -77,6 +77,11 @@ CapsLock:: LCtrl
 ~*XButton2:: mouse_activateUnderCursor()
 ~*WheelDown:: mouse_activateUnderCursor()
 ~*WheelUp:: mouse_activateUnderCursor()
+~*WheelRight:: mouse_activateUnderCursor()
+~*WheelLeft:: mouse_activateUnderCursor()
++WheelDown:: WheelRight
++WheelUp:: WheelLeft
+
 vk1D Up::   ; Muhenkan
     If !key_isLongPressed("vk1D", True)
         ime_off(WinExist("A"))
@@ -162,9 +167,6 @@ AppsKey & PgDn:: Send, {F18}
 ; Browser
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_group browser
-+WheelDown::WheelRight
-+WheelUp::WheelLeft
-
 ~^e::
 ~^f::
 ~^l::
