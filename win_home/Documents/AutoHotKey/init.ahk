@@ -73,8 +73,6 @@ CapsLock:: LCtrl
 
 #z:: Winset, AlwaysOnTop, Toggle, A
 
-~*XButton1:: mouse_activateUnderCursor()
-~*XButton2:: mouse_activateUnderCursor()
 ~*WheelDown:: mouse_activateUnderCursor()
 ~*WheelUp:: mouse_activateUnderCursor()
 ~*WheelRight:: mouse_activateUnderCursor()
