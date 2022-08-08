@@ -31,6 +31,8 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 ; Fast scroll
 fastScrollSensitivity := 10
 
+OnExit("confirmExit")
+
 ; Detect long press
 key_startDetectLongPress("vk1D")    ; Muhenkan
 key_startDetectLongPress("vk1C")    ; Henkan
@@ -113,6 +115,9 @@ AppsKey & WheelDown::
     Send, {%key% %fastScrollSensitivity%}
     Return
 
+; Toggle keep awake
+AppsKey & Esc:: toggleKeepAwake()
+
 ; Turn off IME when opening start menu
 ~LWin Up::
 ~RWin Up::
@@ -177,3 +182,11 @@ AppsKey & PgDn:: Send, {F18}
     ime_off(WinExist("A"))
     Return
 #IfWinActive
+
+confirmExit(ExitReason, ExitCode) {
+    If (ExitReason == "Menu") {
+        MsgBox, 0x04, %A_ScriptName%, Are you sure you want to exit?
+        IfMsgBox, No
+            Return 1
+    }
+}
