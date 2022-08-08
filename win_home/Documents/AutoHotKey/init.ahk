@@ -17,6 +17,12 @@ SetTitleMatchMode, 2
 ; Get environment variables
 EnvGet, A_UserProfile, USERPROFILE
 
+objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" A_ComputerName "\root\cimv2")
+For objComputer in objWMIService.ExecQuery("Select * from Win32_ComputerSystem") {
+    Domain := objComputer.Domain
+    Workgroup := objComputer.Workgroup
+}
+
 ; Office
 GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
 GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
@@ -33,6 +39,10 @@ fastScrollSensitivity := 10
 
 Menu, Tray, Add  ; separator
 Menu, Tray, Add, Keep Awake, toggleKeepAwake
+If (Domain <> "") {
+    ; Enable keep awake in the office
+    toggleKeepAwake()
+}
 
 OnExit("confirmExit")
 
