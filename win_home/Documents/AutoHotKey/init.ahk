@@ -52,16 +52,12 @@ CheckScriptUpdate() {
     If (currentModTime == scriptModTime)
         return
     SetTimer CheckScriptUpdate, Off
-    Loop
-    {
-        reload
-        Sleep 300 ; ms
-        MsgBox 0x2, %A_ScriptName%, Reload failed. ; 0x2 = Abort/Retry/Ignore
-        IfMsgBox Abort
-            ExitApp
-        IfMsgBox Ignore
-            break
-    } ; loops reload on "Retry"
+    Reload
+    Sleep 1000
+    ; If successful, the reload will close this instance during the Sleep,
+    ; so the line below will never be reached.
+    scriptModTime := currentModTime
+    SetTimer CheckScriptUpdate, 1000
 }
 
 ;--------------------------------------------------------------------------------
