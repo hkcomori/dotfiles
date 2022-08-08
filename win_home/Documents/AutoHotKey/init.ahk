@@ -31,6 +31,9 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 ; Fast scroll
 fastScrollSensitivity := 10
 
+Menu, Tray, Add  ; separator
+Menu, Tray, Add, Keep Awake, toggleKeepAwake
+
 OnExit("confirmExit")
 
 ; Detect long press
@@ -182,6 +185,28 @@ AppsKey & PgDn:: Send, {F18}
     ime_off(WinExist("A"))
     Return
 #IfWinActive
+
+toggleKeepAwake() {
+    static enabled := False
+    If (!enabled) {
+        enabled := True
+        Menu, Tray, Check, Keep Awake
+        SetTimer, keepAwake, 300000
+    } Else {
+        enabled := False
+        Menu, Tray, Uncheck, Keep Awake
+        SetTimer, keepAwake, Delete
+    }
+    Return
+}
+
+keepAwake() {
+    If (A_TimeIdlePhysical > 300000) {
+        MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
+        MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
+    }
+    Return
+}
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
