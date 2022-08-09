@@ -192,6 +192,20 @@ AppsKey & PgDn:: Send, {F18}
     Return
 #IfWinActive
 
+;--------------------------------------------------------------------------------
+; Visual Studio Code
+;--------------------------------------------------------------------------------
+#IfWinActive ahk_exe Code.exe
+~^f::
+~^h::
+~^k::
+~^+f::
+~^+h::
+    Sleep, 100
+    ime_off(WinExist("A"))
+    Return
+#IfWinActive
+
 toggleKeepAwake() {
     static enabled := False
     If (!enabled) {
