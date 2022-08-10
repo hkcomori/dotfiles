@@ -7,7 +7,7 @@ key_startDetectLongPress(key)
     If !IsObject(pressedTime)
         pressedTime := Object()
     pressedTime[key] := 0
-    SetTimer key_detectLongPress, 100
+    SetTimer key_detectLongPress, 50
 }
 
 key_stopDetectLongPress(key)
