@@ -84,6 +84,10 @@ CapsLock:: LCtrl
 
 #z:: Winset, AlwaysOnTop, Toggle, A
 
+~*XButton1:: mouse_activateUnderCursor()
+~*XButton2:: mouse_activateUnderCursor()
+~*F19:: mouse_activateUnderCursor()
+
 ~*WheelDown:: mouse_activateUnderCursor()
 ~*WheelUp:: mouse_activateUnderCursor()
 ~*WheelRight:: mouse_activateUnderCursor()
@@ -190,6 +194,19 @@ AppsKey & PgDn:: Send, {F18}
     Sleep, 100
     ime_off(WinExist("A"))
     Return
+
+; Switch tabs by back/forward buttons
+^XButton1:: ^+Tab
+^XButton2:: ^Tab
+
+; Close/open/reopen tabs by pressing both back and forward
+F19:: ^w
+^F19:: ^t
++F19:: ^+t
+
+; Switch tabs by wheel
+^WheelUp:: ^+Tab
+^WheelDown:: ^Tab
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
