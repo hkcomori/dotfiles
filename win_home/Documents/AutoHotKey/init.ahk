@@ -28,6 +28,9 @@ GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
 GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
 GroupAdd, office, ahk_exe POWERPNT.EXE  ; Microsoft PowerPoint
 
+; Outlook child window
+GroupAdd, outlookChild, ahk_exe OUTLOOK.EXE,,, - Outlook
+
 ; Browser
 GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
 GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
@@ -175,11 +178,24 @@ AppsKey & PgDn:: Send, {F18}
 ;--------------------------------------------------------------------------------
 ; Outlook
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe OUTLOOK.EXE
+#IfWinActive - Outlook ahk_exe OUTLOOK.EXE
 ~^e::
     Sleep, 100
     ime_off(WinExist("A"))
     Return
+
+F19:: !F4
+#IfWinActive
+
+#IfWinActive ahk_group outlookChild
+; Ctrl+F to search instead of forwarding
+^f:: Send, {F4}
+
+; Close message window by pressing both back and forward
+F19:: !F4
+
+XButton1:: ^<
+XButton2:: ^>
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
