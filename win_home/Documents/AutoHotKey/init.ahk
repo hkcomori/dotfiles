@@ -224,6 +224,19 @@ F19:: ^w
     Sleep, 100
     ime_off(WinExist("A"))
     Return
+
+; Switch tabs by back/forward buttons
+^XButton1:: ^PgUp
+^XButton2:: ^PgDn
+
+; Close/open/reopen tabs by pressing both back and forward
+F19:: ^w
+^F19:: ^t
++F19:: ^+t
+
+; Switch tabs by wheel
+^WheelUp:: ^PgUp
+^WheelDown:: ^PgDn
 #IfWinActive
 
 toggleKeepAwake() {
