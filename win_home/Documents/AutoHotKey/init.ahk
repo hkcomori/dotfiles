@@ -116,6 +116,24 @@ vkF2 Up::   ; Kana
         ime_on(WinExist("A"))
     Return
 
+; Henkan
+vk1C & j:: Left
+vk1C & i:: Up
+vk1C & k:: Down
+vk1C & l:: Right
+vk1C & a:: Home
+vk1C & e:: End
+vk1C & Space:: Enter
+vk1C & p:: BackSpace
+vk1C & vkBB:: Delete    ; ";" as Delete
+vk1C & [:: Esc
+
+; Muhenkan
+vk1D & j:: +Left
+vk1D & i:: +Up
+vk1D & k:: +Down
+vk1D & l:: +Right
+
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
     If !key_isLongPressed("AppsKey", True)
