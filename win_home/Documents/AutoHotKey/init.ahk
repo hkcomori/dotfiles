@@ -79,6 +79,9 @@ Insert:: Return
 ; Use CapsLock as Ctrl
 CapsLock:: LCtrl
 
+; Keep Alt+Tab menu opened
+!Tab:: ^!Tab
+
 ; Global hot keys for Explorer
 #e::Run, %A_UserProfile%\Downloads
 
