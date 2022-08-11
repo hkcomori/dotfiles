@@ -273,6 +273,14 @@ F19:: ^w
 ^WheelDown:: ^PgDn
 #IfWinActive
 
+;--------------------------------------------------------------------------------
+; CaptureOnTouch
+;--------------------------------------------------------------------------------
+#IfWinActive ahk_exe TouchDR.exe
+XButton1:: Up
+XButton2:: Down
+#IfWinActive
+
 toggleKeepAwake() {
     static enabled := False
     If (!enabled) {
