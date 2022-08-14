@@ -42,7 +42,7 @@ fastScrollSensitivity := 10
 
 Menu, Tray, Add  ; separator
 Menu, Tray, Add, Keep Awake, toggleKeepAwake
-If (Domain <> "") {
+If (Domain <> "WORKGROUP") {
     ; Enable keep awake in the office
     toggleKeepAwake()
 }
