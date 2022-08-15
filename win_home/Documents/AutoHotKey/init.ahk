@@ -14,6 +14,12 @@ SendMode, Input
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
+SetTimer, detectAutoExecFailure, -5000
+detectAutoExecFailure() {
+    MsgBox, Auto-execute section was not fully executed.
+    Reload
+}
+
 ; Get environment variables
 EnvGet, A_UserProfile, USERPROFILE
 
@@ -72,6 +78,10 @@ CheckScriptUpdate() {
     scriptModTime := currentModTime
     SetTimer CheckScriptUpdate, 1000
 }
+
+; End of Auto-execute section
+SetTimer, detectAutoExecFailure, Delete
+Return
 
 ;--------------------------------------------------------------------------------
 ; Global
