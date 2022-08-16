@@ -48,8 +48,7 @@ install_python() {
 
 install_ansible() {
     ansible --version && return 0 || echo "Setup Ansible"
-    pip3 --version || sudo apt-get install -y python3-pip
-    sudo -HE pip3 install ansible ansible-lint
+    sudo apt-get install -y ansible ansible-lint
 }
 
 install_nodejs() {
