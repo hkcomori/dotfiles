@@ -155,11 +155,17 @@ AppsKey & Right:: Send, {Volume_Up}
 AppsKey & Up:: Send, {Media_Play_Pause}
 
 ; Fast scroll
+!WheelUp::
+vk1C & WheelUp::
 AppsKey & WheelUp::
+    mouse_activateUnderCursor()
+    Send, {WheelUp %fastScrollSensitivity%}
+    Return
+!WheelDown::
+vk1C & WheelDown::
 AppsKey & WheelDown::
     mouse_activateUnderCursor()
-    key := StrSplit(A_ThisHotkey, "&", " ")[2]
-    Send, {%key% %fastScrollSensitivity%}
+    Send, {WheelDown %fastScrollSensitivity%}
     Return
 
 ; Toggle keep awake
@@ -281,6 +287,13 @@ F19:: ^w
 ; Switch tabs by wheel
 ^WheelUp:: ^PgUp
 ^WheelDown:: ^PgDn
+
+!WheelUp:: !WheelUp
+vk1C & WheelUp:: !WheelUp           ; Henkan
+AppsKey & WheelUp:: !WheelUp
+!WheelDown:: !WheelDown
+vk1C & WheelDown:: !WheelDown       ; Henkan
+AppsKey & WheelDown:: !WheelDown
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
