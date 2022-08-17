@@ -99,6 +99,9 @@ CapsLock:: LCtrl
 
 #z:: Winset, AlwaysOnTop, Toggle, A
 
+; Input underscore without shift
+vkE2:: _
+
 ~*XButton1:: mouse_activateUnderCursor()
 ~*XButton2:: mouse_activateUnderCursor()
 ~*F19:: mouse_activateUnderCursor()
