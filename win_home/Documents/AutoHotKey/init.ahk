@@ -216,8 +216,6 @@ AppsKey & PgDn:: Send, {F18}
     Sleep, 100
     ime_off(WinExist("A"))
     Return
-
-F19:: !F4
 #IfWinActive
 
 #IfWinActive ahk_group outlookChild
