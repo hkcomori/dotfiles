@@ -58,7 +58,7 @@ OnExit("confirmExit")
 ; Detect long press
 key_startDetectLongPress("vk1D")    ; Muhenkan
 key_startDetectLongPress("vk1C")    ; Henkan
-key_startDetectLongPress("vkF2")    ; Kana
+key_startDetectLongPress("sc70")    ; Kana
 key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
@@ -121,8 +121,8 @@ vk1C Up::   ; Henkan
         ime_on(WinExist("A"))
     Return
 
-vkF2 Up::   ; Kana
-    If !key_isLongPressed("vkF2", True)
+sc70 Up::   ; Kana
+    If !key_isLongPressed("sc70", True)
         ime_on(WinExist("A"))
     Return
 
