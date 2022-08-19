@@ -11,6 +11,7 @@
 #MaxHotkeysPerInterval, 200
 Process, Priority,, Realtime
 SendMode, Input
+SetKeyDelay, -1
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
@@ -19,6 +20,9 @@ detectAutoExecFailure() {
     MsgBox, Auto-execute section was not fully executed.
     Reload
 }
+
+#include <key>
+#Include <stroke>
 
 ; Get environment variables
 EnvGet, A_UserProfile, USERPROFILE
@@ -78,6 +82,8 @@ CheckScriptUpdate() {
     SetTimer CheckScriptUpdate, 1000
 }
 
+stroke := new StrokeInfo()
+
 ; End of Auto-execute section
 SetTimer, detectAutoExecFailure, Delete
 Return
@@ -126,22 +132,18 @@ vk1C Up::   ; Henkan
 sc70:: ime_on(WinExist("A"))   ; Kana
 
 ; Henkan
-vk1C & j:: Left
-vk1C & i:: Up
-vk1C & k:: Down
-vk1C & l:: Right
-vk1C & a:: Home
-vk1C & e:: End
-vk1C & Space:: Enter
-vk1C & p:: BackSpace
-vk1C & vkBB:: Delete    ; ";" as Delete
-vk1C & [:: Esc
-
-; Muhenkan
-vk1D & j:: +Left
-vk1D & i:: +Up
-vk1D & k:: +Down
-vk1D & l:: +Right
+vk1C & Left:: !Left
+vk1C & Right:: !Right
+vk1C & Up:: !Up
+vk1C & Down:: !Down
+vk1C & b:: ^Left
+vk1C & f:: ^Right
+vk1C & n:: Send, {Down 5}
+vk1C & p:: Send, {Up 5}
+vk1C & ,:: ^Home
+vk1C & .:: ^End
+vk1C & w:: ^c
+vk1C & v:: PgUp
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
@@ -186,6 +188,196 @@ AppsKey & PgUp:: Send, {F15}
 AppsKey & Delete:: Send, {F16}
 AppsKey & End:: Send, {F17}
 AppsKey & PgDn:: Send, {F18}
+
+#If !stroke.is_active()
+    vk1D & b:: Left
+    vk1D & p:: Up
+    vk1D & n:: Down
+    vk1D & f:: Right
+    vk1D & a:: Home
+    vk1D & e:: End
+    vk1D & v:: PgDn
+    vk1D & m:: Enter
+    vk1D & h:: BackSpace
+    vk1D & d:: Delete
+    vk1D & s:: ^f
+    vk1D & y:: ^v
+    vk1D & [:: Esc
+    vk1D & /:: ^z
+    vk1D & vkE2:: ^y        ; Backslash located next to slash key
+    vk1D & Left:: ^Left
+    vk1D & Right:: ^Right
+    vk1D & Up:: Send, {Up 5}
+    vk1D & Down:: Send, {Down 5}
+    vk1D & PgUp:: ^PgUp
+    vk1D & PgDn:: ^PgDn
+    vk1D & @:: ^@
+    vk1D & BackSpace:: ^BackSpace
+    vk1D & Delete:: ^Delete
+
+    ; Start multi-stroke
+    vk1D & q::
+    vk1D & x::
+        stroke.activate(A_ThisHotkey)
+        Return
+    vk1D & u::
+        stroke.activate(A_ThisHotkey, True)
+        Return
+    vk1D & g:: Esc
+#If
+
+; Stop multi-stroke
+#If stroke.is_active()
+    Esc::
+    vk1D & g::
+        stroke.deactivate(A_ThisHotKey)
+        Return
+#If
+
+; C-q like behavior
+#If stroke.is_active() && (stroke.keys[1] == "vk1D & q")
+    vk1D & a::
+        stroke.deactivate(A_ThisHotKey)
+        Send, ^a
+        Return
+#If
+
+; C-x like behavior
+#If stroke.is_active() && (stroke.keys[1] == "vk1D & x")
+    vk1D & s::
+        stroke.deactivate(A_ThisHotKey)
+        Send, ^s
+        Return
+#If
+
+; C-u like behavior (Repeat)
+#If stroke.is_active() && (stroke.keys[1] == "vk1D & u")
+    ; Set repeat counts
+    0::
+    1::
+    2::
+    3::
+    4::
+    5::
+    6::
+    7::
+    8::
+    9::
+        stroke.push(A_ThisHotkey)
+        Return
+    ; Repeated send keys
+    a::
+    b::
+    c::
+    d::
+    e::
+    f::
+    g::
+    h::
+    i::
+    j::
+    k::
+    l::
+    m::
+    n::
+    o::
+    p::
+    q::
+    r::
+    s::
+    t::
+    u::
+    v::
+    w::
+    x::
+    y::
+    z::
+    !::
+    #::
+    $::
+    %::
+    &::
+    '::
+    (::
+    )::
+    -::
+    ^::
+    \::
+    =::
+    ~::
+    @::
+    [::
+    ]::
+    `::
+    {::
+    }::
+    ;::
+    :::
+    +::
+    *::
+    <::
+    >::
+    ?::
+    _::
+    Left::
+    Right::
+    Down::
+    Up::
+    Enter::
+    BackSpace::
+    Delete::
+        repeat := stroke.deactivate(A_ThisHotKey)
+        Send, {%A_ThisHotkey% %repeat%}
+        Return
+    +A::
+    +B::
+    +C::
+    +D::
+    +E::
+    +F::
+    +G::
+    +H::
+    +I::
+    +J::
+    +K::
+    +L::
+    +M::
+    +N::
+    +O::
+    +P::
+    +Q::
+    +R::
+    +S::
+    +T::
+    +U::
+    +V::
+    +W::
+    +X::
+    +Y::
+    +Z::
+        key := KeyUtil.trim_modifier(A_ThisHotkey)
+        repeat := stroke.deactivate(A_ThisHotKey)
+        Send, {%key% %repeat%}
+        Return
+    +2::    ; Double quotation
+        repeat := stroke.deactivate(A_ThisHotKey)
+        Loop % repeat {
+            Send, {ASC 034}
+            Sleep, 1
+        }
+        Return
+    +7::    ; Single quotation
+        repeat := stroke.deactivate(A_ThisHotKey)
+        Loop % repeat {
+            Send, {ASC 039}
+            Sleep, 1
+        }
+        Return
+    vkE2::  ; Backslash located next to slash key
+        repeat := stroke.deactivate(A_ThisHotKey)
+        Send, {_ %repeat%}
+        Return
+#If
 
 ;--------------------------------------------------------------------------------
 ; Explorer
@@ -262,6 +454,28 @@ F19:: ^w
 ;--------------------------------------------------------------------------------
 ; Visual Studio Code
 ;--------------------------------------------------------------------------------
+#If WinActive("ahk_exe Code.exe") && GetKeyState("vk1D", "P")
+    ; Swap lines
+    Up:: !Up
+    Down:: !Down
+
+    ; Add multiple cursors
+    ^Up:: ^!Up
+    ^Down:: ^!Down
+
+    ; Change focus editors
+    1:: ^1
+    2:: ^2
+    3:: ^3
+    4:: ^4
+    5:: ^5
+    6:: ^6
+    7:: ^7
+    8:: ^8
+    9:: ^9
+    0:: ^0
+#If
+
 #IfWinActive ahk_exe Code.exe
 ~^f::
 ~^h::
