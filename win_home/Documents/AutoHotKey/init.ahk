@@ -23,6 +23,7 @@ detectAutoExecFailure() {
 
 #include <key>
 #Include <stroke>
+#Include <traymenu>
 
 ; Get environment variables
 EnvGet, A_UserProfile, USERPROFILE
@@ -51,10 +52,16 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 fastScrollSensitivity := 10
 
 Menu, Tray, Add  ; separator
-Menu, Tray, Add, Keep Awake, toggleKeepAwake
+keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", 300000)
+keepAwake() {
+    If (A_TimeIdlePhysical > 300000) {
+        MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
+        MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
+    }
+}
 If (Domain <> "WORKGROUP") {
     ; Enable keep awake in the office
-    toggleKeepAwake()
+    keepAwakeMenu.toggle()
 }
 
 OnExit("confirmExit")
@@ -170,7 +177,7 @@ AppsKey & WheelDown::
     Return
 
 ; Toggle keep awake
-AppsKey & Esc:: toggleKeepAwake()
+AppsKey & Esc:: keepAwakeMenu.toggle()
 
 ; Turn off IME when opening start menu
 ~LWin Up::
@@ -514,28 +521,6 @@ AppsKey & WheelDown:: !WheelDown
 XButton1:: Up
 XButton2:: Down
 #IfWinActive
-
-toggleKeepAwake() {
-    static enabled := False
-    If (!enabled) {
-        enabled := True
-        Menu, Tray, Check, Keep Awake
-        SetTimer, keepAwake, 300000
-    } Else {
-        enabled := False
-        Menu, Tray, Uncheck, Keep Awake
-        SetTimer, keepAwake, Delete
-    }
-    Return
-}
-
-keepAwake() {
-    If (A_TimeIdlePhysical > 300000) {
-        MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
-        MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
-    }
-    Return
-}
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
