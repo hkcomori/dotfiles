@@ -24,6 +24,7 @@ detectAutoExecFailure() {
 #include <key>
 #Include <stroke>
 #Include <traymenu>
+#Include ime_manager.ahk
 
 ; Get environment variables
 EnvGet, A_UserProfile, USERPROFILE
@@ -52,6 +53,9 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 fastScrollSensitivity := 10
 
 Menu, Tray, Add  ; separator
+imeStatus := new ImeManager(60)
+disableImeMenu := new ToggleTrayMenu("Disable IME when non-active", ObjBindMethod(imeStatus, "tick"), 1000)
+disableImeMenu.toggle()
 keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", 300000)
 keepAwake() {
     If (A_TimeIdlePhysical > 300000) {
@@ -126,17 +130,19 @@ vkE2:: _
 +WheelDown:: WheelRight
 +WheelUp:: WheelLeft
 
+sc29:: imeStatus.toggle()      ; Hankaku/Zenkaku
+
 vk1D Up::   ; Muhenkan
     If !key_isLongPressed("vk1D", True)
-        ime_off(WinExist("A"))
+        imeStatus.off()
     Return
 
 vk1C Up::   ; Henkan
     If !key_isLongPressed("vk1C", True)
-        ime_on(WinExist("A"))
+        imeStatus.on()
     Return
 
-sc70:: ime_on(WinExist("A"))   ; Kana
+sc70:: imeStatus.on()          ; Kana
 
 ; Henkan
 vk1C & Left:: !Left
@@ -184,7 +190,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ~RWin Up::
     If (A_PriorKey = "LWin" || A_PriorKey = "RWin"){
         Sleep, 100
-        ime_off(WinExist("A"))
+        imeStatus.off()
     }
     Return
 
@@ -393,7 +399,7 @@ AppsKey & PgDn:: Send, {F18}
 ~^f::
 ~^l::
     Sleep, 100
-    ime_off(WinExist("A"))
+    imeStatus.off()
     Return
 #IfWinActive
 
@@ -403,7 +409,7 @@ AppsKey & PgDn:: Send, {F18}
 #IfWinActive ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE
 ~^f::
     Sleep, 100
-    ime_off(WinExist("A"))
+    imeStatus.off()
     Return
 #IfWinActive
 
@@ -413,7 +419,7 @@ AppsKey & PgDn:: Send, {F18}
 #IfWinActive - Outlook ahk_exe OUTLOOK.EXE
 ~^e::
     Sleep, 100
-    ime_off(WinExist("A"))
+    imeStatus.off()
     Return
 #IfWinActive
 
@@ -441,7 +447,7 @@ XButton2:: ^>
 ~+F3::
 ~^+p::
     Sleep, 100
-    ime_off(WinExist("A"))
+    imeStatus.off()
     Return
 
 ; Switch tabs by back/forward buttons
@@ -490,7 +496,7 @@ F19:: ^w
 ~^+f::
 ~^+h::
     Sleep, 100
-    ime_off(WinExist("A"))
+    imeStatus.off()
     Return
 
 ; Switch tabs by back/forward buttons
