@@ -53,8 +53,8 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 fastScrollSensitivity := 10
 
 Menu, Tray, Add  ; separator
-imeStatus := new ImeManager(60)
-disableImeMenu := new ToggleTrayMenu("Disable IME when non-active", ObjBindMethod(imeStatus, "tick"), 1000)
+imeStatus := new ImeManager(60, 180000)
+disableImeMenu := new ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), 1000)
 disableImeMenu.toggle()
 keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", 300000)
 keepAwake() {
