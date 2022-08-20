@@ -204,8 +204,12 @@ AppsKey & PgDn:: Send, {F18}
 
 #If !stroke.is_active()
     ; Shows command launcher
-    #Space:: Send, ^!{Insert}
-    vk1D & Space:: Send, ^!{Insert}
+    #Space::
+    vk1D & Space::
+        Send, ^!{Insert}
+        Sleep, 100
+        imeStatus.off()
+        Return
 
     vk1D & b:: Left
     vk1D & p:: Up
