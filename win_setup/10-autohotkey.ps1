@@ -5,8 +5,8 @@ $nofilePath = Split-Path -Parent $scriptPath
 
 . ($nofilePath + "\lib.ps1")
 
-$shortcutPath = $UserProperty.Startup + "\init.ahk - ショートカット.lnk"
-$targetPath = "$env:USERPROFILE\Documents\AutoHotKey\init.ahk"
+$shortcutPath = $UserProperty.Startup + "\main.ahk - ショートカット.lnk"
+$targetPath = "$env:USERPROFILE\Documents\AutoHotKey\main.ahk"
 $workingDir = "$env:USERPROFILE\Documents\AutoHotKey"
 
 CreateShortcut "$shortcutPath" "$targetPath" "$workingDir"
