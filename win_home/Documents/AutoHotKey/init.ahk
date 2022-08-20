@@ -396,72 +396,72 @@ AppsKey & PgDn:: Send, {F18}
 ; Explorer
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_class CabinetWClass ahk_exe Explorer.EXE
-~^f::
-~^l::
-    Sleep, 100
-    imeStatus.off()
-    Return
+    ~^f::
+    ~^l::
+        Sleep, 100
+        imeStatus.off()
+        Return
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
 ; Task view
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE
-~^f::
-    Sleep, 100
-    imeStatus.off()
-    Return
+    ~^f::
+        Sleep, 100
+        imeStatus.off()
+        Return
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
 ; Outlook
 ;--------------------------------------------------------------------------------
 #IfWinActive - Outlook ahk_exe OUTLOOK.EXE
-~^e::
-    Sleep, 100
-    imeStatus.off()
-    Return
+    ~^e::
+        Sleep, 100
+        imeStatus.off()
+        Return
 #IfWinActive
 
 #IfWinActive ahk_group outlookChild
-; Ctrl+F to search instead of forwarding
-^f:: Send, {F4}
+    ; Ctrl+F to search instead of forwarding
+    ^f:: Send, {F4}
 
-; Close message window by pressing both back and forward
-F19:: !F4
+    ; Close message window by pressing both back and forward
+    F19:: !F4
 
-XButton1:: ^<
-XButton2:: ^>
+    XButton1:: ^<
+    XButton2:: ^>
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
 ; Browser
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_group browser
-~^e::
-~^f::
-~^l::
-~^t::
-~F1::
-~F3::
-~+F3::
-~^+p::
-    Sleep, 100
-    imeStatus.off()
-    Return
+    ~^e::
+    ~^f::
+    ~^l::
+    ~^t::
+    ~F1::
+    ~F3::
+    ~+F3::
+    ~^+p::
+        Sleep, 100
+        imeStatus.off()
+        Return
 
-; Switch tabs by back/forward buttons
-^XButton1:: ^+Tab
-^XButton2:: ^Tab
+    ; Switch tabs by back/forward buttons
+    ^XButton1:: ^+Tab
+    ^XButton2:: ^Tab
 
-; Close/open/reopen tabs by pressing both back and forward
-F19:: ^w
-^F19:: ^t
-+F19:: ^+t
+    ; Close/open/reopen tabs by pressing both back and forward
+    F19:: ^w
+    ^F19:: ^t
+    +F19:: ^+t
 
-; Switch tabs by wheel
-^WheelUp:: ^+Tab
-^WheelDown:: ^Tab
+    ; Switch tabs by wheel
+    ^WheelUp:: ^+Tab
+    ^WheelDown:: ^Tab
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
@@ -490,42 +490,42 @@ F19:: ^w
 #If
 
 #IfWinActive ahk_exe Code.exe
-~^f::
-~^h::
-~^k::
-~^+f::
-~^+h::
-    Sleep, 100
-    imeStatus.off()
-    Return
+    ~^f::
+    ~^h::
+    ~^k::
+    ~^+f::
+    ~^+h::
+        Sleep, 100
+        imeStatus.off()
+        Return
 
-; Switch tabs by back/forward buttons
-^XButton1:: ^PgUp
-^XButton2:: ^PgDn
+    ; Switch tabs by back/forward buttons
+    ^XButton1:: ^PgUp
+    ^XButton2:: ^PgDn
 
-; Close/open/reopen tabs by pressing both back and forward
-F19:: ^w
-^F19:: ^t
-+F19:: ^+t
+    ; Close/open/reopen tabs by pressing both back and forward
+    F19:: ^w
+    ^F19:: ^t
+    +F19:: ^+t
 
-; Switch tabs by wheel
-^WheelUp:: ^PgUp
-^WheelDown:: ^PgDn
+    ; Switch tabs by wheel
+    ^WheelUp:: ^PgUp
+    ^WheelDown:: ^PgDn
 
-!WheelUp:: !WheelUp
-vk1C & WheelUp:: !WheelUp           ; Henkan
-AppsKey & WheelUp:: !WheelUp
-!WheelDown:: !WheelDown
-vk1C & WheelDown:: !WheelDown       ; Henkan
-AppsKey & WheelDown:: !WheelDown
+    !WheelUp:: !WheelUp
+    vk1C & WheelUp:: !WheelUp           ; Henkan
+    AppsKey & WheelUp:: !WheelUp
+    !WheelDown:: !WheelDown
+    vk1C & WheelDown:: !WheelDown       ; Henkan
+    AppsKey & WheelDown:: !WheelDown
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
 ; CaptureOnTouch
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_exe TouchDR.exe
-XButton1:: Up
-XButton2:: Down
+    XButton1:: Up
+    XButton2:: Down
 #IfWinActive
 
 confirmExit(ExitReason, ExitCode) {
