@@ -203,6 +203,10 @@ AppsKey & End:: Send, {F17}
 AppsKey & PgDn:: Send, {F18}
 
 #If !stroke.is_active()
+    ; Shows command launcher
+    #Space:: Send, ^!{Insert}
+    vk1D & Space:: Send, ^!{Insert}
+
     vk1D & b:: Left
     vk1D & p:: Up
     vk1D & n:: Down
