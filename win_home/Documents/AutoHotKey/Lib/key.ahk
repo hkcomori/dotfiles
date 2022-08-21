@@ -33,7 +33,7 @@ key_isLongPressed(key, clear=False)
     _pressedTime := pressedTime[key]
     If clear
         pressedTime[key] := 0
-    Return _pressedTime > 3
+    Return _pressedTime > 5
 }
 
 class KeyUtil {
