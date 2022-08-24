@@ -33,6 +33,16 @@ fi
 if which wslpath &>/dev/null; then
     export WIN_USER="$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')"
     export WIN_HOME="$(wslpath "$(powershell.exe '$env:USERPROFILE' | sed -e 's/\r//g')")"
+    if [ -d "/mnt/c/Program Files/AutoHotkey" ] ; then
+        AHK_DIR_PATH="/mnt/c/Program Files/AutoHotkey"
+    fi
+    if [ -d "/mnt/c/Program Files (x86)/AutoHotkey" ] ; then
+        AHK_DIR_PATH="/mnt/c/Program Files (x86)/AutoHotkey"
+    fi
+    if [ -d "${WIN_HOME}/bin/AutoHotkey" ] ; then
+        AHK_DIR_PATH="${WIN_HOME}/bin/AutoHotkey"
+    fi
+    PATH="$AHK_DIR_PATH:$PATH"
 fi
 
 export ANSIBLE_ENABLE_TASK_DEBUGGER=yes
