@@ -498,11 +498,17 @@ AppsKey & PgDn:: Send, {F18}
 #If
 
 #IfWinActive ahk_exe Code.exe
+    ~^e::
     ~^f::
     ~^h::
     ~^k::
+    ~^p::
+    ~^t::
     ~^+f::
     ~^+h::
+    ~^+p::
+    ~^@::
+    ~F1::
         Sleep, 100
         imeStatus.off()
         Return
