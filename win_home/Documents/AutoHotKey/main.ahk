@@ -194,14 +194,6 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     }
     Return
 
-; Macro board
-AppsKey & Insert:: Send, {F13}
-AppsKey & Home:: Send, {F14}
-AppsKey & PgUp:: Send, {F15}
-AppsKey & Delete:: Send, {F16}
-AppsKey & End:: Send, {F17}
-AppsKey & PgDn:: Send, {F18}
-
 #If !stroke.is_active()
     ; Shows command launcher
     #Space::
