@@ -119,9 +119,9 @@ CapsLock:: LCtrl
 ; Input underscore without shift
 vkE2:: _
 
-~*XButton1:: mouse_activateUnderCursor()
-~*XButton2:: mouse_activateUnderCursor()
-~*F19:: mouse_activateUnderCursor()
+XButton1:: mouse_sendUnderCursor("{XButton1}")
+XButton2:: mouse_sendUnderCursor("{XButton2}")
+F19:: mouse_sendUnderCursor("{F19}")
 
 ~*WheelDown:: mouse_activateUnderCursor()
 ~*WheelUp:: mouse_activateUnderCursor()
@@ -436,10 +436,10 @@ AppsKey & PgDn:: Send, {F18}
     ^f:: Send, {F4}
 
     ; Close message window by pressing both back and forward
-    F19:: !F4
+    F19:: mouse_sendUnderCursor("!{F4}")
 
-    XButton1:: ^<
-    XButton2:: ^>
+    XButton1:: mouse_sendUnderCursor("^<")
+    XButton2:: mouse_sendUnderCursor("^>")
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
@@ -459,13 +459,13 @@ AppsKey & PgDn:: Send, {F18}
         Return
 
     ; Switch tabs by back/forward buttons
-    ^XButton1:: ^+Tab
-    ^XButton2:: ^Tab
+    ^XButton1:: mouse_sendUnderCursor("^+Tab")
+    ^XButton2:: mouse_sendUnderCursor("^Tab")
 
     ; Close/open/reopen tabs by pressing both back and forward
-    F19:: ^w
-    ^F19:: ^t
-    +F19:: ^+t
+    F19:: mouse_sendUnderCursor("^w")
+    ^F19:: mouse_sendUnderCursor("^t")
+    +F19:: mouse_sendUnderCursor("^+t")
 
     ; Switch tabs by wheel
     ^WheelUp:: ^+Tab
@@ -508,13 +508,13 @@ AppsKey & PgDn:: Send, {F18}
         Return
 
     ; Switch tabs by back/forward buttons
-    ^XButton1:: ^PgUp
-    ^XButton2:: ^PgDn
+    ^XButton1:: mouse_sendUnderCursor("^{PgUp}")
+    ^XButton2:: mouse_sendUnderCursor("^{PgDn}")
 
     ; Close/open/reopen tabs by pressing both back and forward
-    F19:: ^w
-    ^F19:: ^t
-    +F19:: ^+t
+    F19:: mouse_sendUnderCursor("^w")
+    ^F19:: mouse_sendUnderCursor("^t")
+    +F19:: mouse_sendUnderCursor("^+t")
 
     ; Switch tabs by wheel
     ^WheelUp:: ^PgUp
@@ -532,8 +532,8 @@ AppsKey & PgDn:: Send, {F18}
 ; CaptureOnTouch
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_exe TouchDR.exe
-    XButton1:: Up
-    XButton2:: Down
+    XButton1:: mouse_sendUnderCursor("{Up}")
+    XButton2:: mouse_sendUnderCursor("{Down}")
 #IfWinActive
 
 confirmExit(ExitReason, ExitCode) {
