@@ -23,11 +23,9 @@ detectAutoExecFailure() {
 
 #include <key>
 #Include <stroke>
+#Include <sys>
 #Include <traymenu>
 #Include ime_manager.ahk
-
-; Get environment variables
-EnvGet, A_UserProfile, USERPROFILE
 
 objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" A_ComputerName "\root\cimv2")
 For objComputer in objWMIService.ExecQuery("Select * from Win32_ComputerSystem") {
@@ -123,7 +121,7 @@ AppsKey & Insert:: ^v
 !Tab:: ^!Tab
 
 ; Global hot keys for Explorer
-#e::Run, %A_UserProfile%\Downloads
+#e::Run % EnvGet("USERPROFILE") "\Downloads"
 
 #z:: Winset, AlwaysOnTop, Toggle, A
 
