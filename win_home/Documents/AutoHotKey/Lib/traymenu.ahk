@@ -1,4 +1,4 @@
-#include <timer>
+#include <time>
 
 class ToggleTrayMenu{
     __New(menu_name, tick_func, interval) {

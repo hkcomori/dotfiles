@@ -4,7 +4,7 @@ SetWorkingDir, %A_ScriptDir%
 #Include <Yunit\Yunit>
 #Include <Yunit\Stdout>
 
-#Include %A_ScriptDir%\timer.ahk
+#Include %A_ScriptDir%\time.ahk
 
 Tester := Yunit.Use(YunitStdout).Test(TestTimer)
 

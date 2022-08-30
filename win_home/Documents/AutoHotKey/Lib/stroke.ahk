@@ -1,5 +1,5 @@
 #include <array>
-#include <timer>
+#include <time>
 
 class StrokeInfo {
     static IS_NUMBER := new ArrayMatcher(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
