@@ -25,12 +25,12 @@ detectAutoExecFailure() {
 #Include <stroke>
 #Include <sys>
 #Include <traymenu>
+#Include config.ahk
 #Include ime_manager.ahk
 
-objWMIService := ComObjGet("winmgmts:{impersonationLevel=impersonate}!\\" A_ComputerName "\root\cimv2")
-For objComputer in objWMIService.ExecQuery("Select * from Win32_ComputerSystem") {
-    Domain := objComputer.Domain
-    Workgroup := objComputer.Workgroup
+convMillisecond := 1000
+stableWait() {
+    Sleep % config.global.stableWait
 }
 
 ; Office
@@ -48,21 +48,25 @@ GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
 GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 
 ; Fast scroll
-fastScrollSensitivity := 10
+fastScrollSensitivity := config.fascscroll.speed
 
-Menu, Tray, Add  ; separator
-imeStatus := new ImeManager(60, 180000)
-disableImeMenu := new ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), 1000)
-disableImeMenu.toggle()
-keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", 300000)
+; separator
+Menu, Tray, Add
+
+imeStatus := new ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
+disableImeMenu := new ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
+if (config.imeoff.enable) {
+    disableImeMenu.toggle()
+}
+
+keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", config.global.interval)
 keepAwake() {
-    If (A_TimeIdlePhysical > 300000) {
+    If (A_TimeIdlePhysical > (config.keepawake.interval * convMillisecond)) {
         MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
         MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
     }
 }
-If (Domain <> "WORKGROUP") {
-    ; Enable keep awake in the office
+if (config.keepawake.enable) {
     keepAwakeMenu.toggle()
 }
 
@@ -75,7 +79,7 @@ key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
 FileGetTime scriptModTime, %A_ScriptFullPath%
-SetTimer CheckScriptUpdate, 1000
+SetTimer CheckScriptUpdate, % config.global.interval
 CheckScriptUpdate() {
     ListLines, Off
     global scriptModTime
@@ -84,11 +88,11 @@ CheckScriptUpdate() {
         return
     SetTimer CheckScriptUpdate, Off
     Reload
-    Sleep 1000
+    Sleep % config.global.interval
     ; If successful, the reload will close this instance during the Sleep,
     ; so the line below will never be reached.
     scriptModTime := currentModTime
-    SetTimer CheckScriptUpdate, 1000
+    SetTimer CheckScriptUpdate, % config.global.interval
 }
 
 stroke := new StrokeInfo()
@@ -198,7 +202,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ~LWin Up::
 ~RWin Up::
     If (A_PriorKey = "LWin" || A_PriorKey = "RWin"){
-        Sleep, 100
+        stableWait()
         imeStatus.off()
     }
     Return
@@ -208,7 +212,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     #Space::
     vk1D & Space::
         Send, ^!{Insert}
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 
@@ -407,7 +411,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #IfWinActive ahk_class CabinetWClass ahk_exe Explorer.EXE
     ~^f::
     ~^l::
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 #IfWinActive
@@ -417,7 +421,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE
     ~^f::
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 #IfWinActive
@@ -427,7 +431,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ;--------------------------------------------------------------------------------
 #IfWinActive - Outlook ahk_exe OUTLOOK.EXE
     ~^e::
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 #IfWinActive
@@ -455,7 +459,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~F3::
     ~+F3::
     ~^+p::
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 
@@ -510,7 +514,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~^+p::
     ~^@::
     ~F1::
-        Sleep, 100
+        stableWait()
         imeStatus.off()
         Return
 
@@ -554,6 +558,6 @@ pasteText(text) {
     backup := ClipboardAll
     clipboard := text
     Send, ^v
-    Sleep, 100
+    stableWait()
     clipboard := backup
 }
