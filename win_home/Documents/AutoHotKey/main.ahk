@@ -531,10 +531,10 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ^WheelUp:: ^PgUp
     ^WheelDown:: ^PgDn
 
-    !WheelUp:: !WheelUp
+    !WheelUp:: Send, !{WheelUp}
     vk1C & WheelUp:: !WheelUp           ; Henkan
     AppsKey & WheelUp:: !WheelUp
-    !WheelDown:: !WheelDown
+    !WheelDown:: Send, !{WheelDown}
     vk1C & WheelDown:: !WheelDown       ; Henkan
     AppsKey & WheelDown:: !WheelDown
 #IfWinActive
