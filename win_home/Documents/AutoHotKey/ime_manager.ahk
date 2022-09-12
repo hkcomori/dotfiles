@@ -10,11 +10,17 @@ class ImeManager {
         window := WinExist(win_title)
         ime_on(window)
         this.counts[window] := this.set_count
+        if (WinActive(win_title)) {
+            Send, {vk1C}    ; Henkan
+        }
     }
     off(win_title := "A") {
         window := WinExist(win_title)
         this.counts.Delete(window)
         ime_off(window)
+        if (WinActive(win_title)) {
+            Send, {vk1D}    ; Muhenkan
+        }
     }
     toggle(win_title := "A") {
         window := WinExist(win_title)
