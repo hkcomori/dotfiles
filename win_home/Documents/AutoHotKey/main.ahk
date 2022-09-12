@@ -448,6 +448,20 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #IfWinActive
 
 ;--------------------------------------------------------------------------------
+; Office
+;--------------------------------------------------------------------------------
+#IfWinActive ahk_exe EXCEL.EXE
+    AppsKey & WheelDown::
+    !WheelDown::
+        mouse_sendUnderCursor("{PgDn}")
+        Return
+    AppsKey & WheelUp::
+    !WheelUp::
+        mouse_sendUnderCursor("{PgUp}")
+        Return
+#IfWinActive
+
+;--------------------------------------------------------------------------------
 ; Browser
 ;--------------------------------------------------------------------------------
 #IfWinActive ahk_group browser
