@@ -4,4 +4,5 @@ umask 022
 export DEBIAN_FRONTEND=noninteractive
 
 sudo apt-get install -y \
-    cloc
+    cloc \
+    jq
