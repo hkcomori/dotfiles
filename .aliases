@@ -32,6 +32,27 @@ alias docker='podman'
 
 alias g='git'
 
+# Change directory by search
+peco_cd() {
+    cd "$(find "${1:-.}" -type d -maxdepth 5 2>/dev/null | peco)"
+}
+alias pcd='peco_cd'
+
+peco_history() {
+    history -n -r 1 | peco --query "$1"
+}
+alias ph='$(peco_history)'
+
+# Kill processes by search
+peco_kill() {
+    [ "$(whoami)" = "root" ] && OPTA="a" || OPTA=""
+    for pid in $(ps "${OPTA}"fxo user,pid,%cpu,%mem,command | peco | awk '{print $2}'); do
+        kill "${pid}"
+        echo "Killed ${pid}"
+    done
+}
+alias pk='peco_kill'
+
 # GnuPG aliases
 alias encrypt='gpg -es'
 alias decrypt='gpg -d'
