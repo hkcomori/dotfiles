@@ -28,6 +28,8 @@ alias l='ls -CF'
 alias isomount='fuseiso'
 alias umount='fusermount -u'
 
+alias docker='podman'
+
 alias g='git'
 
 # GnuPG aliases
