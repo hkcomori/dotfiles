@@ -1,5 +1,8 @@
 #!/usr/bin/env -S bash -e -o pipefail
 
+# Run on WSL only
+which wslpath &>/dev/null || exit 0
+
 AHK_LIB_DIR="${WIN_HOME}/Documents/AutoHotKey/Lib"
 
 echo [Install Yunit]
