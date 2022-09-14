@@ -10,6 +10,7 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'     # 補完時に大小文�
 zstyle ':completion:*' menu select=1
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}   # ファイルリスト補完でもlsと同様に色をつける｡
 zstyle ':completion:*:default' menu select              # arrow keyで候補間移動
+zstyle ':completion:*' completer _complete _approximate _prefix     # 単語途中の補完を有効化する
 setopt magic_equal_subst        # コマンドラインの引数で --prefix=/usr などの = 以降でも補完できる
 setopt mark_dirs                # ファイル名の展開でディレクトリにマッチした場合末尾に / を付加する
 setopt auto_param_keys          # カッコの対応などを自動的に補完
