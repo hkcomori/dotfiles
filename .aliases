@@ -44,14 +44,10 @@ peco_history() {
 alias ph='$(peco_history)'
 
 # Kill processes by search
-peco_kill() {
-    [ "$(whoami)" = "root" ] && OPTA="a" || OPTA=""
-    for pid in $(ps "${OPTA}"fxo user,pid,%cpu,%mem,command | peco | awk '{print $2}'); do
-        kill "${pid}"
-        echo "Killed ${pid}"
-    done
+kill() {
+    # shellcheck disable=SC2068
+    builtin kill ${@:-$(ps afhx -o user,pid,%cpu,%mem,command | peco | tr -s ' ' | awk '{print $2; system("cat /proc/" $2 "/cmdline 2>/dev/null | xargs -0 echo killed: " $2 ": >&2")}')}
 }
-alias pk='peco_kill'
 
 # GnuPG aliases
 alias encrypt='gpg -es'
