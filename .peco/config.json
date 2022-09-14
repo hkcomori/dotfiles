@@ -1,0 +1,11 @@
+{
+    "Action": {
+        "my.ToggleSelectionAndSelectDown": [
+            "peco.ToggleSelection",
+            "peco.SelectDown"
+        ]
+    },
+    "Keymap": {
+        "C-Space": "my.ToggleSelectionAndSelectDown"
+    }
+}

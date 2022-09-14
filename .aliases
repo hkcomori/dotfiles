@@ -39,7 +39,7 @@ peco_cd() {
 alias pcd='peco_cd'
 
 peco_history() {
-    history -n -r 1 | peco --query "$1"
+    history -n -r 1 | peco --layout=bottom-up --query "$1"
 }
 alias ph='$(peco_history)'
 
