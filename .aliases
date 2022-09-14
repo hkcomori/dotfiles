@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # -*- SH -*-
 
 ## Aliases from ~/.bashrc in Ubuntu 20.04
@@ -34,7 +34,7 @@ alias g='git'
 
 # Change directory by search
 peco_cd() {
-    cd "$(find "${1:-.}" -type d -maxdepth 5 2>/dev/null | peco)"
+    cd "$(find "${1:-.}" -type d -maxdepth 5 2>/dev/null | peco)" || return
 }
 alias pcd='peco_cd'
 
