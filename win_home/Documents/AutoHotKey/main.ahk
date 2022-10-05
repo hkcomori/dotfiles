@@ -110,12 +110,6 @@ Insert:: Return
 ; Use CapsLock as Ctrl
 CapsLock:: LCtrl
 
-; Copy
-^Insert:: ^c
-
-; Cut
-+Delete:: Send, ^x
-
 ; Paste
 ^+v:: pasteText(Clipboard)
 +Insert:: pasteText(Clipboard)
