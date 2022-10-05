@@ -124,9 +124,6 @@ AppsKey & Insert:: ^v
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
 
-; Global hot keys for Explorer
-#e::Run % EnvGet("USERPROFILE") "\Downloads"
-
 #z:: Winset, AlwaysOnTop, Toggle, A
 
 ; Input underscore without shift
