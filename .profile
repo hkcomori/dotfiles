@@ -29,6 +29,11 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# ensure ramdisk for user
+if [ ! -d "/run/shm/user/$(whoami)" ] ; then
+    mkdir -p "/run/shm/user/$(whoami)"
+fi
+
 # if running on WSL
 if which wslpath &>/dev/null; then
     export WIN_USER="$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')"
