@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bash -e -o pipefail
+#!/usr/bin/env -S bash -eu -o pipefail
 
 ensure_link() {
     for file; do

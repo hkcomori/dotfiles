@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bash -e -o pipefail
+#!/usr/bin/env -S bash -eu -o pipefail
 
 cd "$(dirname $0)"
 

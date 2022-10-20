@@ -1,4 +1,4 @@
-#!/usr/bin/env -S bash -e -o pipefail
+#!/usr/bin/env -S bash -eu -o pipefail
 
 # Run on WSL only
 which wslpath &>/dev/null || exit 0
