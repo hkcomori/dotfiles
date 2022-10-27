@@ -5,6 +5,12 @@ class ImeManager {
         this.counts := {}
         this.set_count := set_count
         this.msIdle := msIdle
+        OnExit(ObjBindMethod(this, "__Delete"))
+    }
+    __Delete() {
+        for window, _ in this.counts {
+            ime_off(window)
+        }
     }
     on(win_title := "A") {
         window := WinExist(win_title)
