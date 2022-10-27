@@ -21,6 +21,8 @@ detectAutoExecFailure() {
     Reload
 }
 
+OnExit("confirmExit")
+
 #include <key>
 #Include <stroke>
 #Include <sys>
@@ -69,8 +71,6 @@ keepAwake() {
 if (config.keepawake.enable) {
     keepAwakeMenu.toggle()
 }
-
-OnExit("confirmExit")
 
 ; Detect long press
 key_startDetectLongPress("vk1D")    ; Muhenkan
