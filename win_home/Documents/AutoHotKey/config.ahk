@@ -16,3 +16,11 @@ Loop % files.Length() {
         config := ConfigUtil.read(file, config)
     }
 }
+
+Loop % A_Args.Length() {
+    switch A_Args[A_Index] {
+        case "--keepawake": config.keepawake.enable := True
+        case "--nokeepawake": config.keepawake.enable := False
+        default: ExitApp, 1
+    }
+}
