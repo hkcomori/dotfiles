@@ -40,3 +40,7 @@
 	path = ~/repos/.gitconfig
 [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
+[includeIf "gitdir:~/mnt/"]
+	path = ~/mnt/.gitconfig
+[includeIf "gitdir:/mnt/"]
+	path = ~/mnt/.gitconfig

@@ -10,7 +10,8 @@ ensure_link \
     repos/.gitconfig
 
 ensure_copy \
-    work/.gitkeep
+    work/.gitkeep \
+    mnt/.gitkeep
 
 sudo apt-get install -y \
     git
