@@ -127,10 +127,6 @@ XButton1:: mouse_sendUnderCursor("{XButton1}")
 XButton2:: mouse_sendUnderCursor("{XButton2}")
 F19:: mouse_sendUnderCursor("{F19}")
 
-~*WheelDown:: mouse_activateUnderCursor()
-~*WheelUp:: mouse_activateUnderCursor()
-~*WheelRight:: mouse_activateUnderCursor()
-~*WheelLeft:: mouse_activateUnderCursor()
 +WheelDown:: WheelRight
 +WheelUp:: WheelLeft
 
@@ -176,13 +172,11 @@ AppsKey & Up:: Send, {Media_Play_Pause}
 !WheelUp::
 vk1C & WheelUp::
 AppsKey & WheelUp::
-    mouse_activateUnderCursor()
     Send, {WheelUp %fastScrollSensitivity%}
     Return
 !WheelDown::
 vk1C & WheelDown::
 AppsKey & WheelDown::
-    mouse_activateUnderCursor()
     Send, {WheelDown %fastScrollSensitivity%}
     Return
 
@@ -444,11 +438,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #IfWinActive ahk_exe EXCEL.EXE
     AppsKey & WheelDown::
     !WheelDown::
-        mouse_sendUnderCursor("{PgDn}")
+        Send, {PgDn}
         Return
     AppsKey & WheelUp::
     !WheelUp::
-        mouse_sendUnderCursor("{PgUp}")
+        Send, {PgUp}
         Return
 #IfWinActive
 
@@ -539,12 +533,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     !WheelUp::
     vk1C & WheelUp::        ; Henkan
     AppsKey & WheelUp::
-        mouse_sendUnderCursor("!{WheelUp}")
+        Send, !{WheelUp}
         Return
     !WheelDown::
     vk1C & WheelDown::      ; Henkan
     AppsKey & WheelDown::
-        mouse_sendUnderCursor("!{WheelDown}")
+        Send, !{WheelDown}
         Return
 #IfWinActive
 
