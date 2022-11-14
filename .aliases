@@ -43,6 +43,10 @@ if which peco >/dev/null 2>&1; then
                 # shellcheck disable=SC2068
                 command podman logs -f ${@:-$(command podman ps --noheading | peco | awk '{print $1}')}
                 ;;
+            pod)
+                shift
+                podman_pod "$@"
+                ;;
             rm)
                 shift
                 # shellcheck disable=SC2068
@@ -70,6 +74,38 @@ if which peco >/dev/null 2>&1; then
                 ;;
             *)
                 command podman "$@"
+                ;;
+        esac
+    }
+    podman_pod() {
+        case $1 in
+            logs)
+                shift
+                # shellcheck disable=SC2068
+                command podman pod logs -f ${@:-$(command podman pod ps --noheading | peco | awk '{print $1}')}
+                ;;
+            rm)
+                shift
+                # shellcheck disable=SC2068
+                command podman pod rm ${@:-$(command podman pod ps --noheading --filter status=exited | peco | awk '{print $1}' | tr '\n' ' ')}
+                ;;
+            start)
+                shift
+                # shellcheck disable=SC2068
+                command podman pod start ${@:-$(command podman pod ps --noheading | peco | awk '{print $1}' | tr '\n' ' ')}
+                ;;
+            stop)
+                shift
+                # shellcheck disable=SC2068
+                command podman pod stop ${@:-$(command podman pod ps --noheading | peco | awk '{print $1}' | tr '\n' ' ')}
+                ;;
+            stop-rm)
+                shift
+                # shellcheck disable=SC2046,SC2068
+                command podman pod rm $(podman pod stop ${@:-$(command podman pod ps --noheading | peco | awk '{print $1}' | tr '\n' ' ')})
+                ;;
+            *)
+                command podman pod "$@"
                 ;;
         esac
     }
