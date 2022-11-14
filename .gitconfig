@@ -1,5 +1,6 @@
 [core]
 	autocrlf = false
+	filemode = true
 	quotepath = false
 	pager = delta
 [interactive]
