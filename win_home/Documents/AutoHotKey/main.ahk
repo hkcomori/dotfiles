@@ -110,11 +110,6 @@ Insert:: Return
 ; Use CapsLock as Ctrl
 CapsLock:: LCtrl
 
-; Paste
-^+v:: pasteText(Clipboard)
-+Insert:: pasteText(Clipboard)
-AppsKey & Insert:: ^v
-
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
 
@@ -556,11 +551,4 @@ confirmExit(ExitReason, ExitCode) {
         IfMsgBox, No
             Return 1
     }
-}
-pasteText(text) {
-    backup := ClipboardAll
-    clipboard := text
-    Send, ^v
-    stableWait()
-    clipboard := backup
 }
