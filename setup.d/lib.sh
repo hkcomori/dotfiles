@@ -1,5 +1,12 @@
 #!/usr/bin/env -S bash -eu -o pipefail
 
+# Ensure symlinks into the home directory
+#
+# Usage:
+#   ensure_link <src>...
+#
+# Args:
+#   - src: Related path of files or directories
 ensure_link() {
     for file; do
         target="${HOME}"/"${file}"
@@ -13,6 +20,13 @@ ensure_link() {
     done
 }
 
+# Ensure copy files into the home directory
+#
+# Usage:
+#   ensure_copy <src>...
+#
+# Args:
+#   - src: Related path of files or directories
 ensure_copy() {
     for file; do
         target="${HOME}"/"${file}"
