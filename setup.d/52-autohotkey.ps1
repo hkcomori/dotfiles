@@ -1,3 +1,5 @@
+#!/usr/bin/env -S powershell.exe -ExecutionPolicy Bypass -file
+
 $scriptPath = $MyInvocation.MyCommand.Path
 $nofilePath = Split-Path -Parent $scriptPath
 
