@@ -10,3 +10,5 @@ echo [Install AHK Scripts]
 
 rsync -av "$(pwd)/win_home/Documents/AutoHotKey/" "${WSL_DOCUMENT_DIR}/AutoHotKey/" \
   --exclude "*.spec.ahk" --include={"*.ahk","*/"} --exclude "*"
+
+powershell.exe -ExecutionPolicy Bypass -file "$(dirname "$0")"/startup_autohotkey.ps1
