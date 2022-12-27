@@ -545,6 +545,13 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     XButton2:: mouse_sendUnderCursor("{Down}")
 #IfWinActive
 
+;--------------------------------------------------------------------------------
+; Obsidian
+;--------------------------------------------------------------------------------
+#IfWinActive ahk_exe Obsidian.exe
+    F19:: mouse_sendUnderCursor("^w")
+#IfWinActive
+
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
         MsgBox, 0x04, %A_ScriptName%, Are you sure you want to exit?
