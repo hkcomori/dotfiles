@@ -38,7 +38,7 @@ class StrokeInfo {
     }
     deactivate(key := "") {
         this.timer.stop()
-        If (key <> "")
+        If (key != "")
             this.push(key)
         repeat := (this.repeat == "") ? "1" : this.repeat
         If (repeat > this.repeat_limit)
