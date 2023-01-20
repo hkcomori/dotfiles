@@ -15,7 +15,7 @@ key_stopDetectLongPress(key)
     global pressedTime
     pressedTime.Delete(key)
     If pressedTime.Length == 0
-        SetTimer key_detectLongPress, Delete
+        SetTimer key_detectLongPress, 0
 }
 
 key_detectLongPress()

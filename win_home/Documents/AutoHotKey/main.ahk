@@ -15,7 +15,7 @@ SetKeyDelay, -1
 SetWorkingDir %A_ScriptDir%
 SetTitleMatchMode, 2
 
-SetTimer, detectAutoExecFailure, -5000
+SetTimer(detectAutoExecFailure, -5000)
 detectAutoExecFailure() {
     MsgBox, Auto-execute section was not fully executed.
     Reload
@@ -79,26 +79,26 @@ key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
 FileGetTime scriptModTime, %A_ScriptFullPath%
-SetTimer CheckScriptUpdate, % config.global.interval
+SetTimer(CheckScriptUpdate, config.global.interval)
 CheckScriptUpdate() {
     ListLines, Off
     global scriptModTime
     FileGetTime currentModTime, %A_ScriptFullPath%
     If (currentModTime == scriptModTime)
         return
-    SetTimer CheckScriptUpdate, Off
+    SetTimer(CheckScriptUpdate, 0)
     Reload
     Sleep % config.global.interval
     ; If successful, the reload will close this instance during the Sleep,
     ; so the line below will never be reached.
     scriptModTime := currentModTime
-    SetTimer CheckScriptUpdate, % config.global.interval
+    SetTimer(CheckScriptUpdate, config.global.interval)
 }
 
 stroke := StrokeInfo()
 
 ; End of Auto-execute section
-SetTimer, detectAutoExecFailure, Delete
+SetTimer(detectAutoExecFailure, 0)
 Return
 
 ;--------------------------------------------------------------------------------

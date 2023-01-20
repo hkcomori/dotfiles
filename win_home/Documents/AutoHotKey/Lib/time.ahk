@@ -4,10 +4,10 @@ class Timer {
     }
     start(interval) {
         callback := this.callback
-        SetTimer % callback, % interval
+        SetTimer(callback, interval)
     }
     stop() {
         callback := this.callback
-        SetTimer % callback, Delete
+        SetTimer(callback, 0)
     }
 }
