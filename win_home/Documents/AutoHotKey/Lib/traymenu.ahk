@@ -7,16 +7,18 @@ class ToggleTrayMenu{
         this.timer := Timer(tick_func)
         this.interval := interval
         toggle := ObjBindMethod(this, "toggle")
-        Menu, Tray, Add, % this.menu_name, % toggle
+        tray := A_TrayMenu
+        tray.Add(this.menu_name, toggle)
     }
     toggle() {
+        tray := A_TrayMenu
         If (!this.enabled) {
             this.enabled := True
-            Menu, Tray, Check, % this.menu_name
+            tray.Check(this.menu_name)
             this.timer.start(this.interval)
         } Else {
             this.enabled := False
-            Menu, Tray, Uncheck, % this.menu_name
+            tray.Uncheck(this.menu_name)
             this.timer.stop()
         }
         Return

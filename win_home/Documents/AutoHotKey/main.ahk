@@ -53,7 +53,8 @@ GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 fastScrollSensitivity := config.fastscroll.speed
 
 ; separator
-Menu, Tray, Add
+tray := A_TrayMenu
+tray.Add()
 
 imeStatus := ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
 disableImeMenu := ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
