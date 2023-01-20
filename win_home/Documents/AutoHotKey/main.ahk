@@ -25,7 +25,6 @@ OnExit("confirmExit")
 
 #include <key>
 #Include <stroke>
-#Include <sys>
 #Include <traymenu>
 #Include config.ahk
 #Include ime_manager.ahk

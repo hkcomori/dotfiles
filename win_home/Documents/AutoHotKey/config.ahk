@@ -1,5 +1,4 @@
 #Include <config>
-#Include <sys>
 
 config := { global: { stableWait: 100, interval: 1000 }
         , autoreload: { enable: 1 }
