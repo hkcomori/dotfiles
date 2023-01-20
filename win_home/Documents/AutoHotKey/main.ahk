@@ -36,18 +36,18 @@ stableWait() {
 }
 
 ; Office
-GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
-GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
-GroupAdd, office, ahk_exe POWERPNT.EXE  ; Microsoft PowerPoint
+GroupAdd("office", "ahk_exe WINWORD.EXE")   ; Microsoft Word
+GroupAdd("office", "ahk_exe EXCEL.EXE")     ; Microsoft Excel
+GroupAdd("office", "ahk_exe POWERPNT.EXE")  ; Microsoft PowerPoint
 
 ; Outlook child window
-GroupAdd, outlookChild, ahk_exe OUTLOOK.EXE,,, - Outlook
+GroupAdd("outlookChild", "ahk_exe OUTLOOK.EXE",,, "- Outlook")
 
 ; Browser
-GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
-GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
-GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
-GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
+GroupAdd("browser", "ahk_exe msedge.exe")   ; Microsoft Edge
+GroupAdd("browser", "ahk_exe chrome.exe")   ; Google Chrome
+GroupAdd("browser", "ahk_exe firefox.exe")  ; Mozilla Firefox
+GroupAdd("browser", "ahk_exe vivaldi.exe")  ; Vivaldi
 
 ; Fast scroll
 fastScrollSensitivity := config.fastscroll.speed
