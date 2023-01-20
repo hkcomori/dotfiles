@@ -1,14 +1,13 @@
 ;--------------------------------------------------------------------------------
 ; Auto-execute section
 ;--------------------------------------------------------------------------------
-#Persistent
-#SingleInstance, Force
-#NoEnv
+Persistent
+#SingleInstance Force
 #UseHook
-#InstallKeybdHook
-#InstallMouseHook
-#HotkeyInterval, 2000
-#MaxHotkeysPerInterval, 200
+InstallKeybdHook
+InstallMouseHook
+HotkeyInterval := 2000
+MaxHotkeysPerInterval := 200
 ProcessSetPriority("Realtime")
 SendMode("Input")
 SetKeyDelay(-1)
