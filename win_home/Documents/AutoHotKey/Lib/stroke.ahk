@@ -2,17 +2,17 @@
 #include <time>
 
 class StrokeInfo {
-    static IS_NUMBER := new ArrayMatcher(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    static IS_NUMBER := ArrayMatcher(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     __New(timeout_ms := 5000, repeat_limit := 100) {
         this.init_variables()
-        this.timer := new Timer(ObjBindMethod(this, "deactivate"))
+        this.timer := Timer(ObjBindMethod(this, "deactivate"))
         this.timeout_ms := timeout_ms
         this.repeat_limit := repeat_limit
     }
     init_variables() {
         this.repeat_mode := False
         this.keys := []
-        this.display := new StrokeDisplay()
+        this.display := StrokeDisplay()
         this.repeat := ""
     }
     is_active() {
