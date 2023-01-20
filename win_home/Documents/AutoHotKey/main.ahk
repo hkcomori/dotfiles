@@ -17,7 +17,7 @@ SetTitleMatchMode, 2
 
 SetTimer(detectAutoExecFailure, -5000)
 detectAutoExecFailure() {
-    MsgBox, Auto-execute section was not fully executed.
+    MsgBox("Auto-execute section was not fully executed.")
     Reload
 }
 
@@ -554,8 +554,8 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
-        MsgBox, 0x04, %A_ScriptName%, Are you sure you want to exit?
-        IfMsgBox, No
+        pressed := MsgBox("Are you sure you want to exit?", A_ScriptName, 0x04)
+        If (pressed == "No")
             Return 1
     }
 }
