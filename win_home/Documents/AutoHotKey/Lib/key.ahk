@@ -27,7 +27,7 @@ key_detectLongPress()
             pressedTime.%key%++
 }
 
-key_isLongPressed(key, clear=False)
+key_isLongPressed(key, clear:=False)
 {
     global pressedTime
     _pressedTime := pressedTime.%key%
