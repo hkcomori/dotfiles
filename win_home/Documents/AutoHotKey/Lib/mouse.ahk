@@ -13,6 +13,6 @@ mouse_activateUnderCursor()
 
 mouse_sendUnderCursor(sendkey) {
     if (mouse_activateUnderCursor()) {
-        Send % sendkey
+        Send(sendkey)
     }
 }

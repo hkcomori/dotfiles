@@ -20,7 +20,7 @@ class ImeManager {
         ime_on(window)
         this.counts.%window% := this.set_count
         if (WinActive(win_title)) {
-            Send, {vk1C}    ; Henkan
+            Send("{vk1C}")    ; Henkan
         }
     }
     off(win_title := "A") {
@@ -28,7 +28,7 @@ class ImeManager {
         this.counts.DeleteProp(window)
         ime_off(window)
         if (WinActive(win_title)) {
-            Send, {vk1D}    ; Muhenkan
+            Send("{vk1D}")    ; Muhenkan
         }
     }
     toggle(win_title := "A") {

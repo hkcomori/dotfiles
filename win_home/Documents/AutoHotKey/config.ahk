@@ -20,6 +20,6 @@ Loop A_Args.Length {
     switch A_Args[A_Index] {
         case "--keepawake": config.keepawake.enable := True
         case "--nokeepawake": config.keepawake.enable := False
-        default: ExitApp, 1
+        default: ExitApp(1)
     }
 }

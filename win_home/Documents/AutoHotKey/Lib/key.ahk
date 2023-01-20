@@ -20,7 +20,7 @@ key_stopDetectLongPress(key)
 
 key_detectLongPress()
 {
-    ListLines, Off
+    ListLines(False)
     global pressedTime
     for key, _ in pressedTime.OwnProps()
         If (GetKeyState(key, "P"))

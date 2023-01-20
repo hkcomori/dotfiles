@@ -9,11 +9,11 @@
 #InstallMouseHook
 #HotkeyInterval, 2000
 #MaxHotkeysPerInterval, 200
-Process, Priority,, Realtime
-SendMode, Input
-SetKeyDelay, -1
-SetWorkingDir %A_ScriptDir%
-SetTitleMatchMode, 2
+ProcessSetPriority("Realtime")
+SendMode("Input")
+SetKeyDelay(-1)
+SetWorkingDir(A_ScriptDir)
+SetTitleMatchMode(2)
 
 SetTimer(detectAutoExecFailure, -5000)
 detectAutoExecFailure() {
@@ -32,7 +32,7 @@ OnExit(confirmExit)
 
 convMillisecond := 1000
 stableWait() {
-    Sleep % config.global.stableWait
+    Sleep(config.global.stableWait)
 }
 
 ; Office
@@ -79,17 +79,17 @@ key_startDetectLongPress("vk1C")    ; Henkan
 key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
-FileGetTime scriptModTime, %A_ScriptFullPath%
+scriptModTime := FileGetTime(A_ScriptFullPath)
 SetTimer(CheckScriptUpdate, config.global.interval)
 CheckScriptUpdate() {
-    ListLines, Off
+    ListLines(False)
     global scriptModTime
-    FileGetTime currentModTime, %A_ScriptFullPath%
+    currentModTime := FileGetTime(A_ScriptFullPath)
     If (currentModTime == scriptModTime)
         return
     SetTimer(CheckScriptUpdate, 0)
     Reload
-    Sleep % config.global.interval
+    Sleep(config.global.interval)
     ; If successful, the reload will close this instance during the Sleep,
     ; so the line below will never be reached.
     scriptModTime := currentModTime
@@ -114,7 +114,7 @@ CapsLock:: LCtrl
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
 
-#z:: Winset, AlwaysOnTop, Toggle, A
+#z:: WinsetAlwaysOnTop(-1, "A")
 
 ; Input underscore without shift
 vkE2:: _
@@ -147,8 +147,8 @@ vk1C & Up:: !Up
 vk1C & Down:: !Down
 vk1C & b:: ^Left
 vk1C & f:: ^Right
-vk1C & n:: Send, {Down 5}
-vk1C & p:: Send, {Up 5}
+vk1C & n:: Send("{Down 5}")
+vk1C & p:: Send("{Up 5}")
 vk1C & ,:: ^Home
 vk1C & .:: ^End
 vk1C & w:: ^c
@@ -157,23 +157,23 @@ vk1C & v:: PgUp
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
     If !key_isLongPressed("AppsKey", True)
-        Send, {AppsKey}
+        Send("{AppsKey}")
     Return
-AppsKey & Left:: Send, {Volume_Mute}
-AppsKey & Down:: Send, {Volume_Down}
-AppsKey & Right:: Send, {Volume_Up}
-AppsKey & Up:: Send, {Media_Play_Pause}
+AppsKey & Left:: Send("{Volume_Mute}")
+AppsKey & Down:: Send("{Volume_Down}")
+AppsKey & Right:: Send("{Volume_Up}")
+AppsKey & Up:: Send("{Media_Play_Pause}")
 
 ; Fast scroll
 !WheelUp::
 vk1C & WheelUp::
 AppsKey & WheelUp::
-    Send "{WheelUp " fastScrollSensitivity "}"
+    Send("{WheelUp " fastScrollSensitivity "}")
     Return
 !WheelDown::
 vk1C & WheelDown::
 AppsKey & WheelDown::
-    Send "{WheelDown " fastScrollSensitivity "}"
+    Send("{WheelDown " fastScrollSensitivity "}")
     Return
 
 ; Toggle keep awake
@@ -192,7 +192,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ; Shows command launcher
     #Space::
     vk1D & Space::
-        Send, ^!{Insert}
+        Send("^!{Insert}")
         stableWait()
         imeStatus.off()
         Return
@@ -214,8 +214,8 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     vk1D & vkE2:: ^y        ; Backslash located next to slash key
     vk1D & Left:: ^Left
     vk1D & Right:: ^Right
-    vk1D & Up:: Send, {Up 5}
-    vk1D & Down:: Send, {Down 5}
+    vk1D & Up:: Send("{Up 5}")
+    vk1D & Down:: Send("{Down 5}")
     vk1D & PgUp:: ^PgUp
     vk1D & PgDn:: ^PgDn
     vk1D & @:: ^@
@@ -245,7 +245,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & q")
     vk1D & a::
         stroke.deactivate(A_ThisHotKey)
-        Send, ^a
+        Send("^a")
         Return
 #HotIf
 
@@ -253,7 +253,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & x")
     vk1D & s::
         stroke.deactivate(A_ThisHotKey)
-        Send, ^s
+        Send("^s")
         Return
 #HotIf
 
@@ -334,7 +334,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     BackSpace::
     Delete::
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send "{" A_ThisHotkey " " repeat "}"
+        Send("{" A_ThisHotkey " " repeat "}")
         Return
     +A::
     +B::
@@ -364,25 +364,25 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     +Z::
         key := KeyUtil.trim_modifier(A_ThisHotkey)
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send "{" key " " repeat "}"
+        Send("{" key " " repeat "}")
         Return
     +2::    ; Double quotation
         repeat := stroke.deactivate(A_ThisHotKey)
         Loop repeat {
-            Send, {ASC 034}
-            Sleep, 1
+            Send("{ASC 034}")
+            Sleep(1)
         }
         Return
     +7::    ; Single quotation
         repeat := stroke.deactivate(A_ThisHotKey)
         Loop repeat {
-            Send, {ASC 039}
-            Sleep, 1
+            Send("{ASC 039}")
+            Sleep(1)
         }
         Return
     vkE2::  ; Backslash located next to slash key
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send "{_ " repeat "}"
+        Send("{_ " repeat "}")
         Return
 #HotIf
 
@@ -419,7 +419,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 
 #HotIf WinActive("ahk_group outlookChild")
     ; Ctrl+F to search instead of forwarding
-    ^f:: Send, {F4}
+    ^f:: Send("{F4}")
 
     ; Close message window by pressing both back and forward
     F19:: mouse_sendUnderCursor("!{F4}")
@@ -434,11 +434,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf WinActive("ahk_exe EXCEL.EXE")
     AppsKey & WheelDown::
     !WheelDown::
-        Send, {PgDn}
+        Send("{PgDn}")
         Return
     AppsKey & WheelUp::
     !WheelUp::
-        Send, {PgUp}
+        Send("{PgUp}")
         Return
 #HotIf
 
@@ -529,12 +529,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     !WheelUp::
     vk1C & WheelUp::        ; Henkan
     AppsKey & WheelUp::
-        Send, !{WheelUp}
+        Send("!{WheelUp}")
         Return
     !WheelDown::
     vk1C & WheelDown::      ; Henkan
     AppsKey & WheelDown::
-        Send, !{WheelDown}
+        Send("!{WheelDown}")
         Return
 #HotIf
 
