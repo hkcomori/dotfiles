@@ -22,7 +22,7 @@ class ArrayUtil {
 
         ret := []
         c := end - start
-        loop % c + 1
+        loop c + 1
             ret.push(arr[A_Index + start - 1])
         return ret
     }

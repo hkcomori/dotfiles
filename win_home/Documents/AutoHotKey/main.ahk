@@ -366,14 +366,14 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
         Return
     +2::    ; Double quotation
         repeat := stroke.deactivate(A_ThisHotKey)
-        Loop % repeat {
+        Loop repeat {
             Send, {ASC 034}
             Sleep, 1
         }
         Return
     +7::    ; Single quotation
         repeat := stroke.deactivate(A_ThisHotKey)
-        Loop % repeat {
+        Loop repeat {
             Send, {ASC 039}
             Sleep, 1
         }
