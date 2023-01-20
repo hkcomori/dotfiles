@@ -21,7 +21,7 @@ detectAutoExecFailure() {
     Reload
 }
 
-OnExit("confirmExit")
+OnExit(confirmExit)
 
 #include <key>
 #Include <mouse>

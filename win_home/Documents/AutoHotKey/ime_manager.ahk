@@ -5,7 +5,10 @@ class ImeManager {
         this.counts := {}
         this.set_count := set_count
         this.msIdle := msIdle
-        OnExit(ObjBindMethod(this, "__Delete"))
+        OnExit(ObjBindMethod(this, "onExit"))
+    }
+    onExit(ExitReason, ExitCode) {
+        this.__Delete()
     }
     __Delete() {
         for window, _ in this.counts.OwnProps() {
