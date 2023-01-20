@@ -10,9 +10,9 @@ files := [A_ScriptDir "\autohotkey.ini"
         , EnvGet("USERPROFILE") "\autohotkey.ini"]
 
 Loop files.Length {
-    file := files[A_Index]
-    if (FileExist(file)) {
-        config := ConfigUtil.read(file, config)
+    filePath := files[A_Index]
+    if (FileExist(filePath)) {
+        config := ConfigUtil.read(filePath, config)
     }
 }
 
