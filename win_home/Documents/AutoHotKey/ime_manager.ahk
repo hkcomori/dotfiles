@@ -22,7 +22,7 @@ class ImeManager {
     }
     off(win_title := "A") {
         window := WinExist(win_title)
-        this.counts.Delete(window)
+        this.counts.DeleteProp(window)
         ime_off(window)
         if (WinActive(win_title)) {
             Send, {vk1D}    ; Muhenkan
@@ -46,7 +46,7 @@ class ImeManager {
                 this.counts[window] -= 1
             }
             if (isIdle || (this.counts[window] <= 0)) {
-                this.counts.Delete(window)
+                this.counts.DeleteProp(window)
                 ime_off(window)
             }
         }
