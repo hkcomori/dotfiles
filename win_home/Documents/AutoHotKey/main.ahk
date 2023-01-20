@@ -24,6 +24,7 @@ detectAutoExecFailure() {
 OnExit("confirmExit")
 
 #include <key>
+#Include <mouse>
 #Include <stroke>
 #Include <traymenu>
 #Include config.ahk
