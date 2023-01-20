@@ -4,7 +4,7 @@
 mouse_activateUnderCursor()
 {
     prevWindow := WinExist("A")
-    MouseGetPos, , , id, control
+    MouseGetPos , , &id, &control
     title := WinGetTitle("ahk_id " id)
     Winactivate("ahk_id " id)
     newWindow := WinExist("A")

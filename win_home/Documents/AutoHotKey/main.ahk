@@ -65,8 +65,8 @@ if (config.imeoff.enable) {
 keepAwakeMenu := ToggleTrayMenu("Keep Awake", KeepAwake, config.global.interval)
 keepAwake() {
     If (A_TimeIdlePhysical > (config.keepawake.interval * convMillisecond)) {
-        MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
-        MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
+        MouseMove(1, 0, 1, "R")  ;Move the mouse one pixel to the right
+        MouseMove(-1, 0, 1, "R") ;Move the mouse back one pixel
     }
 }
 if (config.keepawake.enable) {
