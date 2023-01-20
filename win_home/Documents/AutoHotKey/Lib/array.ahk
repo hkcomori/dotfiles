@@ -17,7 +17,7 @@ class ArrayUtil {
         if(start<arr.MinIndex())
             start := arr.MinIndex()
         len := arr.Length
-        if((len <= 0) || (start is not integer) || (end is not integer))
+        if((len <= 0) || !(start is integer) || !(end is integer))
             return []
 
         ret := []
