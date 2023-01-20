@@ -50,7 +50,7 @@ GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
 GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
 
 ; Fast scroll
-fastScrollSensitivity := config.fascscroll.speed
+fastScrollSensitivity := config.fastscroll.speed
 
 ; separator
 Menu, Tray, Add
