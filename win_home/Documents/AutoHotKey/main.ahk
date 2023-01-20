@@ -55,13 +55,13 @@ fastScrollSensitivity := config.fastscroll.speed
 ; separator
 Menu, Tray, Add
 
-imeStatus := new ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
-disableImeMenu := new ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
+imeStatus := ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
+disableImeMenu := ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
 if (config.imeoff.enable) {
     disableImeMenu.toggle()
 }
 
-keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", config.global.interval)
+keepAwakeMenu := ToggleTrayMenu("Keep Awake", KeepAwake, config.global.interval)
 keepAwake() {
     If (A_TimeIdlePhysical > (config.keepawake.interval * convMillisecond)) {
         MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
@@ -95,7 +95,7 @@ CheckScriptUpdate() {
     SetTimer CheckScriptUpdate, % config.global.interval
 }
 
-stroke := new StrokeInfo()
+stroke := StrokeInfo()
 
 ; End of Auto-execute section
 SetTimer, detectAutoExecFailure, Delete

@@ -36,12 +36,12 @@ class ArrayUtil {
     }
     ; Check if arr has item
     in(arr, item) {
-        matcher := new ArrayMatcher(arr*)
+        matcher := ArrayMatcher(arr*)
         return matcher.in(item)
     }
     ; Check if arr has items containing str
     contains(arr, str) {
-        matcher := new ArrayMatcher(arr*)
+        matcher := ArrayMatcher(arr*)
         return matcher.contains(str)
     }
 }

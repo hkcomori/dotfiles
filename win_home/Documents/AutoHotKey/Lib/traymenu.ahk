@@ -4,7 +4,7 @@ class ToggleTrayMenu{
     __New(menu_name, tick_func, interval) {
         this.enabled := False
         this.menu_name := menu_name
-        this.timer := new Timer(tick_func)
+        this.timer := Timer(tick_func)
         this.interval := interval
         toggle := ObjBindMethod(this, "toggle")
         Menu, Tray, Add, % this.menu_name, % toggle
