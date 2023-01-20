@@ -1,5 +1,5 @@
 class ArrayUtil {
-    equal(arr1, arr2) {
+    static equal(arr1, arr2) {
         if (arr1.Length != arr2.Length)
             return False
         Loop arr1.Length {
@@ -9,7 +9,7 @@ class ArrayUtil {
         return True
     }
     ; Get sliced array (arr[start:end])
-    slice(arr, start, end := "") {
+    static slice(arr, start, end := "") {
         if(end == "" || end > arr.MaxIndex())
             end := arr.MaxIndex()
         if(end < 0)
@@ -27,7 +27,7 @@ class ArrayUtil {
         return ret
     }
     ; Get string by concatenating all of items in arr, separated by sep
-    join(arr, sep) {
+    static join(arr, sep) {
         joined := ""
         for _, item in arr
             joined .= item . sep
@@ -35,12 +35,12 @@ class ArrayUtil {
         return joined
     }
     ; Check if arr has item
-    in(arr, item) {
+    static in(arr, item) {
         matcher := ArrayMatcher(arr*)
         return matcher.in(item)
     }
     ; Check if arr has items containing str
-    contains(arr, str) {
+    static contains(arr, str) {
         matcher := ArrayMatcher(arr*)
         return matcher.contains(str)
     }

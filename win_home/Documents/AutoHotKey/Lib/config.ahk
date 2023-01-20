@@ -1,5 +1,5 @@
 class ConfigUtil {
-    read(filepath, defaults := "") {
+    static read(filepath, defaults := "") {
         if (defaults == "") {
             defaults := {}
         }
