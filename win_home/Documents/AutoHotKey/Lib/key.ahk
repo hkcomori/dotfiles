@@ -22,7 +22,7 @@ key_detectLongPress()
 {
     ListLines, Off
     global pressedTime
-    for key, _ in pressedTime
+    for key, _ in pressedTime.OwnProps()
         If (GetKeyState(key, "P"))
             pressedTime[key]++
 }

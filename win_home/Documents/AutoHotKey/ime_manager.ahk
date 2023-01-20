@@ -8,7 +8,7 @@ class ImeManager {
         OnExit(ObjBindMethod(this, "__Delete"))
     }
     __Delete() {
-        for window, _ in this.counts {
+        for window, _ in this.counts.OwnProps() {
             ime_off(window)
         }
     }
@@ -39,7 +39,7 @@ class ImeManager {
     tick() {
         activeWindow := WinExist("A")
         isIdle := (this.msIdle > 0) && (A_TimeIdlePhysical > this.msIdle)
-        for window, _ in this.counts {
+        for window, _ in this.counts.OwnProps() {
             if (window == activeWindow) {
                 this.counts[window] := this.set_count
             } Else {
