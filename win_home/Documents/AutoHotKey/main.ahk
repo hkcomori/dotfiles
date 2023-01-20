@@ -129,14 +129,18 @@ F19:: mouse_sendUnderCursor("{F19}")
 sc29:: imeStatus.toggle()      ; Hankaku/Zenkaku
 
 vk1D Up::   ; Muhenkan
+{
     If !key_isLongPressed("vk1D", True)
         imeStatus.off()
     Return
+}
 
 vk1C Up::   ; Henkan
+{
     If !key_isLongPressed("vk1C", True)
         imeStatus.on()
     Return
+}
 
 sc70:: imeStatus.on()          ; Kana
 
@@ -156,9 +160,11 @@ vk1C & v:: PgUp
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
+{
     If !key_isLongPressed("AppsKey", True)
         Send("{AppsKey}")
     Return
+}
 AppsKey & Left:: Send("{Volume_Mute}")
 AppsKey & Down:: Send("{Volume_Down}")
 AppsKey & Right:: Send("{Volume_Up}")
@@ -168,13 +174,17 @@ AppsKey & Up:: Send("{Media_Play_Pause}")
 !WheelUp::
 vk1C & WheelUp::
 AppsKey & WheelUp::
+{
     Send("{WheelUp " fastScrollSensitivity "}")
     Return
+}
 !WheelDown::
 vk1C & WheelDown::
 AppsKey & WheelDown::
+{
     Send("{WheelDown " fastScrollSensitivity "}")
     Return
+}
 
 ; Toggle keep awake
 AppsKey & Esc:: keepAwakeMenu.toggle()
@@ -182,20 +192,24 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ; Turn off IME when opening start menu
 ~LWin Up::
 ~RWin Up::
+{
     If (A_PriorKey = "LWin" || A_PriorKey = "RWin"){
         stableWait()
         imeStatus.off()
     }
     Return
+}
 
 #HotIf !stroke.is_active()
     ; Shows command launcher
     #Space::
     vk1D & Space::
+    {
         Send("^!{Insert}")
         stableWait()
         imeStatus.off()
         Return
+    }
 
     vk1D & b:: Left
     vk1D & p:: Up
@@ -225,11 +239,15 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ; Start multi-stroke
     vk1D & q::
     vk1D & x::
+    {
         stroke.activate(A_ThisHotkey)
         Return
+    }
     vk1D & u::
+    {
         stroke.activate(A_ThisHotkey, True)
         Return
+    }
     vk1D & g:: Esc
 #HotIf
 
@@ -237,24 +255,30 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf stroke.is_active()
     Esc::
     vk1D & g::
+    {
         stroke.deactivate(A_ThisHotKey)
         Return
+    }
 #HotIf
 
 ; C-q like behavior
 #HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & q")
     vk1D & a::
+    {
         stroke.deactivate(A_ThisHotKey)
         Send("^a")
         Return
+    }
 #HotIf
 
 ; C-x like behavior
 #HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & x")
     vk1D & s::
+    {
         stroke.deactivate(A_ThisHotKey)
         Send("^s")
         Return
+    }
 #HotIf
 
 ; C-u like behavior (Repeat)
@@ -270,8 +294,10 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     7::
     8::
     9::
+    {
         stroke.push(A_ThisHotkey)
         Return
+    }
     ; Repeated send keys
     a::
     b::
@@ -333,9 +359,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     Enter::
     BackSpace::
     Delete::
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
         Send("{" A_ThisHotkey " " repeat "}")
         Return
+    }
     +A::
     +B::
     +C::
@@ -362,28 +390,36 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     +X::
     +Y::
     +Z::
+    {
         key := KeyUtil.trim_modifier(A_ThisHotkey)
         repeat := stroke.deactivate(A_ThisHotKey)
         Send("{" key " " repeat "}")
         Return
+    }
     +2::    ; Double quotation
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
         Loop repeat {
             Send("{ASC 034}")
             Sleep(1)
         }
         Return
+    }
     +7::    ; Single quotation
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
         Loop repeat {
             Send("{ASC 039}")
             Sleep(1)
         }
         Return
+    }
     vkE2::  ; Backslash located next to slash key
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
         Send("{_ " repeat "}")
         Return
+    }
 #HotIf
 
 ;--------------------------------------------------------------------------------
@@ -392,9 +428,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
     ~^f::
     ~^l::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 #HotIf
 
 ;--------------------------------------------------------------------------------
@@ -402,9 +440,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ;--------------------------------------------------------------------------------
 #HotIf WinActive("ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE")
     ~^f::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 #HotIf
 
 ;--------------------------------------------------------------------------------
@@ -412,9 +452,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ;--------------------------------------------------------------------------------
 #HotIf WinActive("- Outlook ahk_exe OUTLOOK.EXE")
     ~^e::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 #HotIf
 
 #HotIf WinActive("ahk_group outlookChild")
@@ -434,12 +476,16 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 #HotIf WinActive("ahk_exe EXCEL.EXE")
     AppsKey & WheelDown::
     !WheelDown::
+    {
         Send("{PgDn}")
         Return
+    }
     AppsKey & WheelUp::
     !WheelUp::
+    {
         Send("{PgUp}")
         Return
+    }
 #HotIf
 
 ;--------------------------------------------------------------------------------
@@ -454,9 +500,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~F3::
     ~+F3::
     ~^+p::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 
     ; Switch tabs by back/forward buttons
     ^XButton1:: mouse_sendUnderCursor("^+Tab")
@@ -509,9 +557,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~^+p::
     ~^@::
     ~F1::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 
     ; Switch tabs by back/forward buttons
     ^XButton1:: mouse_sendUnderCursor("^{PgUp}")
@@ -529,13 +579,17 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     !WheelUp::
     vk1C & WheelUp::        ; Henkan
     AppsKey & WheelUp::
+    {
         Send("!{WheelUp}")
         Return
+    }
     !WheelDown::
     vk1C & WheelDown::      ; Henkan
     AppsKey & WheelDown::
+    {
         Send("!{WheelDown}")
         Return
+    }
 #HotIf
 
 ;--------------------------------------------------------------------------------
