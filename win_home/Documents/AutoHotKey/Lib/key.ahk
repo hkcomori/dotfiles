@@ -6,7 +6,7 @@ key_startDetectLongPress(key)
     global pressedTime
     If !IsObject(pressedTime)
         pressedTime := Object()
-    pressedTime[key] := 0
+    pressedTime.%key% := 0
     SetTimer key_detectLongPress, 50
 }
 
@@ -24,15 +24,15 @@ key_detectLongPress()
     global pressedTime
     for key, _ in pressedTime.OwnProps()
         If (GetKeyState(key, "P"))
-            pressedTime[key]++
+            pressedTime.%key%++
 }
 
 key_isLongPressed(key, clear=False)
 {
     global pressedTime
-    _pressedTime := pressedTime[key]
+    _pressedTime := pressedTime.%key%
     If clear
-        pressedTime[key] := 0
+        pressedTime.%key% := 0
     Return _pressedTime > 5
 }
 

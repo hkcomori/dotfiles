@@ -7,7 +7,7 @@ class ConfigUtil {
         for section, sectionData in sections.OwnProps() {
             for key, defaultValue in sectionData.OwnProps() {
                 value := IniRead(filepath, section, key, defaultValue)
-                sections[section][key] := value
+                sections.%section%.%key% := value
             }
         }
         return sections
