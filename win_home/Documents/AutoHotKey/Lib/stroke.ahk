@@ -26,7 +26,7 @@ class StrokeInfo {
     push(key) {
         this.timer.start(-this.timeout_ms)
         If (this.repeat_mode == True) {
-            If (this.IS_NUMBER.in(key)) {
+            If (StrokeInfo.IS_NUMBER.in(key)) {
                 this.repeat .= key
             } Else {
                 this.repeat_mode := False
