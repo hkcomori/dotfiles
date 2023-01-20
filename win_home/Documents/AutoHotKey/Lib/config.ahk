@@ -6,7 +6,7 @@ class ConfigUtil {
         sections := defaults.Clone()
         for section, sectionData in sections.OwnProps() {
             for key, defaultValue in sectionData.OwnProps() {
-                IniRead, value, % filepath, % section, % key, % defaultValue
+                value := IniRead(filepath, section, key, defaultValue)
                 sections[section][key] := value
             }
         }
