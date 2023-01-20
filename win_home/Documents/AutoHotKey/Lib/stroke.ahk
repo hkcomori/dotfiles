@@ -55,7 +55,7 @@ class StrokeDisplay {
     push(key) {
         this.text .= " " . key
         ; Shows tooltip left-top of active window
-        ToolTip % this.text, 10, 10
+        ToolTip this.text, 10, 10
     }
     __Delete() {
         ToolTip
