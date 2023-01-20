@@ -4,8 +4,11 @@
 key_startDetectLongPress(key)
 {
     global pressedTime
-    If !IsObject(pressedTime)
+    try {
+        IsObject(pressedTime)
+    } catch {
         pressedTime := Object()
+    }
     pressedTime.%key% := 0
     SetTimer key_detectLongPress, 50
 }
