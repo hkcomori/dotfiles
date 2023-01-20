@@ -168,12 +168,12 @@ AppsKey & Up:: Send, {Media_Play_Pause}
 !WheelUp::
 vk1C & WheelUp::
 AppsKey & WheelUp::
-    Send, {WheelUp %fastScrollSensitivity%}
+    Send "{WheelUp " fastScrollSensitivity "}"
     Return
 !WheelDown::
 vk1C & WheelDown::
 AppsKey & WheelDown::
-    Send, {WheelDown %fastScrollSensitivity%}
+    Send "{WheelDown " fastScrollSensitivity "}"
     Return
 
 ; Toggle keep awake
@@ -334,7 +334,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     BackSpace::
     Delete::
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {%A_ThisHotkey% %repeat%}
+        Send "{" A_ThisHotkey " " repeat "}"
         Return
     +A::
     +B::
@@ -364,7 +364,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     +Z::
         key := KeyUtil.trim_modifier(A_ThisHotkey)
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {%key% %repeat%}
+        Send "{" key " " repeat "}"
         Return
     +2::    ; Double quotation
         repeat := stroke.deactivate(A_ThisHotKey)
@@ -382,7 +382,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
         Return
     vkE2::  ; Backslash located next to slash key
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {_ %repeat%}
+        Send "{_ " repeat "}"
         Return
 #If
 
