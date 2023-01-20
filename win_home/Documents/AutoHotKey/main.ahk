@@ -188,7 +188,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     }
     Return
 
-#If !stroke.is_active()
+#HotIf !stroke.is_active()
     ; Shows command launcher
     #Space::
     vk1D & Space::
@@ -231,34 +231,34 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
         stroke.activate(A_ThisHotkey, True)
         Return
     vk1D & g:: Esc
-#If
+#HotIf
 
 ; Stop multi-stroke
-#If stroke.is_active()
+#HotIf stroke.is_active()
     Esc::
     vk1D & g::
         stroke.deactivate(A_ThisHotKey)
         Return
-#If
+#HotIf
 
 ; C-q like behavior
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & q")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & q")
     vk1D & a::
         stroke.deactivate(A_ThisHotKey)
         Send, ^a
         Return
-#If
+#HotIf
 
 ; C-x like behavior
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & x")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & x")
     vk1D & s::
         stroke.deactivate(A_ThisHotKey)
         Send, ^s
         Return
-#If
+#HotIf
 
 ; C-u like behavior (Repeat)
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & u")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & u")
     ; Set repeat counts
     0::
     1::
@@ -384,40 +384,40 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
         repeat := stroke.deactivate(A_ThisHotKey)
         Send "{_ " repeat "}"
         Return
-#If
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Explorer
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_class CabinetWClass ahk_exe Explorer.EXE
+#HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
     ~^f::
     ~^l::
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Task view
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE
+#HotIf WinActive("ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE")
     ~^f::
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Outlook
 ;--------------------------------------------------------------------------------
-#IfWinActive - Outlook ahk_exe OUTLOOK.EXE
+#HotIf WinActive("- Outlook ahk_exe OUTLOOK.EXE")
     ~^e::
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+#HotIf
 
-#IfWinActive ahk_group outlookChild
+#HotIf WinActive("ahk_group outlookChild")
     ; Ctrl+F to search instead of forwarding
     ^f:: Send, {F4}
 
@@ -426,12 +426,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 
     XButton1:: mouse_sendUnderCursor("^<")
     XButton2:: mouse_sendUnderCursor("^>")
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Office
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe EXCEL.EXE
+#HotIf WinActive("ahk_exe EXCEL.EXE")
     AppsKey & WheelDown::
     !WheelDown::
         Send, {PgDn}
@@ -440,12 +440,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     !WheelUp::
         Send, {PgUp}
         Return
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Browser
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_group browser
+#HotIf WinActive("ahk_group browser")
     ~^e::
     ~^f::
     ~^l::
@@ -470,12 +470,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ; Switch tabs by wheel
     ^WheelUp:: ^+Tab
     ^WheelDown:: ^Tab
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Visual Studio Code
 ;--------------------------------------------------------------------------------
-#If WinActive("ahk_exe Code.exe") && GetKeyState("vk1D", "P")
+#HotIf WinActive("ahk_exe Code.exe") && GetKeyState("vk1D", "P")
     ; Swap lines
     Up:: !Up
     Down:: !Down
@@ -495,9 +495,9 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     8:: ^8
     9:: ^9
     0:: ^0
-#If
+#HotIf
 
-#IfWinActive ahk_exe Code.exe
+#HotIf WinActive("ahk_exe Code.exe")
     ~^e::
     ~^f::
     ~^h::
@@ -536,22 +536,22 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     AppsKey & WheelDown::
         Send, !{WheelDown}
         Return
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; CaptureOnTouch
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe TouchDR.exe
+#HotIf WinActive("ahk_exe TouchDR.exe")
     XButton1:: mouse_sendUnderCursor("{Up}")
     XButton2:: mouse_sendUnderCursor("{Down}")
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Obsidian
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe Obsidian.exe
+#HotIf WinActive("ahk_exe Obsidian.exe")
     F19:: mouse_sendUnderCursor("^w")
-#IfWinActive
+#HotIf
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
