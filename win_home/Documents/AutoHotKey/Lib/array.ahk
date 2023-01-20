@@ -1,8 +1,8 @@
 class ArrayUtil {
     equal(arr1, arr2) {
-        if (arr1.Length() != arr2.Length())
+        if (arr1.Length != arr2.Length)
             return False
-        Loop % arr1.Length() {
+        Loop arr1.Length {
             if (arr1[A_Index] != arr2[A_Index])
                 return False
         }
@@ -16,7 +16,7 @@ class ArrayUtil {
             end := arr.MaxIndex() + end
         if(start<arr.MinIndex())
             start := arr.MinIndex()
-        len := arr.Length()
+        len := arr.Length
         if((len <= 0) || (start is not integer) || (end is not integer))
             return []
 

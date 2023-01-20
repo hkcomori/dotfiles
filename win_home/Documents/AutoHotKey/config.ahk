@@ -10,14 +10,14 @@ config := { global: { stableWait: 100, interval: 1000 }
 files := [A_ScriptDir "\autohotkey.ini"
         , EnvGet("USERPROFILE") "\autohotkey.ini"]
 
-Loop % files.Length() {
+Loop files.Length {
     file := files[A_Index]
     if (FileExist(file)) {
         config := ConfigUtil.read(file, config)
     }
 }
 
-Loop % A_Args.Length() {
+Loop A_Args.Length {
     switch A_Args[A_Index] {
         case "--keepawake": config.keepawake.enable := True
         case "--nokeepawake": config.keepawake.enable := False

@@ -16,7 +16,7 @@ class StrokeInfo {
         this.repeat := ""
     }
     is_active() {
-        Return (this.repeat > 1) || (this.keys.Length() > 0)
+        Return (strlen(this.repeat) > 1) || (this.keys.Length > 0)
     }
     activate(key, repeat_mode := False) {
         this.init_variables()

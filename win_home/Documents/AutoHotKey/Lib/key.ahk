@@ -14,7 +14,7 @@ key_stopDetectLongPress(key)
 {
     global pressedTime
     pressedTime.Delete(key)
-    If pressedTime.Length() == 0
+    If pressedTime.Length == 0
         SetTimer key_detectLongPress, Delete
 }
 
@@ -38,7 +38,7 @@ key_isLongPressed(key, clear=False)
 
 class KeyUtil {
     trim_modifier(key) {
-        if (key.Length() == 1) {
+        if (key.Length == 1) {
             return key
         } Else {
             return LTrim(key, "^!+#")
