@@ -33,7 +33,7 @@ class ImeManager {
     }
     toggle(win_title := "A") {
         window := WinExist(win_title)
-        if (this.counts.haskey(window)) {
+        if (this.counts.HasOwnProp(window)) {
             this.off(win_title)
         } Else {
             this.on(win_title)
