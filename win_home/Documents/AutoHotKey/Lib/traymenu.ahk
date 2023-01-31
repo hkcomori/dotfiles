@@ -10,7 +10,7 @@ class ToggleTrayMenu{
         tray := A_TrayMenu
         tray.Add(this.menu_name, toggle)
     }
-    toggle() {
+    toggle(itemName?, itemPos?, myMenu?) {
         tray := A_TrayMenu
         If (!this.enabled) {
             this.enabled := True
