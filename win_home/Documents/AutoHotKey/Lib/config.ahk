@@ -6,10 +6,23 @@ class ConfigUtil {
         sections := defaults.Clone()
         for section, sectionData in sections.OwnProps() {
             for key, defaultValue in sectionData.OwnProps() {
-                value := IniRead(filepath, section, key, defaultValue)
-                sections.%section%.%key% := value
+                readed := ConfigValue(IniRead(filepath, section, key, defaultValue))
+                sections.%section%.%key% := readed.value
             }
         }
         return sections
+    }
+}
+
+class ConfigValue {
+    __New(value) {
+        switch (value) {
+            case "True", "true":
+                this.value := true
+            case "False", "false":
+                this.value := false
+            default:
+                this.value := value
+        }
     }
 }
