@@ -34,6 +34,11 @@ if [ ! -d "/run/shm/user/$(whoami)" ] ; then
     mkdir -p "/run/shm/user/$(whoami)"
 fi
 
+if [ -d "$HOME/.fly" ] ; then
+    export FLYCTL_INSTALL="$HOME/.fly"
+    export PATH="$FLYCTL_INSTALL/bin:$PATH"
+fi
+
 # if running on WSL
 if which wslpath &>/dev/null; then
     export WIN_USER="$(powershell.exe '$env:USERNAME' | sed -e 's/\r//g')"
