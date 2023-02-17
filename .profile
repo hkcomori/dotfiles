@@ -8,8 +8,12 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-export LC_ALL=ja_JP.UTF-8
-export EDITOR='code -w'
+if locale -a | grep -i ja_JP.utf8 &>/dev/null; then
+    export LC_ALL=ja_JP.utf8
+fi
+if which code &>/dev/null; then
+    export EDITOR='code -w'
+fi
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
