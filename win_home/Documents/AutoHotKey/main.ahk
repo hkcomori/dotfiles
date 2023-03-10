@@ -114,6 +114,15 @@ CapsLock:: LCtrl
 !Tab:: ^!Tab
 
 #z:: WinsetAlwaysOnTop(-1, "A")
+#F12::
+{
+    If WinExist("電卓") {
+        WinActivate("電卓")
+    } else {
+        Run "calc.exe"
+    }
+    Return
+}
 
 ; Input underscore without shift
 vkE2:: _
