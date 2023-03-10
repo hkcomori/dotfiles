@@ -179,18 +179,18 @@ AppsKey & Right:: Send("{Volume_Up}")
 AppsKey & Up:: Send("{Media_Play_Pause}")
 AppsKey & XButton1:: Send("{Blind}#^{Left}")
 AppsKey & XButton2:: Send("{Blind}#^{Right}")
+AppsKey & WheelUp:: Send("{Blind}#{PgUp}")
+AppsKey & WheelDown:: Send("{Blind}#{PgDn}")
 
 ; Fast scroll
 !WheelUp::
 vk1C & WheelUp::
-AppsKey & WheelUp::
 {
     Send("{WheelUp " fastScrollSensitivity "}")
     Return
 }
 !WheelDown::
 vk1C & WheelDown::
-AppsKey & WheelDown::
 {
     Send("{WheelDown " fastScrollSensitivity "}")
     Return
