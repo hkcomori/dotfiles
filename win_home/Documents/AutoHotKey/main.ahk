@@ -114,6 +114,15 @@ CapsLock:: LCtrl
 !Tab:: ^!Tab
 
 #z:: WinsetAlwaysOnTop(-1, "A")
+#F11::
+{
+    If WinExist("ahk_exe Obsidian.exe") {
+        WinActivate("ahk_exe Obsidian.exe")
+    } else {
+        Run EnvGet("USERPROFILE") "\AppData\Local\Obsidian\Obsidian.exe"
+    }
+    Return
+}
 #F12::
 {
     If WinExist("電卓") {
