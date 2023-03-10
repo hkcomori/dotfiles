@@ -177,6 +177,8 @@ AppsKey & Left:: Send("{Volume_Mute}")
 AppsKey & Down:: Send("{Volume_Down}")
 AppsKey & Right:: Send("{Volume_Up}")
 AppsKey & Up:: Send("{Media_Play_Pause}")
+AppsKey & XButton1:: Send("{Blind}#^{Left}")
+AppsKey & XButton2:: Send("{Blind}#^{Right}")
 
 ; Fast scroll
 !WheelUp::
