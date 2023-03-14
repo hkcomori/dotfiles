@@ -2,21 +2,21 @@
 #include <time>
 
 class StrokeInfo {
-    static IS_NUMBER := new ArrayMatcher(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+    static IS_NUMBER := ArrayMatcher(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
     __New(timeout_ms := 5000, repeat_limit := 100) {
         this.init_variables()
-        this.timer := new Timer(ObjBindMethod(this, "deactivate"))
+        this.timer := Timer(ObjBindMethod(this, "deactivate"))
         this.timeout_ms := timeout_ms
         this.repeat_limit := repeat_limit
     }
     init_variables() {
         this.repeat_mode := False
         this.keys := []
-        this.display := new StrokeDisplay()
+        this.display := StrokeDisplay()
         this.repeat := ""
     }
     is_active() {
-        Return (this.repeat > 1) || (this.keys.Length() > 0)
+        Return (strlen(this.repeat) > 1) || (this.keys.Length > 0)
     }
     activate(key, repeat_mode := False) {
         this.init_variables()
@@ -26,7 +26,7 @@ class StrokeInfo {
     push(key) {
         this.timer.start(-this.timeout_ms)
         If (this.repeat_mode == True) {
-            If (this.IS_NUMBER.in(key)) {
+            If (StrokeInfo.IS_NUMBER.in(key)) {
                 this.repeat .= key
             } Else {
                 this.repeat_mode := False
@@ -38,7 +38,7 @@ class StrokeInfo {
     }
     deactivate(key := "") {
         this.timer.stop()
-        If (key <> "")
+        If (key != "")
             this.push(key)
         repeat := (this.repeat == "") ? "1" : this.repeat
         If (repeat > this.repeat_limit)
@@ -55,7 +55,7 @@ class StrokeDisplay {
     push(key) {
         this.text .= " " . key
         ; Shows tooltip left-top of active window
-        ToolTip % this.text, 10, 10
+        ToolTip this.text, 10, 10
     }
     __Delete() {
         ToolTip

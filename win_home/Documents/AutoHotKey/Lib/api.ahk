@@ -296,7 +296,7 @@ api_Process32Next(hSnapshot, pPROCESSENTRY32)
             , "Int")
 }
 
-api_ReadFile(hFile, pBuffer, ReadSize, ByRef ReadedSize, pOverlapped)
+api_ReadFile(hFile, pBuffer, ReadSize, &ReadedSize, pOverlapped)
 {
     Return DllCall("kernel32.dll\ReadFile"
         , "UInt", hFile
@@ -357,7 +357,7 @@ api_WindowFromPoint(xpos, ypos)
         , "UInt")
 }
 
-api_WriteFile(hFile, pBuffer, WriteSize, ByRef WrittenSize, pOverlapped)
+api_WriteFile(hFile, pBuffer, WriteSize, &WrittenSize, pOverlapped)
 {
     Return DllCall("kernel32.dll\WriteFile"
         , "UInt", hFile

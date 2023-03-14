@@ -1,33 +1,33 @@
 class ArrayUtil {
-    equal(arr1, arr2) {
-        if (arr1.Length() != arr2.Length())
+    static equal(arr1, arr2) {
+        if (arr1.Length != arr2.Length)
             return False
-        Loop % arr1.Length() {
+        Loop arr1.Length {
             if (arr1[A_Index] != arr2[A_Index])
                 return False
         }
         return True
     }
     ; Get sliced array (arr[start:end])
-    slice(arr, start, end := "") {
+    static slice(arr, start, end := "") {
         if(end == "" || end > arr.MaxIndex())
             end := arr.MaxIndex()
         if(end < 0)
             end := arr.MaxIndex() + end
         if(start<arr.MinIndex())
             start := arr.MinIndex()
-        len := arr.Length()
-        if((len <= 0) || (start is not integer) || (end is not integer))
+        len := arr.Length
+        if((len <= 0) || !(start is integer) || !(end is integer))
             return []
 
         ret := []
         c := end - start
-        loop % c + 1
+        loop c + 1
             ret.push(arr[A_Index + start - 1])
         return ret
     }
     ; Get string by concatenating all of items in arr, separated by sep
-    join(arr, sep) {
+    static join(arr, sep) {
         joined := ""
         for _, item in arr
             joined .= item . sep
@@ -35,13 +35,13 @@ class ArrayUtil {
         return joined
     }
     ; Check if arr has item
-    in(arr, item) {
-        matcher := new ArrayMatcher(arr*)
+    static in(arr, item) {
+        matcher := ArrayMatcher(arr*)
         return matcher.in(item)
     }
     ; Check if arr has items containing str
-    contains(arr, str) {
-        matcher := new ArrayMatcher(arr*)
+    static contains(arr, str) {
+        matcher := ArrayMatcher(arr*)
         return matcher.contains(str)
     }
 }

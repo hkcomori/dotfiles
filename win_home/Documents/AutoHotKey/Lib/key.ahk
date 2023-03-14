@@ -4,41 +4,44 @@
 key_startDetectLongPress(key)
 {
     global pressedTime
-    If !IsObject(pressedTime)
+    try {
+        IsObject(pressedTime)
+    } catch {
         pressedTime := Object()
-    pressedTime[key] := 0
+    }
+    pressedTime.%key% := 0
     SetTimer key_detectLongPress, 50
 }
 
 key_stopDetectLongPress(key)
 {
     global pressedTime
-    pressedTime.Delete(key)
-    If pressedTime.Length() == 0
-        SetTimer key_detectLongPress, Delete
+    pressedTime.DeleteProp(key)
+    If pressedTime.Length == 0
+        SetTimer key_detectLongPress, 0
 }
 
 key_detectLongPress()
 {
-    ListLines, Off
+    ListLines(False)
     global pressedTime
-    for key, _ in pressedTime
+    for key, _ in pressedTime.OwnProps()
         If (GetKeyState(key, "P"))
-            pressedTime[key]++
+            pressedTime.%key%++
 }
 
-key_isLongPressed(key, clear=False)
+key_isLongPressed(key, clear:=False)
 {
     global pressedTime
-    _pressedTime := pressedTime[key]
+    _pressedTime := pressedTime.%key%
     If clear
-        pressedTime[key] := 0
+        pressedTime.%key% := 0
     Return _pressedTime > 5
 }
 
 class KeyUtil {
     trim_modifier(key) {
-        if (key.Length() == 1) {
+        if (key.Length == 1) {
             return key
         } Else {
             return LTrim(key, "^!+#")

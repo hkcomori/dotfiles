@@ -1,71 +1,71 @@
 ;--------------------------------------------------------------------------------
 ; Auto-execute section
 ;--------------------------------------------------------------------------------
-#Persistent
-#SingleInstance, Force
-#NoEnv
+Persistent
+#SingleInstance Force
 #UseHook
-#InstallKeybdHook
-#InstallMouseHook
-#HotkeyInterval, 2000
-#MaxHotkeysPerInterval, 200
-Process, Priority,, Realtime
-SendMode, Input
-SetKeyDelay, -1
-SetWorkingDir %A_ScriptDir%
-SetTitleMatchMode, 2
+InstallKeybdHook
+InstallMouseHook
+HotkeyInterval := 2000
+MaxHotkeysPerInterval := 200
+ProcessSetPriority("Realtime")
+SendMode("Input")
+SetKeyDelay(-1)
+SetWorkingDir(A_ScriptDir)
+SetTitleMatchMode(2)
 
-SetTimer, detectAutoExecFailure, -5000
+SetTimer(detectAutoExecFailure, -5000)
 detectAutoExecFailure() {
-    MsgBox, Auto-execute section was not fully executed.
+    MsgBox("Auto-execute section was not fully executed.")
     Reload
 }
 
-OnExit("confirmExit")
+OnExit(confirmExit)
 
 #include <key>
+#Include <mouse>
 #Include <stroke>
-#Include <sys>
 #Include <traymenu>
 #Include config.ahk
 #Include ime_manager.ahk
 
 convMillisecond := 1000
 stableWait() {
-    Sleep % config.global.stableWait
+    Sleep(config.global.stableWait)
 }
 
 ; Office
-GroupAdd, office, ahk_exe WINWORD.EXE   ; Microsoft Word
-GroupAdd, office, ahk_exe EXCEL.EXE     ; Microsoft Excel
-GroupAdd, office, ahk_exe POWERPNT.EXE  ; Microsoft PowerPoint
+GroupAdd("office", "ahk_exe WINWORD.EXE")   ; Microsoft Word
+GroupAdd("office", "ahk_exe EXCEL.EXE")     ; Microsoft Excel
+GroupAdd("office", "ahk_exe POWERPNT.EXE")  ; Microsoft PowerPoint
 
 ; Outlook child window
-GroupAdd, outlookChild, ahk_exe OUTLOOK.EXE,,, - Outlook
+GroupAdd("outlookChild", "ahk_exe OUTLOOK.EXE",,, "- Outlook")
 
 ; Browser
-GroupAdd, browser, ahk_exe msedge.exe   ; Microsoft Edge
-GroupAdd, browser, ahk_exe chrome.exe   ; Google Chrome
-GroupAdd, browser, ahk_exe firefox.exe  ; Mozilla Firefox
-GroupAdd, browser, ahk_exe vivaldi.exe  ; Vivaldi
+GroupAdd("browser", "ahk_exe msedge.exe")   ; Microsoft Edge
+GroupAdd("browser", "ahk_exe chrome.exe")   ; Google Chrome
+GroupAdd("browser", "ahk_exe firefox.exe")  ; Mozilla Firefox
+GroupAdd("browser", "ahk_exe vivaldi.exe")  ; Vivaldi
 
 ; Fast scroll
 fastScrollSensitivity := config.fastscroll.speed
 
 ; separator
-Menu, Tray, Add
+tray := A_TrayMenu
+tray.Add()
 
-imeStatus := new ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
-disableImeMenu := new ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
+imeStatus := ImeManager(config.imeoff.nonactive, config.imeoff.idle * convMillisecond)
+disableImeMenu := ToggleTrayMenu("Auto IME OFF", ObjBindMethod(imeStatus, "tick"), config.global.interval)
 if (config.imeoff.enable) {
     disableImeMenu.toggle()
 }
 
-keepAwakeMenu := new ToggleTrayMenu("Keep Awake", "KeepAwake", config.global.interval)
+keepAwakeMenu := ToggleTrayMenu("Keep Awake", KeepAwake, config.global.interval)
 keepAwake() {
     If (A_TimeIdlePhysical > (config.keepawake.interval * convMillisecond)) {
-        MouseMove, 1, 0, 1, R  ;Move the mouse one pixel to the right
-        MouseMove, -1, 0, 1, R ;Move the mouse back one pixel
+        MouseMove(1, 0, 1, "R")  ;Move the mouse one pixel to the right
+        MouseMove(-1, 0, 1, "R") ;Move the mouse back one pixel
     }
 }
 if (config.keepawake.enable) {
@@ -78,27 +78,27 @@ key_startDetectLongPress("vk1C")    ; Henkan
 key_startDetectLongPress("AppsKey")
 
 ; Auto reload this script
-FileGetTime scriptModTime, %A_ScriptFullPath%
-SetTimer CheckScriptUpdate, % config.global.interval
+scriptModTime := FileGetTime(A_ScriptFullPath)
+SetTimer(CheckScriptUpdate, config.global.interval)
 CheckScriptUpdate() {
-    ListLines, Off
+    ListLines(False)
     global scriptModTime
-    FileGetTime currentModTime, %A_ScriptFullPath%
+    currentModTime := FileGetTime(A_ScriptFullPath)
     If (currentModTime == scriptModTime)
         return
-    SetTimer CheckScriptUpdate, Off
+    SetTimer(CheckScriptUpdate, 0)
     Reload
-    Sleep % config.global.interval
+    Sleep(config.global.interval)
     ; If successful, the reload will close this instance during the Sleep,
     ; so the line below will never be reached.
     scriptModTime := currentModTime
-    SetTimer CheckScriptUpdate, % config.global.interval
+    SetTimer(CheckScriptUpdate, config.global.interval)
 }
 
-stroke := new StrokeInfo()
+stroke := StrokeInfo()
 
 ; End of Auto-execute section
-SetTimer, detectAutoExecFailure, Delete
+SetTimer(detectAutoExecFailure, 0)
 Return
 
 ;--------------------------------------------------------------------------------
@@ -113,7 +113,25 @@ CapsLock:: LCtrl
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
 
-#z:: Winset, AlwaysOnTop, Toggle, A
+#z:: WinsetAlwaysOnTop(-1, "A")
+#F11::
+{
+    If WinExist("ahk_exe Obsidian.exe") {
+        WinActivate("ahk_exe Obsidian.exe")
+    } else {
+        Run EnvGet("USERPROFILE") "\AppData\Local\Obsidian\Obsidian.exe"
+    }
+    Return
+}
+#F12::
+{
+    If WinExist("電卓") {
+        WinActivate("電卓")
+    } else {
+        Run "calc.exe"
+    }
+    Return
+}
 
 ; Input underscore without shift
 vkE2:: _
@@ -128,14 +146,18 @@ F19:: mouse_sendUnderCursor("{F19}")
 sc29:: imeStatus.toggle()      ; Hankaku/Zenkaku
 
 vk1D Up::   ; Muhenkan
+{
     If !key_isLongPressed("vk1D", True)
         imeStatus.off()
     Return
+}
 
 vk1C Up::   ; Henkan
+{
     If !key_isLongPressed("vk1C", True)
         imeStatus.on()
     Return
+}
 
 sc70:: imeStatus.on()          ; Kana
 
@@ -146,8 +168,8 @@ vk1C & Up:: !Up
 vk1C & Down:: !Down
 vk1C & b:: ^Left
 vk1C & f:: ^Right
-vk1C & n:: Send, {Down 5}
-vk1C & p:: Send, {Up 5}
+vk1C & n:: Send("{Down 5}")
+vk1C & p:: Send("{Up 5}")
 vk1C & ,:: ^Home
 vk1C & .:: ^End
 vk1C & w:: ^c
@@ -155,25 +177,33 @@ vk1C & v:: PgUp
 
 ; Emulate Fn-key of RealForce by AppsKey
 AppsKey Up::
+{
     If !key_isLongPressed("AppsKey", True)
-        Send, {AppsKey}
+        Send("{AppsKey}")
     Return
-AppsKey & Left:: Send, {Volume_Mute}
-AppsKey & Down:: Send, {Volume_Down}
-AppsKey & Right:: Send, {Volume_Up}
-AppsKey & Up:: Send, {Media_Play_Pause}
+}
+AppsKey & Left:: Send("{Volume_Mute}")
+AppsKey & Down:: Send("{Volume_Down}")
+AppsKey & Right:: Send("{Volume_Up}")
+AppsKey & Up:: Send("{Media_Play_Pause}")
+AppsKey & XButton1:: Send("{Blind}#^{Left}")
+AppsKey & XButton2:: Send("{Blind}#^{Right}")
+AppsKey & WheelUp:: Send("{Blind}#{PgUp}")
+AppsKey & WheelDown:: Send("{Blind}#{PgDn}")
 
 ; Fast scroll
 !WheelUp::
 vk1C & WheelUp::
-AppsKey & WheelUp::
-    Send, {WheelUp %fastScrollSensitivity%}
+{
+    Send("{WheelUp " fastScrollSensitivity "}")
     Return
+}
 !WheelDown::
 vk1C & WheelDown::
-AppsKey & WheelDown::
-    Send, {WheelDown %fastScrollSensitivity%}
+{
+    Send("{WheelDown " fastScrollSensitivity "}")
     Return
+}
 
 ; Toggle keep awake
 AppsKey & Esc:: keepAwakeMenu.toggle()
@@ -181,20 +211,24 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ; Turn off IME when opening start menu
 ~LWin Up::
 ~RWin Up::
+{
     If (A_PriorKey = "LWin" || A_PriorKey = "RWin"){
         stableWait()
         imeStatus.off()
     }
     Return
+}
 
-#If !stroke.is_active()
+#HotIf !stroke.is_active()
     ; Shows command launcher
     #Space::
     vk1D & Space::
-        Send, ^!{Insert}
+    {
+        Send("^!{Insert}")
         stableWait()
         imeStatus.off()
         Return
+    }
 
     vk1D & b:: Left
     vk1D & p:: Up
@@ -213,8 +247,8 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     vk1D & vkE2:: ^y        ; Backslash located next to slash key
     vk1D & Left:: ^Left
     vk1D & Right:: ^Right
-    vk1D & Up:: Send, {Up 5}
-    vk1D & Down:: Send, {Down 5}
+    vk1D & Up:: Send("{Up 5}")
+    vk1D & Down:: Send("{Down 5}")
     vk1D & PgUp:: ^PgUp
     vk1D & PgDn:: ^PgDn
     vk1D & @:: ^@
@@ -224,40 +258,50 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ; Start multi-stroke
     vk1D & q::
     vk1D & x::
+    {
         stroke.activate(A_ThisHotkey)
         Return
+    }
     vk1D & u::
+    {
         stroke.activate(A_ThisHotkey, True)
         Return
+    }
     vk1D & g:: Esc
-#If
+#HotIf
 
 ; Stop multi-stroke
-#If stroke.is_active()
+#HotIf stroke.is_active()
     Esc::
     vk1D & g::
+    {
         stroke.deactivate(A_ThisHotKey)
         Return
-#If
+    }
+#HotIf
 
 ; C-q like behavior
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & q")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & q")
     vk1D & a::
+    {
         stroke.deactivate(A_ThisHotKey)
-        Send, ^a
+        Send("^a")
         Return
-#If
+    }
+#HotIf
 
 ; C-x like behavior
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & x")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & x")
     vk1D & s::
+    {
         stroke.deactivate(A_ThisHotKey)
-        Send, ^s
+        Send("^s")
         Return
-#If
+    }
+#HotIf
 
 ; C-u like behavior (Repeat)
-#If stroke.is_active() && (stroke.keys[1] == "vk1D & u")
+#HotIf stroke.is_active() && (stroke.keys[1] == "vk1D & u")
     ; Set repeat counts
     0::
     1::
@@ -269,8 +313,10 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     7::
     8::
     9::
+    {
         stroke.push(A_ThisHotkey)
         Return
+    }
     ; Repeated send keys
     a::
     b::
@@ -332,9 +378,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     Enter::
     BackSpace::
     Delete::
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {%A_ThisHotkey% %repeat%}
+        Send("{" A_ThisHotkey " " repeat "}")
         Return
+    }
     +A::
     +B::
     +C::
@@ -361,90 +409,108 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     +X::
     +Y::
     +Z::
+    {
         key := KeyUtil.trim_modifier(A_ThisHotkey)
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {%key% %repeat%}
+        Send("{" key " " repeat "}")
         Return
+    }
     +2::    ; Double quotation
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
-        Loop % repeat {
-            Send, {ASC 034}
-            Sleep, 1
+        Loop repeat {
+            Send("{ASC 034}")
+            Sleep(1)
         }
         Return
+    }
     +7::    ; Single quotation
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
-        Loop % repeat {
-            Send, {ASC 039}
-            Sleep, 1
+        Loop repeat {
+            Send("{ASC 039}")
+            Sleep(1)
         }
         Return
+    }
     vkE2::  ; Backslash located next to slash key
+    {
         repeat := stroke.deactivate(A_ThisHotKey)
-        Send, {_ %repeat%}
+        Send("{_ " repeat "}")
         Return
-#If
+    }
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Explorer
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_class CabinetWClass ahk_exe Explorer.EXE
+#HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
     ~^f::
     ~^l::
+    {
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+    }
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Task view
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE
+#HotIf WinActive("ahk_class Windows.UI.Core.CoreWindow ahk_exe Explorer.EXE")
     ~^f::
+    {
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+    }
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Outlook
 ;--------------------------------------------------------------------------------
-#IfWinActive - Outlook ahk_exe OUTLOOK.EXE
+#HotIf WinActive("- Outlook ahk_exe OUTLOOK.EXE")
     ~^e::
+    {
         stableWait()
         imeStatus.off()
         Return
-#IfWinActive
+    }
+#HotIf
 
-#IfWinActive ahk_group outlookChild
+#HotIf WinActive("ahk_group outlookChild")
     ; Ctrl+F to search instead of forwarding
-    ^f:: Send, {F4}
+    ^f:: Send("{F4}")
 
     ; Close message window by pressing both back and forward
     F19:: mouse_sendUnderCursor("!{F4}")
 
     XButton1:: mouse_sendUnderCursor("^<")
     XButton2:: mouse_sendUnderCursor("^>")
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Office
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe EXCEL.EXE
+#HotIf WinActive("ahk_exe EXCEL.EXE")
     AppsKey & WheelDown::
     !WheelDown::
-        Send, {PgDn}
+    {
+        Send("{PgDn}")
         Return
+    }
     AppsKey & WheelUp::
     !WheelUp::
-        Send, {PgUp}
+    {
+        Send("{PgUp}")
         Return
-#IfWinActive
+    }
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Browser
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_group browser
+#HotIf WinActive("ahk_group browser")
     ~^e::
     ~^f::
     ~^l::
@@ -453,9 +519,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~F3::
     ~+F3::
     ~^+p::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 
     ; Switch tabs by back/forward buttons
     ^XButton1:: mouse_sendUnderCursor("^+Tab")
@@ -469,12 +537,12 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ; Switch tabs by wheel
     ^WheelUp:: ^+Tab
     ^WheelDown:: ^Tab
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Visual Studio Code
 ;--------------------------------------------------------------------------------
-#If WinActive("ahk_exe Code.exe") && GetKeyState("vk1D", "P")
+#HotIf WinActive("ahk_exe Code.exe") && GetKeyState("vk1D", "P")
     ; Swap lines
     Up:: !Up
     Down:: !Down
@@ -494,9 +562,9 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     8:: ^8
     9:: ^9
     0:: ^0
-#If
+#HotIf
 
-#IfWinActive ahk_exe Code.exe
+#HotIf WinActive("ahk_exe Code.exe")
     ~^e::
     ~^f::
     ~^h::
@@ -508,9 +576,11 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     ~^+p::
     ~^@::
     ~F1::
+    {
         stableWait()
         imeStatus.off()
         Return
+    }
 
     ; Switch tabs by back/forward buttons
     ^XButton1:: mouse_sendUnderCursor("^{PgUp}")
@@ -528,34 +598,38 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
     !WheelUp::
     vk1C & WheelUp::        ; Henkan
     AppsKey & WheelUp::
-        Send, !{WheelUp}
+    {
+        Send("!{WheelUp}")
         Return
+    }
     !WheelDown::
     vk1C & WheelDown::      ; Henkan
     AppsKey & WheelDown::
-        Send, !{WheelDown}
+    {
+        Send("!{WheelDown}")
         Return
-#IfWinActive
+    }
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; CaptureOnTouch
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe TouchDR.exe
+#HotIf WinActive("ahk_exe TouchDR.exe")
     XButton1:: mouse_sendUnderCursor("{Up}")
     XButton2:: mouse_sendUnderCursor("{Down}")
-#IfWinActive
+#HotIf
 
 ;--------------------------------------------------------------------------------
 ; Obsidian
 ;--------------------------------------------------------------------------------
-#IfWinActive ahk_exe Obsidian.exe
+#HotIf WinActive("ahk_exe Obsidian.exe")
     F19:: mouse_sendUnderCursor("^w")
-#IfWinActive
+#HotIf
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
-        MsgBox, 0x04, %A_ScriptName%, Are you sure you want to exit?
-        IfMsgBox, No
+        pressed := MsgBox("Are you sure you want to exit?", A_ScriptName, 0x04)
+        If (pressed == "No")
             Return 1
     }
 }
