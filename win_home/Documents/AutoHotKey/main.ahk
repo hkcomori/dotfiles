@@ -182,10 +182,10 @@ AppsKey Up::
         Send("{AppsKey}")
     Return
 }
-AppsKey & Left:: Send("{Volume_Mute}")
-AppsKey & Down:: Send("{Volume_Down}")
-AppsKey & Right:: Send("{Volume_Up}")
-AppsKey & Up:: Send("{Media_Play_Pause}")
+AppsKey & F1:: Send("{Media_Play_Pause}")
+AppsKey & F2:: Send("{Volume_Mute}")
+AppsKey & F3:: Send("{Volume_Down}")
+AppsKey & F4:: Send("{Volume_Up}")
 AppsKey & XButton1:: Send("{Blind}#^{Left}")
 AppsKey & XButton2:: Send("{Blind}#^{Right}")
 AppsKey & WheelUp:: Send("{Blind}#{PgUp}")
