@@ -113,6 +113,15 @@ CapsLock:: LCtrl
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
 
+; FancyZones expand window
+#+Left:: Send("{Blind}#^!{Left}")
+#+Down:: Send("{Blind}#^!{Down}")
+#+Right:: Send("{Blind}#^!{Right}")
+#+Up:: Send("{Blind}#^!{Up}")
+; FancyZones rotate windows in current zone
+AppsKey & PgUp:: Send("{Blind}#{PgUp}")
+AppsKey & PgDn:: Send("{Blind}#{PgDn}")
+
 #z:: WinsetAlwaysOnTop(-1, "A")
 #F11::
 {
@@ -186,6 +195,10 @@ AppsKey & F1:: Send("{Media_Play_Pause}")
 AppsKey & F2:: Send("{Volume_Mute}")
 AppsKey & F3:: Send("{Volume_Down}")
 AppsKey & F4:: Send("{Volume_Up}")
+
+; Virtual Desktop switch desktops
+AppsKey & Home:: Send("{Blind}#^{Left}")
+AppsKey & End:: Send("{Blind}#^{Right}")
 AppsKey & XButton1:: Send("{Blind}#^{Left}")
 AppsKey & XButton2:: Send("{Blind}#^{Right}")
 AppsKey & WheelUp:: Send("{Blind}#{PgUp}")
