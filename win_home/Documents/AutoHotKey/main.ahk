@@ -124,6 +124,7 @@ AppsKey & PgDn:: Send("{Blind}#{PgDn}")
 
 #z:: WinsetAlwaysOnTop(-1, "A")
 #F11::
+AppsKey & F11::
 {
     If WinExist("ahk_exe Obsidian.exe") {
         WinActivate("ahk_exe Obsidian.exe")
@@ -133,6 +134,7 @@ AppsKey & PgDn:: Send("{Blind}#{PgDn}")
     Return
 }
 #F12::
+AppsKey & F12::
 {
     If WinExist("電卓") {
         WinActivate("電卓")
