@@ -199,6 +199,8 @@ AppsKey & F3:: Send("{Volume_Down}")
 AppsKey & F4:: Send("{Volume_Up}")
 
 ; Virtual Desktop switch desktops
+#Home:: Send("{Blind}#^{Left}")
+#End:: Send("{Blind}#^{Right}")
 AppsKey & Home:: Send("{Blind}#^{Left}")
 AppsKey & End:: Send("{Blind}#^{Right}")
 AppsKey & XButton1:: Send("{Blind}#^{Left}")
