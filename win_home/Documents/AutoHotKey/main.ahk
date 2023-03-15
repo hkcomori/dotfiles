@@ -114,10 +114,10 @@ CapsLock:: LCtrl
 !Tab:: ^!Tab
 
 ; FancyZones expand window
-#+Left:: Send("{Blind}#^!{Left}")
-#+Down:: Send("{Blind}#^!{Down}")
-#+Right:: Send("{Blind}#^!{Right}")
-#+Up:: Send("{Blind}#^!{Up}")
+#!Left:: Send("{Blind}#^!{Left}")
+#!Down:: Send("{Blind}#^!{Down}")
+#!Right:: Send("{Blind}#^!{Right}")
+#!Up:: Send("{Blind}#^!{Up}")
 ; FancyZones rotate windows in current zone
 AppsKey & PgUp:: Send("{Blind}#{PgUp}")
 AppsKey & PgDn:: Send("{Blind}#{PgDn}")
