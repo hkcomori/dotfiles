@@ -462,6 +462,7 @@ AppsKey & Esc:: keepAwakeMenu.toggle()
 ; Explorer
 ;--------------------------------------------------------------------------------
 #HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
+    F19:: mouse_sendUnderCursor("!{F4}")
     ~^f::
     ~^l::
     {
