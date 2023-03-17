@@ -1,5 +1,5 @@
 #HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
-    F19:: mouse_sendUnderCursor("!{F4}")
+    F19:: WinClose("A")
     ~^f::
     ~^l::
     {
