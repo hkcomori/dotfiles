@@ -4,6 +4,13 @@ GroupAdd("browser", "ahk_exe chrome.exe")   ; Google Chrome
 GroupAdd("browser", "ahk_exe firefox.exe")  ; Mozilla Firefox
 GroupAdd("browser", "ahk_exe vivaldi.exe")  ; Vivaldi
 
+GroupAdd("browserDevtool", "DevTools ahk_exe chrome.exe")                        ; Google Chrome
+GroupAdd("browserDevtool", "Developer Tools ahk_exe vivaldi.exe")      ; Vivaldi
+
+#HotIf WinActive("ahk_group browserDevtool")
+    F19:: WinClose("A")
+#HotIf
+
 #HotIf WinActive("ahk_group browser")
     ~^e::
     ~^f::
