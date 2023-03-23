@@ -53,8 +53,8 @@ if which wslpath &>/dev/null; then
     if [ -d "/mnt/c/Program Files (x86)/AutoHotkey" ] ; then
         AHK_DIR_PATH="/mnt/c/Program Files (x86)/AutoHotkey"
     fi
-    if [ -d "${WIN_HOME}/bin/AutoHotkey" ] ; then
-        AHK_DIR_PATH="${WIN_HOME}/bin/AutoHotkey"
+    if [ -d "$HOME/OneDrive/Apps/AutoHotkey" ] ; then
+        AHK_DIR_PATH="$HOME/OneDrive/Apps/AutoHotkey"
     fi
     PATH="$AHK_DIR_PATH:$PATH"
 fi
