@@ -41,7 +41,7 @@ AppsKey & F11::
     }
     Return
 }
-#F12::
+#F12:: vk87
 AppsKey & F12:: vk87
 
 ; Input underscore without shift
