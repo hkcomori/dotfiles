@@ -42,15 +42,7 @@ AppsKey & F11::
     Return
 }
 #F12::
-AppsKey & F12::
-{
-    If WinExist("??") {
-        WinActivate("??")
-    } else {
-        Run "calc.exe"
-    }
-    Return
-}
+AppsKey & F12:: vk87
 
 ; Input underscore without shift
 vkE2:: _
