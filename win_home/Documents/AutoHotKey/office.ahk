@@ -20,7 +20,13 @@ GroupAdd("outlookChild", "ahk_exe OUTLOOK.EXE",,, "- Outlook")
     ^f:: Send("{F4}")
 
     ; Close message window by pressing both back and forward
-    F19:: WinClose("A")
+    F19::
+    {
+        if (mouse_activateUnderCursor()) {
+            WinClose("A")
+        }
+        Return
+    }
 
     XButton1:: mouse_sendUnderCursor("^<")
     XButton2:: mouse_sendUnderCursor("^>")
