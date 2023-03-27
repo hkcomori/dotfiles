@@ -41,8 +41,16 @@ AppsKey & F11::
     }
     Return
 }
-#F12:: vk87
-AppsKey & F12:: vk87
+#F12::
+AppsKey & F12::
+{
+    If WinExist("電卓") {
+        WinActivate("電卓")
+    } else {
+        Run "calc.exe"
+    }
+    Return
+}
 
 ; Input underscore without shift
 vkE2:: _
