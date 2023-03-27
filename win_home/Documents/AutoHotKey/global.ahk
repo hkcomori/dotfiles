@@ -7,11 +7,6 @@ fastScrollSensitivity := config.fastscroll.speed
 
 stroke := StrokeInfo()
 
-; Detect long press
-key_startDetectLongPress("vk1D")    ; Muhenkan
-key_startDetectLongPress("vk1C")    ; Henkan
-key_startDetectLongPress("AppsKey")
-
 ; Disable Insert
 Insert:: Return
 
@@ -64,19 +59,11 @@ F19:: mouse_sendUnderCursor("{F19}")
 
 sc29:: imeStatus.toggle()      ; Hankaku/Zenkaku
 
-vk1D Up::   ; Muhenkan
-{
-    If !key_isLongPressed("vk1D", True)
-        imeStatus.off()
-    Return
-}
+; Muhenkan
+vk1D Up:: imeStatus.off()
 
-vk1C Up::   ; Henkan
-{
-    If !key_isLongPressed("vk1C", True)
-        imeStatus.on()
-    Return
-}
+; Henkan
+vk1C Up:: imeStatus.on()
 
 sc70:: imeStatus.on()          ; Kana
 
@@ -94,13 +81,7 @@ vk1C & .:: ^End
 vk1C & w:: ^c
 vk1C & v:: PgUp
 
-; Emulate Fn-key of RealForce by AppsKey
-AppsKey Up::
-{
-    If !key_isLongPressed("AppsKey", True)
-        Send("{AppsKey}")
-    Return
-}
+AppsKey Up:: Send("{AppsKey}")
 AppsKey & F1:: Send("{Media_Play_Pause}")
 AppsKey & F2:: Send("{Volume_Mute}")
 AppsKey & F3:: Send("{Volume_Down}")
