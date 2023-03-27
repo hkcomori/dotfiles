@@ -1,5 +1,11 @@
 #HotIf WinActive("ahk_class CabinetWClass ahk_exe Explorer.EXE")
-    F19:: WinClose("A")
+    F19::
+    {
+        if (mouse_activateUnderCursor()) {
+            WinClose("A")
+        }
+        Return
+    }
     ~^f::
     ~^l::
     {
