@@ -349,6 +349,14 @@ api_timeGetTime()
         , "UInt")
 }
 
+api_TurnOffMonitor()
+{
+    SC_MONITORPOWER := 0xF170
+    WM_SYSCOMMAND := 0x0112
+    MONITOR_OFF := 2
+    Return SendMessage(WM_SYSCOMMAND, SC_MONITORPOWER, MONITOR_OFF,, "Program Manager")
+}
+
 api_WindowFromPoint(xpos, ypos)
 {
     Return DllCall("user32.dll\WindowFromPoint"

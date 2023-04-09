@@ -1,3 +1,4 @@
+#include <api>
 #include <key>
 #Include <mouse>
 #Include <stroke>
@@ -12,6 +13,9 @@ Insert:: Return
 
 ; Use CapsLock as Ctrl
 CapsLock:: LCtrl
+
+; Lock workstation and turn off monitor
+#l:: api_TurnOffMonitor()
 
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
