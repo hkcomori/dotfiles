@@ -15,7 +15,7 @@ Insert:: Return
 CapsLock:: LCtrl
 
 ; Lock workstation and turn off monitor
-#l:: api_TurnOffMonitor()
+#l:: SetTimer(api_TurnOffMonitor, -500)
 
 ; Keep Alt+Tab menu opened
 !Tab:: ^!Tab
