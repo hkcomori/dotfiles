@@ -40,6 +40,7 @@ AppsKey & F11::
     }
     Return
 }
+Launch_App2::
 #F12::
 AppsKey & F12::
 {
