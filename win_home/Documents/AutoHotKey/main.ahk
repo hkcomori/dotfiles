@@ -83,6 +83,7 @@ SetTimer(detectAutoExecFailure, 0)
 #Include vscode.ahk
 #Include captureontouch.ahk
 #Include obsidian.ahk
+#Include spark.ahk
 
 confirmExit(ExitReason, ExitCode) {
     If (ExitReason == "Menu") {
