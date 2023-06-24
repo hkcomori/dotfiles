@@ -2,25 +2,25 @@ from .key import KeymapConverter
 from . import cmd
 
 
-# キーマップを適用するウィンドウのフィルタリング
+# キーマップ適用対象ウィンドウの指定
 # - exe_name, class_name, window_text には、ワイルドカード ( * ? ) が使えます。
 # - exe_name, class_name, window_text, check_func が None の場合は、
 #   その条件を無視します。
-WINDOW_FILTER = {
-    # ウインドウが所属するプログラムの実行ファイル名のディレクトリ名を取り除いた部分
+TARGET_WINDOW = {
+    # 実行ファイル名
     'exe_name': None,
-    # ウインドウのクラス名
+    # クラス名
     'class_name': None,
-    # ウインドウのタイトル文字列
+    # タイトル文字列
     'window_text': None,
-    # ウインドウ識別関数
-    # pyauto.Window オブジェクトを受け取り、True か False を返す関数を渡します。
+    # 識別関数: pyauto.Window オブジェクトを受け取り、True か False を返す
     'check_func': None,
 }
 
 
-def configure(keymap):
-    window_keymap = KeymapConverter(keymap.defineWindowKeymap(**WINDOW_FILTER))
+def configure_keymap(window_keymap: KeymapConverter):
+    window_keymap["Insert"] = cmd.activate_window_under_mouse_pointer
+
     cursor(window_keymap)
     task_switcher(window_keymap)
     fancy_zones(window_keymap)
@@ -104,4 +104,4 @@ def multimedia_key(window_keymap: KeymapConverter):
     window_keymap["U0-F11"] = cmd.launch_obsidian
     window_keymap["W-F12"] = cmd.launch_calc
     window_keymap["U0-F12"] = cmd.launch_calc
-    window_keymap['LaunchApp2'] = cmd.launch_calc
+    window_keymap["LaunchApp2"] = cmd.launch_calc

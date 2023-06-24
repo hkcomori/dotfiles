@@ -17,11 +17,11 @@ class KeymapConverter:
         self.keymap = keymap
 
     def __setitem__(self, key: str, value):
-        conv_key = convert_key(key)
-        self.keymap[conv_key] = convert(value)
+        conv_key = _convert_key(key)
+        self.keymap[conv_key] = self.__class__.convert(value)
 
     def __getitem__(self, key: str) -> KeymapCommand:
-        return self.keymap[convert_key(key)]
+        return self.keymap[_convert_key(key)]
 
     # When using `@singledispatchmethod` and `@classmethod` together,
     # it can cause an error in the `functools` module.
@@ -29,7 +29,7 @@ class KeymapConverter:
     # https://bugs.python.org/issue39679
     @classmethod
     def convert(cls, value: KeymapCommand) -> KeymapCommand:
-        return convert(value)
+        return _convert(value)
 
 
 __lookup = {
@@ -75,26 +75,26 @@ __lookup = {
 
 
 @singledispatch
-def convert(value: KeymapCommand) -> KeymapCommand:
+def _convert(value: KeymapCommand) -> KeymapCommand:
     raise NotImplementedError
 
 
-@convert.register
-def convert_str(value: str) -> str:
-    return convert_key(value)
+@_convert.register
+def _convert_str(value: str) -> str:
+    return _convert_key(value)
 
 
-@convert.register
-def convert_tuple(value: tuple) -> tuple:
-    return tuple(convert_key(v) for v in value)
+@_convert.register
+def _convert_tuple(value: tuple) -> tuple:
+    return tuple(_convert_key(v) for v in value)
 
 
-@convert.register
-def convert_func(value: Callable) -> Callable:
+@_convert.register
+def _convert_func(value: Callable) -> Callable:
     return value
 
 
-def convert_key(key: str) -> str:
+def _convert_key(key: str) -> str:
     src_keys: list = key.split('-')
     dest_keys = tuple(__lookup.get(k, k) for k in src_keys)
     return '-'.join(dest_keys)

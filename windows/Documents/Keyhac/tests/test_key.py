@@ -1,6 +1,13 @@
+import sys
+from unittest.mock import Mock
+
 import pytest
 
-from extension.key import (
+sys.modules['ctypes.windll'] = Mock()
+sys.modules['pyauto'] = Mock()
+sys.modules['keyhac'] = Mock()
+
+from extension.key import (    # noqa: E402
     KeymapCommand,
     WindowKeymap,
     KeymapConverter,
