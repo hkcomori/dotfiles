@@ -15,8 +15,7 @@ JobQueue.createDefaultQueue()
 
 
 def task_finished(job_item):
-    num_items = JobQueue.defaultQueue().numItems()
-    logger.debug(f"Task finished (tasks={num_items})")
+    pass
 
 
 def background_task(func: Callable[..., None]):
@@ -26,9 +25,6 @@ def background_task(func: Callable[..., None]):
 
         job_item = JobItem(task, task_finished)
         JobQueue.defaultQueue().enqueue(job_item)
-
-        num_items = JobQueue.defaultQueue().numItems()
-        logger.debug(f"Task queued (tasks={num_items})")
 
     return decorated_func
 
