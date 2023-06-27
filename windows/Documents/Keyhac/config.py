@@ -1,7 +1,5 @@
 ﻿from logging import basicConfig, getLogger, DEBUG
 
-# from keyhac import *    # noqa: F403
-
 from extension import init
 
 
