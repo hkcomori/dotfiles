@@ -49,7 +49,8 @@ class Window:
         self._hwnd = hwnd
         if not user32.IsWindow(self._hwnd):
             raise WindowNotFoundError(f'hwnd={self._hwnd}')
-        self._thread = Thread(self._hwnd)
+        thread_id: DWORD = user32.GetWindowThreadProcessId(self._hwnd, 0)
+        self._thread = Thread(thread_id)
 
     def __eq__(self, other: 'Window') -> bool:
         return self._hwnd == other._hwnd
@@ -69,9 +70,9 @@ class Window:
         raise RuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
 
     def set_foreground(self) -> 'Window':
-        self_thread = Thread(self)
+        self_thread = self._thread
         old_fore = self.__class__.from_foreground()
-        old_thread = Thread(old_fore)
+        old_thread = old_fore._thread
 
         if user32.IsIconic(self._hwnd):
             SW_RESTORE = 9
@@ -86,7 +87,7 @@ class Window:
 
         with self_thread.attach(old_thread):
             new_fore = self._set_foreground(old_fore)
-            new_thread = Thread(new_fore)
+            new_thread = new_fore._thread
 
         user32.BringWindowToTop(self._hwnd)
         user32.SetFocus(self._hwnd)
@@ -160,8 +161,8 @@ class Cursor:
 
 
 class Thread:
-    def __init__(self, window: 'Window'):
-        self._thread_id: DWORD = user32.GetWindowThreadProcessId(window._hwnd, 0)
+    def __init__(self, thread_id: DWORD):
+        self._thread_id = thread_id
 
     def __eq__(self, other: 'Thread') -> bool:
         return self._thread_id == other._thread_id
