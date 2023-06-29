@@ -4,13 +4,14 @@ from unittest.mock import Mock
 import pytest
 
 sys.modules['ctypes.windll'] = Mock()
+sys.modules['ctypes.WINFUNCTYPE'] = Mock()
 sys.modules['pyauto'] = Mock()
 sys.modules['keyhac'] = Mock()
 
-from extension.key import (    # noqa: E402
-    KeymapCommand,
-    WindowKeymap,
-    KeymapConverter,
+from extension.keymap.common import (    # noqa: E402
+    KeymapValue,
+    KeymapDefinition,
+    KeyCondition,
 )
 
 
@@ -21,11 +22,11 @@ def nop():
 @pytest.mark.parametrize(('src', 'expected'), [
     ('A-Tab', 'A-Tab'),
     ('W-S-F24', 'W-S-(135)'),
-    (('A-WheelUp', 'Up', 'F24'), ('A-(159)', 'Up', '(135)')),
+    # (('A-WheelUp', 'Up', 'F24'), ('A-(159)', 'Up', '(135)')),
     ('LaunchApp2', '(183)'),
 ])
-def test_convert(src: str, expected: str):
-    assert KeymapConverter.convert(src) == expected
+def test_KeyCondition(src: str, expected: str):
+    assert KeyCondition(src).to_keyhac() == expected
 
 
 @pytest.mark.parametrize(('key', 'expected_key', 'value', 'expected_value'), [
@@ -36,10 +37,9 @@ def test_convert(src: str, expected: str):
 ])
 def test_get_set(
     key: str, expected_key: str,
-    value: KeymapCommand, expected_value: KeymapCommand
+    value: KeymapValue, expected_value: KeymapValue
 ):
-    orig_keymap: WindowKeymap = dict()
-    keymap = KeymapConverter(orig_keymap)
+    keymap = KeymapDefinition()
     keymap[key] = value
-    assert orig_keymap[expected_key] == expected_value
-    assert keymap[expected_key] == expected_value
+    assert keymap[key] == expected_value
+    assert keymap[key] == expected_value

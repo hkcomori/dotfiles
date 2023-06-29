@@ -1,18 +1,21 @@
-from . import (
-    keymap_global,
+from .keymap import (
+    KeymapDefinition,
+    KeyCondition,
 )
-from .key import KeymapConverter
 
 
 def init(keymap):
-    keymap.defineModifier(KeymapConverter.convert("Apps"), "User0")
-    keymap.defineModifier(KeymapConverter.convert("Kana"), "User1")
-    keymap.defineModifier(KeymapConverter.convert("Henkan"), "User2")
-    keymap.defineModifier(KeymapConverter.convert("Muhenkan"), "User3")
+    keymap.defineModifier(KeyCondition("Apps").to_keyhac(), "User0")
+    keymap.defineModifier(KeyCondition("Kana").to_keyhac(), "User1")
+    keymap.defineModifier(KeyCondition("Henkan").to_keyhac(), "User2")
+    keymap.defineModifier(KeyCondition("Muhenkan").to_keyhac(), "User3")
 
-    for m in (
-        keymap_global,
-    ):
-        target_window = m.TARGET_WINDOW
-        window_keymap = keymap.defineWindowKeymap(**target_window)
-        m.configure_keymap(KeymapConverter(window_keymap))
+    for keymap_definition in KeymapDefinition.all():
+        window_keymap = keymap.defineWindowKeymap(
+            keymap_definition.exe_name,
+            keymap_definition.class_name,
+            keymap_definition.window_text,
+            keymap_definition.check_func,
+        )
+        for k, v in keymap_definition.items():
+            window_keymap[k] = v
