@@ -1,16 +1,25 @@
 from ctypes import (
     windll,
+    WINFUNCTYPE,
     pointer,
     sizeof,
+    create_unicode_buffer,
 )
 from ctypes.wintypes import (
     POINT,
     HWND,
     BOOL,
     DWORD,
+    LPARAM,
 )
 import enum
 from logging import getLogger
+import re
+from typing import (
+    Sequence,
+)
+
+import pyauto
 
 
 RETRY_COUNT = 3
@@ -42,6 +51,11 @@ dwmapi = windll.dwmapi
 
 dwmapi.DwmGetWindowAttribute.restype = HRESULT
 
+WNDENUMPROC = WINFUNCTYPE(BOOL, HWND, LPARAM)
+
+MAX_CLASS_NAME_LENGTH = 256
+"""クラス名の最大長"""
+
 
 class Window:
     @enum.unique
@@ -64,12 +78,39 @@ class Window:
             raise WindowNotFoundError(f'hwnd={self._hwnd}')
         thread_id: DWORD = user32.GetWindowThreadProcessId(self._hwnd, 0)
         self._thread = Thread(thread_id)
+        pyauto_window = pyauto.Window.fromHWND(self._hwnd)
+        self._process_name: str = pyauto_window.getProcessName()
+        self._title = self._get_title()
+        self._class_name = self._get_class_name()
 
     def __eq__(self, other: 'Window') -> bool:
         return self._hwnd == other._hwnd
 
     def __str__(self) -> str:
         return str(self._hwnd)
+
+    @property
+    def process_name(self) -> str:
+        return self._process_name
+
+    def _get_title(self):
+        length = user32.GetWindowTextLengthW(self._hwnd)
+        buff = create_unicode_buffer(length + 1)
+        user32.GetWindowTextW(self._hwnd, buff, length + 1)
+        return buff.value
+
+    @property
+    def title(self) -> str:
+        return self._title
+
+    def _get_class_name(self) -> str:
+        buff = create_unicode_buffer(MAX_CLASS_NAME_LENGTH + 1)
+        user32.GetClassNameW(self._hwnd, buff, MAX_CLASS_NAME_LENGTH + 1)
+        return buff.value
+
+    @property
+    def class_name(self) -> str:
+        return self._class_name
 
     def _set_foreground(self, current: 'Window') -> 'Window':
         user32.SetForegroundWindow(self._hwnd)
@@ -136,6 +177,31 @@ class Window:
         if hwnd == 0:
             raise WindowNotFoundError('No foreground window')
         return cls(hwnd)
+
+    @classmethod
+    def from_find(cls, process_name: str = '', title: str = '', class_name: str = '') -> Sequence['Window']:
+        founds = []
+
+        def _callback(hwnd: HWND, lparam: LPARAM) -> bool:
+            try:
+                window = Window.from_hwnd(hwnd)
+            except WindowNotFoundError:
+                return True
+            if all((
+                any((len(process_name) == 0, re.search(process_name, window.process_name, re.IGNORECASE))),
+                any((len(title) == 0, re.search(title, window.title, re.IGNORECASE))),
+                any((len(class_name) == 0, re.search(class_name, window.class_name, re.IGNORECASE))),
+            )):
+                founds.append(window)
+                w_proc = window.process_name
+                w_title = window.title
+                w_class = window.class_name
+                logger.debug(f'Matched windows: proc={w_proc}, title={w_title}, class={w_class}')
+            return True
+
+        user32.EnumWindows(WNDENUMPROC(_callback), 0)
+
+        return founds
 
     @staticmethod
     def is_visible(hwnd: HWND) -> bool:
