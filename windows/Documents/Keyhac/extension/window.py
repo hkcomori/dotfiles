@@ -45,7 +45,7 @@ class Window:
         PREV = 3    # GW_HWNDPREV
         OWNER = 4   # GW_OWNER
 
-    def __init__(self, hwnd):
+    def __init__(self, hwnd: HWND):
         self._hwnd = hwnd
         if not user32.IsWindow(self._hwnd):
             raise WindowNotFoundError(f'hwnd={self._hwnd}')
@@ -103,11 +103,6 @@ class Window:
 
     def ime_off(self):
         IME(self._hwnd).status = IME.Status.OFF
-
-    def get_owner(self) -> 'Window':
-        relation = self.__class__.Relation.OWNER
-        hwnd: HWND = user32.GetWindow(self._hwnd, relation)
-        return self.__class__(hwnd)
 
     @classmethod
     def from_hwnd(cls, hwnd: HWND) -> 'Window':
