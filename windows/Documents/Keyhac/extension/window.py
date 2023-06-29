@@ -1,10 +1,12 @@
 from ctypes import (
     windll,
     pointer,
+    sizeof,
 )
 from ctypes.wintypes import (
     POINT,
     HWND,
+    BOOL,
     DWORD,
 )
 import enum
@@ -26,8 +28,19 @@ class IMEWindowNotFoundError(WindowNotFoundError):
     pass
 
 
+class HRESULT:
+    def __init__(self, hresult: int):
+        self._hresult = hresult
+
+    def __bool__(self) -> bool:
+        return self._hresult >= 0
+
+
 user32 = windll.user32
 imm32 = windll.imm32
+dwmapi = windll.dwmapi
+
+dwmapi.DwmGetWindowAttribute.restype = HRESULT
 
 
 class Window:
@@ -105,8 +118,10 @@ class Window:
         IME(self._hwnd).status = IME.Status.OFF
 
     @classmethod
-    def from_hwnd(cls, hwnd: HWND) -> 'Window':
-        return cls(hwnd)
+    def from_hwnd(cls, hwnd: HWND, allow_hidden: bool = False) -> 'Window':
+        if allow_hidden or cls.is_visible(hwnd):
+            return cls(hwnd)
+        raise WindowNotFoundError(f'hwnd={hwnd}')
 
     @classmethod
     def from_point(cls, point: POINT) -> 'Window':
@@ -121,6 +136,22 @@ class Window:
         if hwnd == 0:
             raise WindowNotFoundError('No foreground window')
         return cls(hwnd)
+
+    @staticmethod
+    def is_visible(hwnd: HWND) -> bool:
+        if not user32.IsWindowVisible(hwnd):
+            return False
+        if Window.is_cloaked(hwnd):
+            return False
+        return True
+
+    @staticmethod
+    def is_cloaked(hwnd: HWND) -> bool:
+        cloaked = BOOL()
+        DWMWA_CLOAKED = 14
+        result: HRESULT = dwmapi.DwmGetWindowAttribute(
+            hwnd, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
+        return bool(result) and bool(cloaked)
 
 
 class IME:
