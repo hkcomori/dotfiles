@@ -68,7 +68,12 @@ class KeymapDefinition(dict):
         return cls.__instances[dict_key]
 
     def __setitem__(self, keys: str, value: KeymapValue):
-        super().__setitem__(KeyCondition(keys).to_keyhac(), _convert(value))
+        if keys.startswith('*-'):
+            explicit_keys = keys[2:]
+            for m in ['C-', 'A-', 'S-', 'W-', 'U0-', 'U1-', 'U2-', 'U3-']:
+                self[m + explicit_keys] = value
+        else:
+            super().__setitem__(KeyCondition(keys).to_keyhac(), _convert(value))
 
     def __getitem__(self, keys: str) -> KeymapValue:
         return super().__getitem__(KeyCondition(keys).to_keyhac())
@@ -77,10 +82,16 @@ class KeymapDefinition(dict):
     def all(cls) -> Iterable['KeymapDefinition']:
         return (i for i in cls.__instances.values())
 
+    @classmethod
+    def clear(cls):
+        cls.__instances = dict()
+
 
 class KeyCondition:
     def __init__(self, keys: str):
-        self.keys = [Key(k) for k in keys.split('-')]
+        orig_keys = keys.split('-')
+        uniq_mods = list(dict.fromkeys(orig_keys[:-1]))
+        self.keys = [Key(k) for k in (*uniq_mods, orig_keys[-1])]
 
     def to_keyhac(self) -> str:
         return '-'.join(k.to_keyhac() for k in self.keys)
