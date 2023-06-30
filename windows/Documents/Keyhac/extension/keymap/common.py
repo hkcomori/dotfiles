@@ -18,8 +18,16 @@ WindowKeymap = Dict[str, KeymapValue]
 CheckFunc = typing.Callable[[pyauto.Window], bool]
 
 
-class KeymapDefinition:
-    __instances: List['KeymapDefinition'] = []
+class KeymapDefinition(dict):
+    __instances: Dict[
+        Tuple[
+            Union[str, None],
+            Union[str, None],
+            Union[str, None],
+            Union[CheckFunc, None]
+        ],
+        'KeymapDefinition'
+    ] = dict()
 
     def __init__(
         self,
@@ -41,25 +49,33 @@ class KeymapDefinition:
             - (*1): ワイルドカード ( * ? ) が使えます。
             - (*2): None の場合は、その条件を無視します。
         """
+        super().__init__()
         self.exe_name = exe_name
         self.class_name = class_name
         self.window_text = window_text
         self.check_func = check_func
-        self.keymap: WindowKeymap = dict()
-        self.__class__.__instances.append(self)
+
+    def __new__(
+        cls,
+        exe_name: Union[str, None] = None,
+        class_name: Union[str, None] = None,
+        window_text: Union[str, None] = None,
+        check_func: Union[CheckFunc, None] = None,
+    ) -> 'KeymapDefinition':
+        dict_key = (exe_name, class_name, window_text, check_func)
+        if dict_key not in cls.__instances:
+            cls.__instances[dict_key] = super().__new__(cls, *dict_key)
+        return cls.__instances[dict_key]
 
     def __setitem__(self, keys: str, value: KeymapValue):
-        self.keymap[KeyCondition(keys).to_keyhac()] = _convert(value)
+        super().__setitem__(KeyCondition(keys).to_keyhac(), _convert(value))
 
     def __getitem__(self, keys: str) -> KeymapValue:
-        return self.keymap[KeyCondition(keys).to_keyhac()]
-
-    def items(self) -> Iterable[Tuple[str, KeymapValue]]:
-        return self.keymap.items()
+        return super().__getitem__(KeyCondition(keys).to_keyhac())
 
     @classmethod
     def all(cls) -> Iterable['KeymapDefinition']:
-        return (i for i in cls.__instances)
+        return (i for i in cls.__instances.values())
 
 
 class KeyCondition:

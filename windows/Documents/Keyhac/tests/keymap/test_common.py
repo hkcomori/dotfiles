@@ -43,3 +43,9 @@ def test_get_set(
     keymap[key] = value
     assert keymap[key] == expected_value
     assert keymap[key] == expected_value
+
+
+def test_instance_identification():
+    keymap1 = KeymapDefinition()
+    keymap2 = KeymapDefinition()
+    assert keymap1 is keymap2
