@@ -5,9 +5,9 @@ from typing import (
     Tuple,
     Union,
     Iterable,
-    List,
 )
 import typing
+from weakref import WeakValueDictionary
 
 import pyauto
 
@@ -19,7 +19,7 @@ CheckFunc = typing.Callable[[pyauto.Window], bool]
 
 
 class KeymapDefinition(dict):
-    __instances: Dict[
+    __instances: WeakValueDictionary[
         Tuple[
             Union[str, None],
             Union[str, None],
@@ -27,7 +27,7 @@ class KeymapDefinition(dict):
             Union[CheckFunc, None]
         ],
         'KeymapDefinition'
-    ] = dict()
+    ] = WeakValueDictionary()
 
     def __init__(
         self,
@@ -63,9 +63,11 @@ class KeymapDefinition(dict):
         check_func: Union[CheckFunc, None] = None,
     ) -> 'KeymapDefinition':
         dict_key = (exe_name, class_name, window_text, check_func)
-        if dict_key not in cls.__instances:
-            cls.__instances[dict_key] = super().__new__(cls, *dict_key)
-        return cls.__instances[dict_key]
+        obj = cls.__instances.get(dict_key)
+        if not obj:
+            obj = super().__new__(cls, *dict_key)
+            cls.__instances[dict_key] = obj
+        return obj
 
     def __setitem__(self, keys: str, value: KeymapValue):
         if keys.startswith('*-'):
@@ -81,10 +83,6 @@ class KeymapDefinition(dict):
     @classmethod
     def all(cls) -> Iterable['KeymapDefinition']:
         return (i for i in cls.__instances.values())
-
-    @classmethod
-    def clear(cls):
-        cls.__instances = dict()
 
 
 class KeyCondition:

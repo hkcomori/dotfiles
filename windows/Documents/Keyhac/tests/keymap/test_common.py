@@ -47,7 +47,6 @@ def test_get_set(
     keymap[key] = value
     assert keymap[key] == expected_value
     assert keymap[key] == expected_value
-    KeymapDefinition.clear()
 
 
 @pytest.mark.parametrize(('key', 'expected_key', 'value', 'expected_value'), [
@@ -61,11 +60,9 @@ def test_wildcard_keymap(
     keymap[key] = value
     for k in expected_key:
         assert keymap[k] == expected_value
-    KeymapDefinition.clear()
 
 
 def test_instance_identification():
     keymap1 = KeymapDefinition()
     keymap2 = KeymapDefinition()
     assert keymap1 is keymap2
-    KeymapDefinition.clear()
