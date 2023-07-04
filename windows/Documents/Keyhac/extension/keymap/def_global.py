@@ -1,9 +1,13 @@
-from .common import KeymapDefinition
+from .common import WindowKeymap
 from .. import cmd
 
 
-window_keymap = KeymapDefinition()
+exe_name = None
+class_name = None
+window_text = None
+check_func = None
 
+window_keymap: WindowKeymap = dict()
 
 window_keymap["Insert"] = cmd.enum_windows
 

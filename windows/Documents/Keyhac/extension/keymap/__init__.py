@@ -3,7 +3,6 @@ import keyhac
 from .common import (    # noqa: F401
     KeymapDefinition,
     KeyCondition,
-    WindowKeymap,
 )
 from . import (          # noqa: F401
     def_global,
@@ -16,12 +15,13 @@ def init(keymap: keyhac.Keymap):
     keymap.defineModifier(KeyCondition("Henkan").to_keyhac(), "User2")
     keymap.defineModifier(KeyCondition("Muhenkan").to_keyhac(), "User3")
 
-    for keymap_definition in KeymapDefinition.all():
-        window_keymap: WindowKeymap = keymap.defineWindowKeymap(
-            keymap_definition.exe_name,
-            keymap_definition.class_name,
-            keymap_definition.window_text,
-            keymap_definition.check_func,
-        )
-        for k, v in keymap_definition.items():
-            window_keymap[k] = v
+    for m in (
+        def_global,
+    ):
+        keymap_definition = KeymapDefinition(keymap.defineWindowKeymap(
+            m.exe_name,
+            m.class_name,
+            m.window_text,
+            m.check_func,
+        ))
+        keymap_definition.update(m.window_keymap)

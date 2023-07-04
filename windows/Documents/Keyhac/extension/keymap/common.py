@@ -4,12 +4,12 @@ from typing import (
     Dict,
     Tuple,
     Union,
-    Iterable,
 )
 import typing
-from weakref import WeakValueDictionary
 
 import pyauto
+
+from ..singleton import MetaSingleton
 
 
 CmdFunc = typing.Callable[[], None]
@@ -18,56 +18,9 @@ WindowKeymap = Dict[str, KeymapValue]
 CheckFunc = typing.Callable[[pyauto.Window], bool]
 
 
-class KeymapDefinition(dict):
-    __instances: WeakValueDictionary[
-        Tuple[
-            Union[str, None],
-            Union[str, None],
-            Union[str, None],
-            Union[CheckFunc, None]
-        ],
-        'KeymapDefinition'
-    ] = WeakValueDictionary()
-
-    def __init__(
-        self,
-        exe_name: Union[str, None] = None,
-        class_name: Union[str, None] = None,
-        window_text: Union[str, None] = None,
-        check_func: Union[CheckFunc, None] = None,
-    ):
-        """
-        キーマップ適用対象ウィンドウの指定
-
-        Args:
-            - exe_name: 実行ファイル名 (*1)(*2)
-            - class_name: クラス名 (*1)(*2)
-            - window_text: タイトル文字列 (*1)(*2)
-            - check_func: 識別関数 (*2)
-
-        Description:
-            - (*1): ワイルドカード ( * ? ) が使えます。
-            - (*2): None の場合は、その条件を無視します。
-        """
-        super().__init__()
-        self.exe_name = exe_name
-        self.class_name = class_name
-        self.window_text = window_text
-        self.check_func = check_func
-
-    def __new__(
-        cls,
-        exe_name: Union[str, None] = None,
-        class_name: Union[str, None] = None,
-        window_text: Union[str, None] = None,
-        check_func: Union[CheckFunc, None] = None,
-    ) -> 'KeymapDefinition':
-        dict_key = (exe_name, class_name, window_text, check_func)
-        obj = cls.__instances.get(dict_key)
-        if not obj:
-            obj = super().__new__(cls, *dict_key)
-            cls.__instances[dict_key] = obj
-        return obj
+class KeymapDefinition():
+    def __init__(self, keymap: WindowKeymap):
+        self.__keymap = keymap
 
     def __setitem__(self, keys: str, value: KeymapValue):
         if keys.startswith('*-'):
@@ -75,32 +28,32 @@ class KeymapDefinition(dict):
             for m in ['C-', 'A-', 'S-', 'W-', 'U0-', 'U1-', 'U2-', 'U3-']:
                 self[m + explicit_keys] = value
         else:
-            super().__setitem__(KeyCondition(keys).to_keyhac(), _convert(value))
+            self.__keymap[KeyCondition(keys).to_keyhac()] = _convert(value)
 
     def __getitem__(self, keys: str) -> KeymapValue:
-        return super().__getitem__(KeyCondition(keys).to_keyhac())
+        return self.__keymap[KeyCondition(keys).to_keyhac()]
 
-    @classmethod
-    def all(cls) -> Iterable['KeymapDefinition']:
-        return (i for i in cls.__instances.values())
+    def update(self, keymap: WindowKeymap):
+        for k, v in keymap.items():
+            self[k] = v
 
 
-class KeyCondition:
+class KeyCondition(metaclass=MetaSingleton):
     def __init__(self, keys: str):
         orig_keys = keys.split('-')
         uniq_mods = list(dict.fromkeys(orig_keys[:-1]))
-        self.keys = [Key(k) for k in (*uniq_mods, orig_keys[-1])]
+        self.__keys = [Key(k) for k in (*uniq_mods, orig_keys[-1])]
 
     def to_keyhac(self) -> str:
-        return '-'.join(k.to_keyhac() for k in self.keys)
+        return '-'.join(k.to_keyhac() for k in self.__keys)
 
 
-class Key:
+class Key(metaclass=MetaSingleton):
     def __init__(self, key: str):
-        self._user = key
+        self.__key = key
 
     def to_keyhac(self) -> str:
-        return self.__class__.__lookup.get(self._user, self._user)
+        return self.__class__.__lookup.get(self.__key, self.__key)
 
     __lookup = {
         'BackSpace':            'Back',              # noqa: E241
