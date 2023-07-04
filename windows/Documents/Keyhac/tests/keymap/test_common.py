@@ -1,15 +1,9 @@
-import sys
 from typing import (
     Sequence,
 )
-from unittest.mock import Mock
-
 import pytest
 
-sys.modules['ctypes.windll'] = Mock()
-sys.modules['ctypes.WINFUNCTYPE'] = Mock()
-sys.modules['pyauto'] = Mock()
-sys.modules['keyhac'] = Mock()
+import tests.mock   # noqa: F401
 
 from extension.keymap.common import (    # noqa: E402
     KeymapValue,

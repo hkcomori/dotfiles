@@ -1,5 +1,7 @@
 import pytest   # noqa: F401
 
+import tests.mock   # noqa: F401
+
 from extension.singleton import (    # noqa: E402
     MetaSingleton,
 )
