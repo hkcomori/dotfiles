@@ -58,6 +58,10 @@ window_keymap["W-S-Down"] = "W-C-A-Down"
 # Vertical maximize window
 window_keymap["W-S-Up"] = "W-S-Up"
 
+# Disable minimize window
+window_keymap["W-C-Down"] = None
+window_keymap["W-D"] = None
+
 window_keymap["W-Home"] = "W-C-Left"
 window_keymap["W-End"] = "W-C-Right"
 window_keymap["U0-Home"] = "W-C-Left"
