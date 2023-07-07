@@ -15,9 +15,6 @@ from ctypes.wintypes import (
 import enum
 from logging import getLogger
 import re
-from typing import (
-    Sequence,
-)
 
 import pyauto
 
@@ -179,7 +176,12 @@ class Window:
         return cls(hwnd)
 
     @classmethod
-    def from_find(cls, process_name: str = '', title: str = '', class_name: str = '') -> Sequence['Window']:
+    def from_find(
+        cls,
+        process_name: str = '',
+        title: str = '',
+        class_name: str = '',
+    ) -> 'Window':
         founds = []
 
         def _callback(hwnd: HWND, lparam: LPARAM) -> bool:
@@ -197,11 +199,14 @@ class Window:
                 w_title = window.title
                 w_class = window.class_name
                 logger.debug(f'Matched windows: proc={w_proc}, title={w_title}, class={w_class}')
+                return False
             return True
 
         user32.EnumWindows(WNDENUMPROC(_callback), 0)
 
-        return founds
+        if len(founds) > 0:
+            return founds[0]
+        raise WindowNotFoundError(f'No matched: proc={process_name}, title={title}, class={class_name}')
 
     @staticmethod
     def is_visible(hwnd: HWND) -> bool:
