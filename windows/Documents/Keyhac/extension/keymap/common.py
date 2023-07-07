@@ -2,6 +2,7 @@ from collections.abc import Callable
 from functools import singledispatch
 from typing import (
     Dict,
+    Optional,
     Tuple,
     Union,
 )
@@ -14,21 +15,28 @@ from ..singleton import MetaSingleton
 
 CmdFunc = typing.Callable[[], None]
 KeymapValue = Union[str, Tuple[str, ...], CmdFunc]
-WindowKeymap = Dict[str, KeymapValue]
+WindowKeymap = Dict[str, Optional[KeymapValue]]
+KeyhacWindowKeymap = Dict[str, KeymapValue]
 CheckFunc = typing.Callable[[pyauto.Window], bool]
 
 
+def nop():
+    """Function that does nothing to assign to a key"""
+    pass
+
+
 class KeymapDefinition():
-    def __init__(self, keymap: WindowKeymap):
+    def __init__(self, keymap: KeyhacWindowKeymap):
         self.__keymap = keymap
 
-    def __setitem__(self, keys: str, value: KeymapValue):
+    def __setitem__(self, keys: str, value: Optional[KeymapValue]):
         if keys.startswith('*-'):
             explicit_keys = keys[2:]
             for m in ['C-', 'A-', 'S-', 'W-', 'U0-', 'U1-', 'U2-', 'U3-']:
                 self[m + explicit_keys] = value
         else:
-            self.__keymap[KeyCondition(keys).to_keyhac()] = _convert(value)
+            converted_value = _convert(value) if value is not None else nop
+            self.__keymap[KeyCondition(keys).to_keyhac()] = converted_value
 
     def __getitem__(self, keys: str) -> KeymapValue:
         return self.__keymap[KeyCondition(keys).to_keyhac()]

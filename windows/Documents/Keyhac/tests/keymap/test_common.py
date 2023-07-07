@@ -43,6 +43,13 @@ def test_get_set(
     assert keymap[key] == expected_value
 
 
+def test_set_none():
+    """Set function to do nothing for keys mapped to None"""
+    keymap = KeymapDefinition(dict())
+    keymap['Insert'] = None
+    assert keymap['Insert']() is None
+
+
 @pytest.mark.parametrize(('key', 'expected_key', 'value', 'expected_value'), [
     ('*-A-Tab', ('C-A-Tab', 'A-Tab', 'S-A-Tab', 'W-A-Tab', 'U0-A-Tab', 'U1-A-Tab', 'U2-A-Tab', 'U3-A-Tab'), 'A-C-WheelUp', 'A-C-(159)'),
 ])

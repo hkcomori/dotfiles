@@ -9,7 +9,7 @@ check_func = None
 
 window_keymap: WindowKeymap = dict()
 
-window_keymap["Insert"] = cmd.enum_windows
+window_keymap["Insert"] = None
 
 window_keymap["U2-Left"] = "A-Left"
 window_keymap["U2-Right"] = "A-Right"
