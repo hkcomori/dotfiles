@@ -1,4 +1,4 @@
-from .common import WindowKeymap
+from ..keymap_helper import WindowKeymap
 from .. import cmd
 
 

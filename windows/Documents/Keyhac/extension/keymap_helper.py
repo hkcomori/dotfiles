@@ -10,7 +10,7 @@ import typing
 
 import pyauto
 
-from ..singleton import MetaSingleton
+from .singleton import MetaSingleton
 
 
 CmdFunc = typing.Callable[[], None]

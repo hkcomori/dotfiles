@@ -1,6 +1,6 @@
 import keyhac
 
-from .common import (    # noqa: F401
+from ..keymap_helper import (    # noqa: F401
     KeymapDefinition,
     KeyCondition,
 )
