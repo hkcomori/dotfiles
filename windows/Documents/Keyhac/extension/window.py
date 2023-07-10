@@ -80,7 +80,9 @@ class Window:
         self._title = self._get_title()
         self._class_name = self._get_class_name()
 
-    def __eq__(self, other: 'Window') -> bool:
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            raise NotImplementedError
         return self._hwnd == other._hwnd
 
     def __str__(self) -> str:
@@ -261,7 +263,9 @@ class Thread:
     def __init__(self, thread_id: DWORD):
         self._thread_id = thread_id
 
-    def __eq__(self, other: 'Thread') -> bool:
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            raise NotImplementedError
         return self._thread_id == other._thread_id
 
     def __str__(self) -> str:
