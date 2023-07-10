@@ -15,6 +15,7 @@ from ctypes.wintypes import (
 import enum
 from logging import getLogger
 import re
+from threading import currentThread
 
 import pyauto
 
@@ -142,8 +143,12 @@ class Window:
             new_fore = self._set_foreground(old_fore)
             new_thread = new_fore._thread
 
-        user32.BringWindowToTop(self._hwnd)
-        user32.SetFocus(self._hwnd)
+        if not user32.BringWindowToTop(self._hwnd):
+            logger.error(f'BringWindowTop failure: {self._hwnd}')
+
+        with self_thread.attach(Thread.from_current()):
+            if user32.SetFocus(self._hwnd) == 0:
+                logger.error(f'SetFocus failure: {self._hwnd}')
 
         if (new_fore == self) or (new_thread == self_thread):
             logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={self}, thread={self_thread})')
@@ -270,6 +275,13 @@ class Thread:
 
     def __str__(self) -> str:
         return str(self._thread_id)
+
+    @classmethod
+    def from_current(cls) -> 'Thread':
+        thread_id = currentThread().ident
+        if thread_id is None:
+            raise RuntimeError('currentThread failure')
+        return cls(DWORD(thread_id))
 
     def attach(self, other: 'Thread') -> 'Thread.AttacheInput':
         return Thread.AttacheInput(self._thread_id, other._thread_id)
