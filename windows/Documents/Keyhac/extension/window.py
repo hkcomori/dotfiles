@@ -9,7 +9,6 @@ from ctypes.wintypes import (
     POINT,
     HWND,
     BOOL,
-    DWORD,
     LPARAM,
 )
 import enum
@@ -43,6 +42,7 @@ class HRESULT:
         return self._hresult >= 0
 
 
+kernel32 = windll.kernel32
 user32 = windll.user32
 imm32 = windll.imm32
 dwmapi = windll.dwmapi
@@ -74,7 +74,7 @@ class Window:
         self._hwnd = hwnd
         if not user32.IsWindow(self._hwnd):
             raise WindowNotFoundError(f'hwnd={self._hwnd}')
-        thread_id: DWORD = user32.GetWindowThreadProcessId(self._hwnd, 0)
+        thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, 0)
         self._thread = Thread(thread_id)
         pyauto_window = pyauto.Window.fromHWND(self._hwnd)
         self._process_name: str = pyauto_window.getProcessName()
@@ -265,7 +265,7 @@ class Cursor:
 
 
 class Thread:
-    def __init__(self, thread_id: DWORD):
+    def __init__(self, thread_id: int):
         self._thread_id = thread_id
 
     def __eq__(self, other) -> bool:
@@ -281,7 +281,7 @@ class Thread:
         thread_id = currentThread().ident
         if thread_id is None:
             raise RuntimeError('currentThread failure')
-        return cls(DWORD(thread_id))
+        return cls(thread_id)
 
     def attach(self, other: 'Thread') -> 'Thread.AttacheInput':
         return Thread.AttacheInput(self._thread_id, other._thread_id)
@@ -295,6 +295,9 @@ class Thread:
         def __enter__(self):
             if self._self_thread_id != self._other_thread_id:
                 self._attached = user32.AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
+                if not self._attached:
+                    err = kernel32.GetLastError()
+                    raise RuntimeError(f'AttachThreadInput failed {err}: self={self._self_thread_id}, other={self._other_thread_id}')
 
         def __exit__(self, exc_type, exc_value, traceback):
             if self._attached:
