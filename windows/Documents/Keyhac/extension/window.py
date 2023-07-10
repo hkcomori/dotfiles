@@ -293,7 +293,8 @@ class Thread:
             self._attached = False
 
         def __enter__(self):
-            self._attached = user32.AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
+            if self._self_thread_id != self._other_thread_id:
+                self._attached = user32.AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
 
         def __exit__(self, exc_type, exc_value, traceback):
             if self._attached:
