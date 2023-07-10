@@ -145,7 +145,6 @@ class Window(metaclass=MetaSingleton):
             new_fore = self._set_foreground(old_fore)
             new_thread = new_fore._thread
 
-
         if (new_fore == self) or (new_thread == self_thread):
             logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={new_fore}, thread={new_thread}), target=(hwnd={self}, thread={self_thread})')
         else:
