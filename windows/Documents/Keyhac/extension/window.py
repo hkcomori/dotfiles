@@ -58,6 +58,8 @@ MAX_CLASS_NAME_LENGTH = 256
 
 
 class Window(metaclass=MetaSingleton):
+    __slots__ = ['__weakref__', '_hwnd', '_thread', '_process_name', '_title', '_class_name']
+
     @enum.unique
     class Relation(enum.IntEnum):
         """
@@ -74,14 +76,6 @@ class Window(metaclass=MetaSingleton):
 
     def __init__(self, hwnd: HWND):
         self._hwnd = hwnd
-        if not user32.IsWindow(self._hwnd):
-            raise WindowNotFoundError(f'hwnd={self._hwnd}')
-        thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, 0)
-        self._thread = Thread(thread_id)
-        pyauto_window = pyauto.Window.fromHWND(self._hwnd)
-        self._process_name: str = pyauto_window.getProcessName()
-        self._title = self._get_title()
-        self._class_name = self._get_class_name()
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, self.__class__):
@@ -91,8 +85,22 @@ class Window(metaclass=MetaSingleton):
     def __str__(self) -> str:
         return str(self._hwnd)
 
+    def _get_thread_info(self):
+        thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, 0)
+        self._thread: Thread = Thread(thread_id)
+        pyauto_window = pyauto.Window.fromHWND(self._hwnd)
+        self._process_name: str = pyauto_window.getProcessName()
+
+    @property
+    def thread(self) -> 'Thread':
+        if not hasattr(self, '_thread'):
+            self._get_thread_info()
+        return self._thread
+
     @property
     def process_name(self) -> str:
+        if not hasattr(self, '_process_name'):
+            self._get_thread_info()
         return self._process_name
 
     def _get_title(self):
@@ -103,6 +111,8 @@ class Window(metaclass=MetaSingleton):
 
     @property
     def title(self) -> str:
+        if not hasattr(self, '_title'):
+            self._title: str = self._get_title()
         return self._title
 
     def _get_class_name(self) -> str:
@@ -112,6 +122,8 @@ class Window(metaclass=MetaSingleton):
 
     @property
     def class_name(self) -> str:
+        if not hasattr(self, '_class_name'):
+            self._class_name: str = self._get_class_name()
         return self._class_name
 
     def _set_foreground(self, current: 'Window') -> 'Window':
@@ -125,31 +137,28 @@ class Window(metaclass=MetaSingleton):
             if new_hwnd != current._hwnd:
                 break
         if self._hwnd == user32.GetWindow(new_hwnd, Window.Relation.OWNER):
-            return self.__class__.from_hwnd(new_hwnd)
+            return self.__class__(new_hwnd)
         raise RuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
 
     def set_foreground(self) -> 'Window':
-        self_thread = self._thread
-        old_fore = self.__class__.from_foreground()
-        old_thread = old_fore._thread
+        old = self.__class__.from_foreground()
 
         if user32.IsIconic(self._hwnd):
             SW_RESTORE = 9
             user32.ShowWindow(self._hwnd, SW_RESTORE)
 
-        if old_fore == self:
-            logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={self}, thread={self_thread}), Same hwnd')
-            return old_fore
+        if old == self:
+            logger.debug(f'Foreground: (hwnd={old}, thread={old.thread}) => (hwnd={self}, thread={self.thread}), Same hwnd')
+            return old
 
-        with self_thread.attach(old_thread):
-            new_fore = self._set_foreground(old_fore)
-            new_thread = new_fore._thread
+        with self.thread.attach(old.thread):
+            new = self._set_foreground(old)
 
-        if (new_fore == self) or (new_thread == self_thread):
-            logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={new_fore}, thread={new_thread}), target=(hwnd={self}, thread={self_thread})')
+        if (new == self) or (new.thread == self.thread):
+            logger.debug(f'Foreground: (hwnd={old}, thread={old.thread}) => (hwnd={new}, thread={new.thread}), target=(hwnd={self}, thread={self.thread})')
         else:
-            logger.error(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={new_fore}, thread={new_thread}), expected=(hwnd={self}, thread={self_thread})')
-        return new_fore
+            logger.error(f'Foreground: (hwnd={old}, thread={old.thread}) => (hwnd={new}, thread={new.thread}), expected=(hwnd={self}, thread={self.thread})')
+        return new
 
     def get_first_ancestor(self) -> 'Window':
         """
@@ -161,10 +170,10 @@ class Window(metaclass=MetaSingleton):
         parent_prev = self._hwnd
         while True:
             if (user32.GetWindowLongW(parent_prev, GWL_STYLE) & WS_CHILD) == 0:
-                return self.__class__.from_hwnd(parent_prev)
+                return self.__class__(parent_prev)
             parent = user32.GetParent(parent_prev)
             if parent == 0:
-                return self.__class__.from_hwnd(parent_prev)
+                return self.__class__(parent_prev)
             parent_prev = parent
 
     def ime_on(self):
@@ -175,6 +184,8 @@ class Window(metaclass=MetaSingleton):
 
     @classmethod
     def from_hwnd(cls, hwnd: HWND, allow_hidden: bool = False) -> 'Window':
+        if not user32.IsWindow(hwnd):
+            raise WindowNotFoundError(f'hwnd={hwnd}')
         if allow_hidden or cls.is_visible(hwnd):
             return cls(hwnd)
         raise WindowNotFoundError(f'hwnd={hwnd}')
@@ -203,10 +214,7 @@ class Window(metaclass=MetaSingleton):
         founds = []
 
         def _callback(hwnd: HWND, lparam: LPARAM) -> bool:
-            try:
-                window = Window.from_hwnd(hwnd)
-            except WindowNotFoundError:
-                return True
+            window = cls(hwnd)
             if all((
                 any((len(process_name) == 0, re.search(process_name, window.process_name, re.IGNORECASE))),
                 any((len(title) == 0, re.search(title, window.title, re.IGNORECASE))),
