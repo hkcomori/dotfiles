@@ -18,6 +18,8 @@ from threading import currentThread
 
 import pyauto
 
+from .singleton import MetaSingleton
+
 
 RETRY_COUNT = 3
 RETRY_WAIT_MS = 100
@@ -55,7 +57,7 @@ MAX_CLASS_NAME_LENGTH = 256
 """クラス名の最大長"""
 
 
-class Window:
+class Window(metaclass=MetaSingleton):
     @enum.unique
     class Relation(enum.IntEnum):
         """
@@ -242,7 +244,7 @@ class Window:
         return bool(result) and bool(cloaked)
 
 
-class IME:
+class IME(metaclass=MetaSingleton):
     @enum.unique
     class Status(enum.Enum):
         """
@@ -266,7 +268,7 @@ class IME:
         user32.SendMessage(self._hwnd, 0x283, 0x6, status.value)
 
 
-class Cursor:
+class Cursor(metaclass=MetaSingleton):
     @property
     def point(self) -> POINT:
         point = POINT()
@@ -274,7 +276,7 @@ class Cursor:
         return point
 
 
-class Thread:
+class Thread(metaclass=MetaSingleton):
     def __init__(self, thread_id: int):
         self._thread_id = thread_id
 
