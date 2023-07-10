@@ -114,12 +114,15 @@ class Window:
 
     def _set_foreground(self, current: 'Window') -> 'Window':
         user32.SetForegroundWindow(self._hwnd)
-        new_hwnd = current._hwnd
-        while new_hwnd == current._hwnd:
+        while True:
             new_hwnd: HWND = user32.GetForegroundWindow()
-        if new_hwnd == self._hwnd:
-            return self
-        if (new_hwnd != current._hwnd) and (self._hwnd == user32.GetWindow(new_hwnd, Window.Relation.OWNER)):
+            if new_hwnd == 0:
+                continue
+            if new_hwnd == self._hwnd:
+                return self
+            if new_hwnd != current._hwnd:
+                break
+        if self._hwnd == user32.GetWindow(new_hwnd, Window.Relation.OWNER):
             return self.__class__.from_hwnd(new_hwnd)
         raise RuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
 
@@ -135,26 +138,33 @@ class Window:
         if old_fore == self:
             logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={self}, thread={self_thread}), Same hwnd')
             return old_fore
-        if old_thread == self_thread:
-            logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={self}, thread={self_thread}), Same thread')
-            return old_fore
 
         with self_thread.attach(old_thread):
             new_fore = self._set_foreground(old_fore)
             new_thread = new_fore._thread
 
-        if not user32.BringWindowToTop(self._hwnd):
-            logger.error(f'BringWindowTop failure: {self._hwnd}')
-
-        with self_thread.attach(Thread.from_current()):
-            if user32.SetFocus(self._hwnd) == 0:
-                logger.error(f'SetFocus failure: {self._hwnd}')
 
         if (new_fore == self) or (new_thread == self_thread):
-            logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={self}, thread={self_thread})')
+            logger.debug(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={new_fore}, thread={new_thread}), target=(hwnd={self}, thread={self_thread})')
         else:
             logger.error(f'Foreground: (hwnd={old_fore}, thread={old_thread}) => (hwnd={new_fore}, thread={new_thread}), expected=(hwnd={self}, thread={self_thread})')
         return new_fore
+
+    def get_first_ancestor(self) -> 'Window':
+        """
+        Returns the first ancestor of self that isn't itself a child.
+        See: AutoHotkey/source/window.cpp: GetNonChildParent
+        """
+        GWL_STYLE = -16
+        WS_CHILD = 0x40000000
+        parent_prev = self._hwnd
+        while True:
+            if (user32.GetWindowLongW(parent_prev, GWL_STYLE) & WS_CHILD) == 0:
+                return self.__class__.from_hwnd(parent_prev)
+            parent = user32.GetParent(parent_prev)
+            if parent == 0:
+                return self.__class__.from_hwnd(parent_prev)
+            parent_prev = parent
 
     def ime_on(self):
         IME(self._hwnd).status = IME.Status.ON
@@ -173,7 +183,7 @@ class Window:
         hwnd: HWND = user32.WindowFromPoint(point)
         if hwnd == 0:
             raise WindowNotFoundError(f'point=({point.x}, {point.y})')
-        return cls(hwnd)
+        return cls(hwnd).get_first_ancestor()
 
     @classmethod
     def from_foreground(cls) -> 'Window':
