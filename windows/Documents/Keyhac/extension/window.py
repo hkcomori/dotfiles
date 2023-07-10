@@ -171,7 +171,7 @@ class Window:
     @classmethod
     def from_point(cls, point: POINT) -> 'Window':
         hwnd: HWND = user32.WindowFromPoint(point)
-        if not hwnd:
+        if hwnd == 0:
             raise WindowNotFoundError(f'point=({point.x}, {point.y})')
         return cls(hwnd)
 
