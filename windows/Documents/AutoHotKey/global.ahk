@@ -25,6 +25,9 @@ CapsLock:: LCtrl
 #+Down:: Send("{Blind}#^!{Down}")
 #+Right:: Send("{Blind}#^!{Right}")
 #+Up:: Send("{Blind}#+{Up}")
+; Disable minimize window
+#^Down:: Return
+#D:: Return
 ; FancyZones rotate windows in current zone
 AppsKey & PgUp:: Send("{Blind}#{PgUp}")
 AppsKey & PgDn:: Send("{Blind}#{PgDn}")
