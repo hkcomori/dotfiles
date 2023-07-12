@@ -1,9 +1,7 @@
 from .keyhac_interface import (
     KeymapInterface,
 )
-from .keymap_helper import (
-    KeymapEx,
-)
+from .keyhac_helper import KeymapEx
 from . import keymap_definitions
 
 

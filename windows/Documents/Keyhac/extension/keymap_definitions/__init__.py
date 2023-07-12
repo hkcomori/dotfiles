@@ -1,6 +1,4 @@
-from ..keymap_helper import (
-    KeymapEx,
-)
+from ..keyhac_helper import KeymapEx
 from . import (
     def_global,
 )

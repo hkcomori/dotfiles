@@ -5,7 +5,7 @@ import pytest
 
 import tests.mock   # noqa: F401
 
-from extension.keymap_helper import (    # noqa: E402
+from extension.keyhac_helper import (
     KeymapValue,
     WindowKeymapEx,
     KeyCondition,
