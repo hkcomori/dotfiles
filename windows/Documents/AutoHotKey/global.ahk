@@ -33,6 +33,7 @@ AppsKey & PgUp:: Send("{Blind}#{PgUp}")
 AppsKey & PgDn:: Send("{Blind}#{PgDn}")
 
 #z:: WinsetAlwaysOnTop(-1, "A")
+#o:: Run EnvGet("OneDrive")
 #F11::
 AppsKey & F11::
 {
