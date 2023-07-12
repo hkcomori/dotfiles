@@ -2,9 +2,7 @@ from logging import getLogger
 import os
 
 import pyauto
-from keyhac import (
-    shellExecute as _shellExecute,
-)
+import keyhac
 
 from .task import background_task
 from .window import (
@@ -19,7 +17,7 @@ logger = getLogger(__name__)
 
 @background_task
 def shellExecute(*args, **kwargs):
-    return _shellExecute(*args, **kwargs)
+    return keyhac.shellExecute(*args, **kwargs)
 
 
 def launch_or_activate(process_path: str, **kwargs: str):
