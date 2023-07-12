@@ -1,23 +1,19 @@
-from collections.abc import Callable
+import collections.abc
 from functools import singledispatch
 from typing import (
-    Dict,
+    Callable,
     Optional,
-    Tuple,
-    Union,
+    Sequence,
 )
-import typing
 
-import pyauto
 
 from .singleton import MetaSingleton
-
-
-CmdFunc = typing.Callable[[], None]
-KeymapValue = Union[str, Tuple[str, ...], CmdFunc]
-WindowKeymap = Dict[str, Optional[KeymapValue]]
-KeyhacWindowKeymap = Dict[str, KeymapValue]
-CheckFunc = typing.Callable[[pyauto.Window], bool]
+from .keyhac_interface import (
+    KeymapValue,
+    KeymapInterface,
+    CheckFunc,
+    WindowKeymapInterface,
+)
 
 
 def nop():
@@ -25,8 +21,35 @@ def nop():
     pass
 
 
-class KeymapDefinition():
-    def __init__(self, keymap: KeyhacWindowKeymap):
+class KeymapEx(KeymapInterface):
+    def __init__(self, keymap: KeymapInterface):
+        self._keymap = keymap
+
+    def defineModifier(self, src_key: str, dest_key: str):
+        converted_src_key = KeyCondition(src_key).to_keyhac()
+        return self._keymap.defineModifier(converted_src_key, dest_key)
+
+    def defineWindowKeymap(
+        self,
+        exe_name: Optional[str] = None,
+        class_name: Optional[str] = None,
+        window_text: Optional[str] = None,
+        check_func: Optional[CheckFunc] = None,
+    ):
+        return KeymapDefinition(self._keymap.defineWindowKeymap(
+            exe_name, class_name, window_text, check_func))
+
+    def sendInput_FromString(self, keys: Sequence[str]) -> Callable[[], None]:
+        def _sendInput_FromString():
+            self._keymap.beginInput()
+            for key in keys:
+                self._keymap.setInput_FromString(key)
+            self._keymap.endInput()
+        return _sendInput_FromString
+
+
+class KeymapDefinition(WindowKeymapInterface):
+    def __init__(self, keymap: WindowKeymapInterface):
         self.__keymap = keymap
 
     def __setitem__(self, keys: str, value: Optional[KeymapValue]):
@@ -40,10 +63,6 @@ class KeymapDefinition():
 
     def __getitem__(self, keys: str) -> KeymapValue:
         return self.__keymap[KeyCondition(keys).to_keyhac()]
-
-    def update(self, keymap: WindowKeymap):
-        for k, v in keymap.items():
-            self[k] = v
 
 
 class KeyCondition(metaclass=MetaSingleton):
@@ -121,5 +140,5 @@ def _convert_tuple(value: tuple) -> tuple:
 
 
 @_convert.register
-def _convert_func(value: Callable) -> Callable:
+def _convert_func(value: collections.abc.Callable) -> collections.abc.Callable:
     return value

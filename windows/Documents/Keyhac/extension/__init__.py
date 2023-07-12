@@ -1,7 +1,12 @@
-import keyhac
+from .keyhac_interface import (
+    KeymapInterface,
+)
+from .keymap_helper import (
+    KeymapEx,
+)
+from . import keymap_definitions
 
-from . import keymap
 
-
-def init(_keymap: keyhac.Keymap):
-    keymap.init(_keymap)
+def init(_keymap: KeymapInterface):
+    keymap = KeymapEx(_keymap)
+    keymap_definitions.init(keymap)
