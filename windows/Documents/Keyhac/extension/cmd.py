@@ -51,6 +51,13 @@ def launch_obsidian():
     launch_or_activate(obsidian_path)
 
 
+def open_onedrive():
+    """OneDriveフォルダを開く"""
+    logger.debug("open_onedrive")
+    onedrive_path = os.getenv("OneDrive")
+    shellExecute(None, onedrive_path)
+
+
 @background_task
 def activate_window_under_mouse_pointer():
     """マウスカーソル座標のウィンドウをアクティブにする"""

@@ -78,6 +78,8 @@ window_keymap["U0-F2"] = "VolumeMute"
 window_keymap["U0-F3"] = "VolumeDown"
 window_keymap["U0-F4"] = "VolumeUp"
 
+window_keymap["W-O"] = cmd.open_onedrive
+
 window_keymap["W-F11"] = cmd.launch_obsidian
 window_keymap["U0-F11"] = cmd.launch_obsidian
 window_keymap["W-F12"] = cmd.launch_calc
