@@ -58,6 +58,11 @@ def open_onedrive():
     shellExecute(None, onedrive_path)
 
 
+def toggle_always_on_top():
+    """アクティブウィンドウを常に最前面に配置する設定をトグルする"""
+    pass
+
+
 @background_task
 def activate_window_under_mouse_pointer():
     """マウスカーソル座標のウィンドウをアクティブにする"""
