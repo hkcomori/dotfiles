@@ -7,7 +7,7 @@ import tests.mock   # noqa: F401
 
 from extension.keymap_helper import (    # noqa: E402
     KeymapValue,
-    KeymapDefinition,
+    WindowKeymapEx,
     KeyCondition,
 )
 
@@ -37,7 +37,7 @@ def test_get_set(
     key: str, expected_key: str,
     value: KeymapValue, expected_value: KeymapValue
 ):
-    keymap = KeymapDefinition(dict())
+    keymap = WindowKeymapEx(dict())
     keymap[key] = value
     assert keymap[key] == expected_value
     assert keymap[key] == expected_value
@@ -45,7 +45,7 @@ def test_get_set(
 
 def test_set_none():
     """Set function to do nothing for keys mapped to None"""
-    keymap = KeymapDefinition(dict())
+    keymap = WindowKeymapEx(dict())
     keymap['Insert'] = None
     assert keymap['Insert']() is None
 
@@ -57,7 +57,7 @@ def test_wildcard_keymap(
     key: str, expected_key: Sequence[str],
     value: KeymapValue, expected_value: KeymapValue
 ):
-    keymap = KeymapDefinition(dict())
+    keymap = WindowKeymapEx(dict())
     keymap[key] = value
     for k in expected_key:
         assert keymap[k] == expected_value

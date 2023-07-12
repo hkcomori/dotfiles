@@ -36,7 +36,7 @@ class KeymapEx(KeymapInterface):
         window_text: Optional[str] = None,
         check_func: Optional[CheckFunc] = None,
     ):
-        return KeymapDefinition(self._keymap.defineWindowKeymap(
+        return WindowKeymapEx(self._keymap.defineWindowKeymap(
             exe_name, class_name, window_text, check_func))
 
     def sendInput_FromString(self, keys: Sequence[str]) -> Callable[[], None]:
@@ -48,7 +48,7 @@ class KeymapEx(KeymapInterface):
         return _sendInput_FromString
 
 
-class KeymapDefinition(WindowKeymapInterface):
+class WindowKeymapEx(WindowKeymapInterface):
     def __init__(self, keymap: WindowKeymapInterface):
         self.__keymap = keymap
 
