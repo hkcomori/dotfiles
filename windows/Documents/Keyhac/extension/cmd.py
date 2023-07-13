@@ -15,6 +15,9 @@ from .window import (
 logger = getLogger(__name__)
 
 
+OBSIDIAN_PATH = f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe'
+
+
 @background_task
 def shellExecute(*args, **kwargs):
     return keyhac.shellExecute(*args, **kwargs)
@@ -45,10 +48,8 @@ def launch_calc():
 
 def launch_obsidian():
     """Obsidianを起動またはアクティブ化する"""
-    logger.debug("launch_obsidian")
-    userprofile = os.getenv("USERPROFILE")
-    obsidian_path = f'{userprofile}/AppData/Local/Obsidian/Obsidian.exe'
-    launch_or_activate(obsidian_path)
+    logger.debug(f'launch_obsidian: {OBSIDIAN_PATH}')
+    launch_or_activate(OBSIDIAN_PATH)
 
 
 def open_onedrive():
