@@ -5,6 +5,7 @@ import pyauto
 import keyhac
 
 from .task import background_task
+from .keyhac_helper import KeymapEx
 from .window import (
     WindowNotFoundError,
     Cursor,
@@ -19,6 +20,14 @@ OBSIDIAN_PATH = f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe
 DOCUMENTS_PATH = os.popen(
     'powershell.exe -Command "([Environment])::GetFolderPath("""MyDocuments""")"'
 ).read().rstrip('\n').replace(os.sep, '/')
+
+
+keymap: KeymapEx = None
+
+
+def init(_keymap: KeymapEx):
+    global keymap
+    keymap = _keymap
 
 
 @background_task
@@ -79,6 +88,19 @@ def activate_window_under_mouse_pointer():
     cursor = Cursor()
     target_window = Window.from_point(cursor.point)
     target_window.set_foreground()
+
+
+def send_under_mouse_pointer(*keys: str):
+    """マウスカーソル座標のウィンドウにキー入力する"""
+    _send_input = keymap.sendInput_FromString(keys)
+
+    @background_task
+    def _send_under_mouse_pointer():
+        cursor = Cursor()
+        target_window = Window.from_point(cursor.point)
+        target_window.set_foreground()
+        _send_input()
+    return _send_under_mouse_pointer
 
 
 def wheel_right():

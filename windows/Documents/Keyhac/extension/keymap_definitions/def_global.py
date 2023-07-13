@@ -7,7 +7,7 @@ def init(keymap: KeymapEx):
 
     window_keymap["Insert"] = None
 
-    window_keymap["W-Insert"] = keymap.sendInput_FromString(("C-A", "C-C"))
+    window_keymap["W-Insert"] = cmd.send_under_mouse_pointer("C-A", "C-C")
 
     window_keymap["U2-Left"] = "A-Left"
     window_keymap["U2-Right"] = "A-Right"
