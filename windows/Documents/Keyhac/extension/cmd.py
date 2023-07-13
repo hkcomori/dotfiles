@@ -16,6 +16,9 @@ logger = getLogger(__name__)
 
 
 OBSIDIAN_PATH = f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe'
+DOCUMENTS_PATH = os.popen(
+    'powershell.exe -Command "([Environment])::GetFolderPath("""MyDocuments""")"'
+).read().rstrip('\n').replace(os.sep, '/')
 
 
 @background_task
@@ -50,6 +53,12 @@ def launch_obsidian():
     """Obsidianを起動またはアクティブ化する"""
     logger.debug(f'launch_obsidian: {OBSIDIAN_PATH}')
     launch_or_activate(OBSIDIAN_PATH)
+
+
+def open_documents():
+    """Documentsフォルダを開く"""
+    logger.debug(f'open_documents: {DOCUMENTS_PATH}')
+    shellExecute(None, DOCUMENTS_PATH)
 
 
 def open_onedrive():

@@ -58,7 +58,6 @@ def init(keymap: KeymapEx):
 
     # Disable minimize window
     window_keymap["W-C-Down"] = None
-    window_keymap["W-D"] = None
 
     window_keymap["W-Home"] = "W-C-Left"
     window_keymap["W-End"] = "W-C-Right"
@@ -77,6 +76,7 @@ def init(keymap: KeymapEx):
     window_keymap["U0-F4"] = "VolumeUp"
 
     window_keymap["W-Z"] = cmd.toggle_always_on_top
+    window_keymap["W-D"] = cmd.open_documents
     window_keymap["W-O"] = cmd.open_onedrive
 
     window_keymap["W-F11"] = cmd.launch_obsidian
