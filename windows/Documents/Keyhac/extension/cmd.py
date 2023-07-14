@@ -146,10 +146,14 @@ def wheel_left():
 
 def ime_on():
     logger.debug("ime_on")
+    wnd = Window.from_foreground()
+    wnd.ime_on()
 
 
 def ime_off():
     logger.debug("ime_off")
+    wnd = Window.from_foreground()
+    wnd.ime_off()
 
 
 def ime_toggle():

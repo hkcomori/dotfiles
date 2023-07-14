@@ -177,10 +177,12 @@ class Window(metaclass=MetaSingleton):
             parent_prev = parent
 
     def ime_on(self):
-        IME(self._hwnd).status = IME.Status.ON
+        ime = IME(self._hwnd)
+        ime.status = IME.Status.ON
 
     def ime_off(self):
-        IME(self._hwnd).status = IME.Status.OFF
+        ime = IME(self._hwnd)
+        ime.status = IME.Status.OFF
 
     @classmethod
     def from_hwnd(cls, hwnd: HWND, allow_hidden: bool = False) -> 'Window':
@@ -267,12 +269,12 @@ class IME(metaclass=MetaSingleton):
 
     @property
     def status(self) -> 'IME.Status':
-        result = user32.SendMessage(self._hwnd, 0x283, 0x5, 0x00)
+        result = user32.SendMessageW(self._hwnd, 0x283, 0x5, 0x00)
         return IME.Status(result)
 
     @status.setter
     def status(self, status: 'IME.Status'):
-        user32.SendMessage(self._hwnd, 0x283, 0x6, status.value)
+        user32.SendMessageW(self._hwnd, 0x283, 0x6, status.value)
 
 
 class Cursor(metaclass=MetaSingleton):
