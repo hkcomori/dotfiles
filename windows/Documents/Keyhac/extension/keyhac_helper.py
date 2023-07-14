@@ -58,6 +58,9 @@ class KeymapEx(KeymapInterface):
     def _updateFocusWindow(self):
         self._keymap._updateFocusWindow()
 
+    def _onKeyDown(self, vk: int):
+        self._keymap._onKeyDown(vk)
+
     def beginInput(self) -> None:
         self._keymap.beginInput()
 
