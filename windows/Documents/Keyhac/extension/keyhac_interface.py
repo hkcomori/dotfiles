@@ -58,6 +58,14 @@ class KeymapInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def setTimer(self, func: Callable[[], None], sec: int):
+        raise NotImplementedError
+
+    @abstractmethod
+    def _updateFocusWindow(self):
+        raise NotImplementedError
+
+    @abstractmethod
     def beginInput(self) -> None:
         raise NotImplementedError
 

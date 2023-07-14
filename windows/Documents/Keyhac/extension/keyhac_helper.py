@@ -6,6 +6,7 @@ from typing import (
     Sequence,
 )
 
+import keyhac_hook
 
 from .singleton import MetaSingleton
 from .keyhac_interface import (
@@ -25,6 +26,18 @@ class KeymapEx(KeymapInterface):
     def __init__(self, keymap: KeymapInterface):
         self._keymap = keymap
 
+        self.__add_hook_mousedown()
+
+    def __add_hook_mousedown(self):
+        """Add hook to detect change window focus by mouse buttons"""
+        orig_hook = keyhac_hook.hook.mousedown
+
+        def _new_hook(x, y, vk):
+            orig_hook(x, y, vk)
+            self.setTimer(self._updateFocusWindow, 0)
+
+        keyhac_hook.hook.mousedown = _new_hook
+
     def defineModifier(self, src_key: str, dest_key: str):
         converted_src_key = KeyCondition(src_key).to_keyhac()
         return self._keymap.defineModifier(converted_src_key, dest_key)
@@ -38,6 +51,12 @@ class KeymapEx(KeymapInterface):
     ):
         return WindowKeymapEx(self._keymap.defineWindowKeymap(
             exe_name, class_name, window_text, check_func))
+
+    def setTimer(self, func: Callable[[], None], sec: int):
+        self._keymap.setTimer(func, sec)
+
+    def _updateFocusWindow(self):
+        self._keymap._updateFocusWindow()
 
     def beginInput(self) -> None:
         self._keymap.beginInput()
