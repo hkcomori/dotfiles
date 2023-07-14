@@ -126,6 +126,11 @@ class Window(metaclass=MetaSingleton):
             self._class_name: str = self._get_class_name()
         return self._class_name
 
+    def close(self):
+        logger.debug(f'Close: (hwnd={self._hwnd}, title={self.title})')
+        WM_CLOSE = 0x0010
+        user32.PostMessageW(self._hwnd, WM_CLOSE, 0, 0)
+
     def _set_foreground(self, current: 'Window') -> 'Window':
         user32.SetForegroundWindow(self._hwnd)
         while True:
