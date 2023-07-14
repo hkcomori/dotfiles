@@ -177,10 +177,12 @@ class Window(metaclass=MetaSingleton):
             parent_prev = parent
 
     def ime_on(self):
+        logger.debug(f'ime_on: (hwnd={self._hwnd}, title={self.title})')
         ime = IME(self._hwnd)
         ime.status = IME.Status.ON
 
     def ime_off(self):
+        logger.debug(f'ime_off: (hwnd={self._hwnd}, title={self.title})')
         ime = IME(self._hwnd)
         ime.status = IME.Status.OFF
 
@@ -204,6 +206,15 @@ class Window(metaclass=MetaSingleton):
         hwnd: HWND = user32.GetForegroundWindow()
         if hwnd == 0:
             raise WindowNotFoundError('No foreground window')
+        return cls(hwnd)
+
+    @classmethod
+    def from_focus(cls) -> 'Window':
+        wnd = cls.from_foreground()
+        with wnd.thread.attach(Thread.from_current()):
+            hwnd: HWND = user32.GetFocus()
+        if hwnd == 0:
+            raise WindowNotFoundError('No focus window')
         return cls(hwnd)
 
     @classmethod
