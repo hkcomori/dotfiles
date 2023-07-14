@@ -3,6 +3,13 @@ from .. import cmd
 
 
 def init(keymap: KeymapEx):
+    explorer = keymap.defineWindowKeymap(
+        exe_name='explorer.exe',
+        class_name='DirectUIHWND',
+    )
+    # explorer['F19'] = cmd.send_under_mouse_pointer('C-W')
+    explorer['F19'] = cmd.close_window_under_mouse_pointer
+
     explorer_location = keymap.defineWindowKeymap(
         exe_name='explorer.exe',
         class_name='Edit',

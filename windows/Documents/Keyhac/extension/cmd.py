@@ -136,6 +136,15 @@ def send_under_mouse_pointer(*keys: str):
     return _send_under_mouse_pointer
 
 
+@background_task
+def close_window_under_mouse_pointer():
+    """マウスカーソル座標のウィンドウを閉じる"""
+    cursor = Cursor()
+    target_window = Window.from_point(cursor.point)
+    target_window.set_foreground()
+    target_window.close()
+
+
 def wheel_right():
     logger.debug("wheel_right")
 
