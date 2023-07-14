@@ -64,6 +64,14 @@ class WindowKeymapEx(WindowKeymapInterface):
     def __getitem__(self, keys: str) -> KeymapValue:
         return self.__keymap[KeyCondition(keys).to_keyhac()]
 
+    @property
+    def applying_func(self):
+        return self.__keymap.applying_func
+
+    @applying_func.setter
+    def applying_func(self, callback: Callable[[], None]):
+        self.__keymap.applying_func = callback
+
 
 class KeyCondition(metaclass=MetaSingleton):
     def __init__(self, keys: str):

@@ -24,6 +24,15 @@ class WindowKeymapInterface(metaclass=ABCMeta):
     def __getitem__(self, keys: str) -> KeymapValue:
         raise NotImplementedError
 
+    @property
+    @abstractmethod
+    def applying_func(self):
+        raise NotImplementedError
+
+    @applying_func.setter
+    def applying_func(self, callback: Callable[[], None]):
+        raise NotImplementedError
+
 
 class WindowInterface(metaclass=ABCMeta):
     pass
