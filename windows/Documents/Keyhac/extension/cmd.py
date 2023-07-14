@@ -1,5 +1,9 @@
+import enum
 from logging import getLogger
 import os
+from typing import (
+    Optional,
+)
 
 import pyauto
 import keyhac
@@ -30,9 +34,35 @@ def init(_keymap: KeymapEx):
     keymap = _keymap
 
 
+class Verb(enum.Enum):
+    """ShellExecute: 実行する操作"""
+    OPEN = 'open'
+    """ファイルを開く、またはプログラムを起動する"""
+    EDIT = 'edit'
+    """ファイルを編集する"""
+    PROPERTIES = 'properties'
+    """ファイルのプロパティを表示する"""
+
+
+class SwMode(enum.Enum):
+    """ShellExecute: ウィンドウ表示モード"""
+    NORMAL = 'normal'
+    """通常状態"""
+    MAXIMIZED = 'maximized'
+    """最大化状態"""
+    MINIMIZED = 'minimized'
+    """最小化状態"""
+
+
 @background_task
-def shellExecute(*args, **kwargs):
-    return keyhac.shellExecute(*args, **kwargs)
+def open(
+    file: str,
+    param: Optional[str] = None,
+    directory: Optional[str] = None,
+    swmode: SwMode = SwMode.NORMAL,
+):
+    verb = Verb.OPEN
+    return pyauto.shellExecute(verb.value, file, param, directory, swmode.value)
 
 
 def launch_or_activate(process_path: str, **kwargs: str):
@@ -42,7 +72,7 @@ def launch_or_activate(process_path: str, **kwargs: str):
     try:
         window = Window.from_find(**find_kwargs)
     except WindowNotFoundError:
-        shellExecute(None, process_path)
+        open(process_path)
     else:
         window.set_foreground()
 
@@ -67,14 +97,16 @@ def launch_obsidian():
 def open_documents():
     """Documentsフォルダを開く"""
     logger.debug(f'open_documents: {DOCUMENTS_PATH}')
-    shellExecute(None, DOCUMENTS_PATH)
+    open(DOCUMENTS_PATH)
 
 
 def open_onedrive():
     """OneDriveフォルダを開く"""
     logger.debug("open_onedrive")
     onedrive_path = os.getenv("OneDrive")
-    shellExecute(None, onedrive_path)
+    if onedrive_path is None:
+        raise RuntimeError('Env:OneDrive not found')
+    open(onedrive_path)
 
 
 def toggle_always_on_top():
