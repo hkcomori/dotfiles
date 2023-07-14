@@ -39,12 +39,21 @@ class KeymapEx(KeymapInterface):
         return WindowKeymapEx(self._keymap.defineWindowKeymap(
             exe_name, class_name, window_text, check_func))
 
+    def beginInput(self) -> None:
+        self._keymap.beginInput()
+
+    def setInput_FromString(self, s: str) -> None:
+        self._keymap.setInput_FromString(s)
+
+    def endInput(self) -> None:
+        self._keymap.endInput()
+
     def sendInput_FromString(self, keys: Sequence[str]) -> Callable[[], None]:
         def _sendInput_FromString():
-            self._keymap.beginInput()
+            self.beginInput()
             for key in keys:
-                self._keymap.setInput_FromString(key)
-            self._keymap.endInput()
+                self.setInput_FromString(key)
+            self.endInput()
         return _sendInput_FromString
 
 

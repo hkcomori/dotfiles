@@ -57,11 +57,14 @@ class KeymapInterface(metaclass=ABCMeta):
     ) -> WindowKeymapInterface:
         raise NotImplementedError
 
+    @abstractmethod
     def beginInput(self) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def setInput_FromString(self, s: str) -> None:
         raise NotImplementedError
 
+    @abstractmethod
     def endInput(self) -> None:
         raise NotImplementedError
