@@ -61,6 +61,7 @@ def open(
     directory: Optional[str] = None,
     swmode: SwMode = SwMode.NORMAL,
 ):
+    """ファイルを開く、またはプログラムを起動する"""
     verb = Verb.OPEN
     return pyauto.shellExecute(verb.value, file, param, directory, swmode.value)
 
