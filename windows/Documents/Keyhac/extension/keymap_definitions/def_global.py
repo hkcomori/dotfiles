@@ -9,6 +9,8 @@ def init(keymap: KeymapEx):
 
     global_keymap["W-Insert"] = cmd.send_under_mouse_pointer("C-A", "C-C")
 
+    global_keymap["BackSlash"] = "S-BackSlash"
+
     global_keymap["U2-Left"] = "A-Left"
     global_keymap["U2-Right"] = "A-Right"
     global_keymap["U2-Up"] = "A-Up"
