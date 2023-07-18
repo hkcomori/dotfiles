@@ -2,6 +2,7 @@ from ..keyhac_helper import KeymapEx
 from . import (
     def_global,
     def_windows,
+    def_browser,
 )
 
 
@@ -14,5 +15,6 @@ def init(keymap: KeymapEx):
     for m in (
         def_global,
         def_windows,
+        def_browser,
     ):
         m.init(keymap)
