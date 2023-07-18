@@ -232,7 +232,10 @@ class Window(metaclass=MetaSingleton):
         founds = []
 
         def _callback(hwnd: HWND, lparam: LPARAM) -> bool:
-            window = cls(hwnd)
+            try:
+                window = cls.from_hwnd(hwnd)
+            except WindowNotFoundError:
+                return True
             if all((
                 any((len(process_name) == 0, re.search(process_name, window.process_name, re.IGNORECASE))),
                 any((len(title) == 0, re.search(title, window.title, re.IGNORECASE))),
