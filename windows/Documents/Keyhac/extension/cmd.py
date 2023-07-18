@@ -115,7 +115,6 @@ def toggle_always_on_top():
     pass
 
 
-@background_task
 def activate_window_under_mouse_pointer():
     """マウスカーソル座標のウィンドウをアクティブにする"""
     cursor = Cursor()
@@ -127,7 +126,6 @@ def send_under_mouse_pointer(*keys: str):
     """マウスカーソル座標のウィンドウにキー入力する"""
     _send_input = keymap.sendInput_FromString(keys)
 
-    @background_task
     def _send_under_mouse_pointer():
         cursor = Cursor()
         target_window = Window.from_point(cursor.point)
@@ -136,7 +134,6 @@ def send_under_mouse_pointer(*keys: str):
     return _send_under_mouse_pointer
 
 
-@background_task
 def close_window_under_mouse_pointer():
     """マウスカーソル座標のウィンドウを閉じる"""
     cursor = Cursor()
