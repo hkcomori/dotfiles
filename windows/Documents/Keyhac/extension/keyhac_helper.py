@@ -104,6 +104,34 @@ class WindowKeymapEx(WindowKeymapInterface):
         self.__keymap.applying_func = callback
 
 
+class WindowKeymapGroup(WindowKeymapInterface):
+    """Groups WindowKeymapInterface objects"""
+    def __init__(self, *keymaps: WindowKeymapInterface):
+        self.__keymaps = keymaps
+
+    def __setitem__(self, keys: str, value: Optional[KeymapValue]):
+        for keymap in self.__keymaps:
+            keymap[keys] = value
+
+    def __getitem__(self, keys: str) -> KeymapValue:
+        values = [keymap[keys] for keymap in self.__keymaps]
+        if values.count(values[0]) != len(values):
+            raise ValueError('Grouped value mismatch')
+        return values[0]
+
+    @property
+    def applying_func(self):
+        funcs = [keymap.applying_func for keymap in self.__keymaps]
+        if funcs.count(funcs[0]) != len(funcs):
+            raise ValueError('Grouped applying_func mismatch')
+        return funcs[0]
+
+    @applying_func.setter
+    def applying_func(self, callback: Callable[[], None]):
+        for keymap in self.__keymaps:
+            keymap.applying_func = callback
+
+
 class KeyCondition(metaclass=MetaSingleton):
     def __init__(self, keys: str):
         orig_keys = keys.split('-')

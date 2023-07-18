@@ -1,15 +1,30 @@
 from typing import (
+    Callable,
     Sequence,
 )
 import pytest
 
 import tests.mock   # noqa: F401
 
+from extension.keyhac_interface import (
+    WindowKeymapInterface,
+)
 from extension.keyhac_helper import (
     KeymapValue,
     WindowKeymapEx,
+    WindowKeymapGroup,
     KeyCondition,
 )
+
+
+class MyWindowKeymap(dict, WindowKeymapInterface):
+    @property
+    def applying_func(self):
+        return self._applying_func
+
+    @applying_func.setter
+    def applying_func(self, callback: Callable[[], None]):
+        self._applying_func = callback
 
 
 def nop():
@@ -37,7 +52,7 @@ def test_get_set(
     key: str, expected_key: str,
     value: KeymapValue, expected_value: KeymapValue
 ):
-    keymap = WindowKeymapEx(dict())
+    keymap = WindowKeymapEx(MyWindowKeymap())
     keymap[key] = value
     assert keymap[key] == expected_value
     assert keymap[key] == expected_value
@@ -45,7 +60,7 @@ def test_get_set(
 
 def test_set_none():
     """Set function to do nothing for keys mapped to None"""
-    keymap = WindowKeymapEx(dict())
+    keymap = WindowKeymapEx(MyWindowKeymap())
     keymap['Insert'] = None
     assert keymap['Insert']() is None
 
@@ -57,7 +72,25 @@ def test_wildcard_keymap(
     key: str, expected_key: Sequence[str],
     value: KeymapValue, expected_value: KeymapValue
 ):
-    keymap = WindowKeymapEx(dict())
+    keymap = WindowKeymapEx(MyWindowKeymap())
     keymap[key] = value
     for k in expected_key:
         assert keymap[k] == expected_value
+
+
+def test_grouping():
+    keymap1 = WindowKeymapEx(MyWindowKeymap())
+    keymap2 = WindowKeymapEx(MyWindowKeymap())
+    keymap1['Insert'] = 'Insert'
+    keymap2['Insert'] = 'Enter'
+    assert keymap1['Insert'] == 'Insert'
+    assert keymap2['Insert'] == 'Enter'
+    group = WindowKeymapGroup(keymap1, keymap2)
+    group['Tab'] = 'Pause'
+    assert group['Tab'] == 'Pause'
+    assert keymap1['Tab'] == 'Pause'
+    assert keymap2['Tab'] == 'Pause'
+    group.applying_func = nop
+    assert group.applying_func == nop
+    assert keymap1.applying_func == nop
+    assert keymap2.applying_func == nop
