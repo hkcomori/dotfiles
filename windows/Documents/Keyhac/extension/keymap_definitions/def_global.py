@@ -11,6 +11,10 @@ def init(keymap: KeymapEx):
 
     global_keymap["BackSlash"] = "S-BackSlash"
 
+    global_keymap["O-Kana"] = cmd.ime_on
+    global_keymap["O-Henkan"] = cmd.ime_on
+    global_keymap["O-Muhenkan"] = cmd.ime_off
+
     global_keymap["U2-Left"] = "A-Left"
     global_keymap["U2-Right"] = "A-Right"
     global_keymap["U2-Up"] = "A-Up"
