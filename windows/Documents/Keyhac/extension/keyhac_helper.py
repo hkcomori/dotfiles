@@ -74,7 +74,7 @@ class KeymapEx(KeymapInterface):
         def _sendInput_FromString():
             self.beginInput()
             for key in keys:
-                self.setInput_FromString(key)
+                self.setInput_FromString(KeyCondition(key).to_keyhac())
             self.endInput()
         return _sendInput_FromString
 
