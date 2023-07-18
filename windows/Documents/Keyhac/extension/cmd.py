@@ -2,13 +2,18 @@ import enum
 from logging import getLogger
 import os
 from typing import (
+    List,
     Optional,
+    Union,
 )
 
 import pyauto
 import keyhac
 
 from .task import background_task
+from .keyhac_interface import (
+    CmdFunc,
+)
 from .keyhac_helper import KeymapEx
 from .window import (
     WindowNotFoundError,
@@ -64,6 +69,27 @@ def open(
     """ファイルを開く、またはプログラムを起動する"""
     verb = Verb.OPEN
     return pyauto.shellExecute(verb.value, file, param, directory, swmode.value)
+
+
+def make(*args: Union[str, CmdFunc]) -> CmdFunc:
+    """キー入力、または関数を順番に実行する関数を生成する"""
+    func_seq: List[CmdFunc] = []
+    input_seq: List[str] = []
+    for i in args:
+        if isinstance(i, str):
+            input_seq.append(i)
+        else:
+            if len(input_seq) > 0:
+                send_func = keymap.sendInput_FromString(input_seq)
+                func_seq.append(send_func)
+                input_seq = []
+            func_seq.append(i)
+
+    def _new_func():
+        for i in func_seq:
+            i()
+
+    return _new_func
 
 
 def launch_or_activate(process_path: str, **kwargs: str):
