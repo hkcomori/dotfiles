@@ -28,6 +28,7 @@ class KeymapEx(KeymapInterface):
         self._keymap = keymap
 
         self.__add_hook_mousedown()
+        self.__add_hook_mouseup()
 
     def __add_hook_mousedown(self):
         """Add hook to detect change window focus by mouse buttons"""
@@ -36,8 +37,19 @@ class KeymapEx(KeymapInterface):
         def _new_hook(x, y, vk):
             orig_hook(x, y, vk)
             self.setTimer(self._updateFocusWindow, 0)
+            self._onKeyDown(vk)
 
         keyhac_hook.hook.mousedown = _new_hook
+
+    def __add_hook_mouseup(self):
+        """Add hook to input vk by mouse buttons"""
+        orig_hook = keyhac_hook.hook.mouseup
+
+        def _new_hook(x, y, vk):
+            orig_hook(x, y, vk)
+            self._onKeyUp(vk)
+
+        keyhac_hook.hook.mouseup = _new_hook
 
     def defineModifier(self, src_key: str, dest_key: str):
         converted_src_key = KeyCondition(src_key).to_keyhac()
@@ -61,6 +73,9 @@ class KeymapEx(KeymapInterface):
 
     def _onKeyDown(self, vk: int):
         self._keymap._onKeyDown(vk)
+
+    def _onKeyUp(self, vk: int):
+        self._keymap._onKeyUp(vk)
 
     def beginInput(self) -> None:
         self._keymap.beginInput()

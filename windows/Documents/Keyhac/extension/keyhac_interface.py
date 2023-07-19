@@ -66,6 +66,10 @@ class KeymapInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def _onKeyUp(self, vk: int):
+        raise NotImplementedError
+
+    @abstractmethod
     def setTimer(self, func: Callable[[], None], sec: int):
         raise NotImplementedError
 
