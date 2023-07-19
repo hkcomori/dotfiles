@@ -24,8 +24,8 @@ def init(keymap: KeymapEx):
     browser['C-S-P'] = cmd.make('C-S-P', cmd.ime_off)
 
     # Switch tabs by back/forward buttons
-    browser['XButton1'] = cmd.send_under_mouse_pointer('C-S-Tab')
-    browser['XButton2'] = cmd.send_under_mouse_pointer('C-Tab')
+    browser['C-XButton1'] = cmd.send_under_mouse_pointer('C-S-Tab')
+    browser['C-XButton2'] = cmd.send_under_mouse_pointer('C-Tab')
 
     # Close/open/reopen tabs by pressing both back and forward
     browser['F19'] = cmd.send_under_mouse_pointer('C-W')
