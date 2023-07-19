@@ -7,6 +7,7 @@ import pytest
 import tests.mock   # noqa: F401
 
 from extension.keyhac_interface import (
+    WindowInterface,
     WindowKeymapInterface,
 )
 from extension.keyhac_helper import (
@@ -17,7 +18,14 @@ from extension.keyhac_helper import (
 )
 
 
+class MyWindow(WindowInterface):
+    pass
+
+
 class MyWindowKeymap(dict, WindowKeymapInterface):
+    def __init__(self):
+        self.check_result = True
+
     @property
     def applying_func(self):
         return self._applying_func
@@ -25,6 +33,9 @@ class MyWindowKeymap(dict, WindowKeymapInterface):
     @applying_func.setter
     def applying_func(self, callback: Callable[[], None]):
         self._applying_func = callback
+
+    def check(self, wnd: WindowInterface) -> bool:
+        return self.check_result
 
 
 def nop():
@@ -94,3 +105,25 @@ def test_grouping():
     assert group.applying_func == nop
     assert keymap1.applying_func == nop
     assert keymap2.applying_func == nop
+
+
+def test_check():
+    mock_keymap1 = MyWindowKeymap()
+    keymap1 = WindowKeymapEx(mock_keymap1)
+    mock_keymap1.check_result = True
+    assert keymap1.check(MyWindow()) is True
+    mock_keymap1.check_result = False
+    assert keymap1.check(MyWindow()) is not True
+
+    mock_keymap2 = MyWindowKeymap()
+    keymap2 = WindowKeymapEx(mock_keymap2)
+
+    group = WindowKeymapGroup(keymap1, keymap2)
+    (mock_keymap1.check_result, mock_keymap2.check_result) = (False, False)
+    assert group.check(MyWindow()) is not True
+    (mock_keymap1.check_result, mock_keymap2.check_result) = (False, True)
+    assert group.check(MyWindow()) is not True
+    (mock_keymap1.check_result, mock_keymap2.check_result) = (True, False)
+    assert group.check(MyWindow()) is not True
+    (mock_keymap1.check_result, mock_keymap2.check_result) = (True, True)
+    assert group.check(MyWindow()) is True

@@ -11,6 +11,7 @@ import keyhac_hook
 from .singleton import MetaSingleton
 from .keyhac_interface import (
     KeymapValue,
+    WindowInterface,
     KeymapInterface,
     CheckFunc,
     WindowKeymapInterface,
@@ -103,6 +104,9 @@ class WindowKeymapEx(WindowKeymapInterface):
     def applying_func(self, callback: Callable[[], None]):
         self.__keymap.applying_func = callback
 
+    def check(self, wnd: WindowInterface) -> bool:
+        return self.__keymap.check(wnd)
+
 
 class WindowKeymapGroup(WindowKeymapInterface):
     """Groups WindowKeymapInterface objects"""
@@ -130,6 +134,9 @@ class WindowKeymapGroup(WindowKeymapInterface):
     def applying_func(self, callback: Callable[[], None]):
         for keymap in self.__keymaps:
             keymap.applying_func = callback
+
+    def check(self, wnd: WindowInterface) -> bool:
+        return all((k.check(wnd) for k in self.__keymaps))
 
 
 class KeyCondition(metaclass=MetaSingleton):

@@ -15,6 +15,10 @@ CmdFunc = Callable[[], None]
 KeymapValue = Union[str, Sequence[str], CmdFunc]
 
 
+class WindowInterface(metaclass=ABCMeta):
+    pass
+
+
 class WindowKeymapInterface(metaclass=ABCMeta):
     """keyhac.WindowKeymap"""
 
@@ -33,9 +37,9 @@ class WindowKeymapInterface(metaclass=ABCMeta):
     def applying_func(self, callback: Callable[[], None]):
         raise NotImplementedError
 
-
-class WindowInterface(metaclass=ABCMeta):
-    pass
+    @abstractmethod
+    def check(self, wnd: WindowInterface) -> bool:
+        raise NotImplementedError
 
 
 CheckFunc = Callable[[WindowInterface], bool]
