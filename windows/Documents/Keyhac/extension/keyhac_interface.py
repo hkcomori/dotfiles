@@ -62,11 +62,11 @@ class KeymapInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def _onKeyDown(self, vk: int):
+    def _hook_onKeyDown(self, vk: int, scan: int) -> bool:
         raise NotImplementedError
 
     @abstractmethod
-    def _onKeyUp(self, vk: int):
+    def _hook_onKeyUp(self, vk: int, scan: int) -> bool:
         raise NotImplementedError
 
     @abstractmethod

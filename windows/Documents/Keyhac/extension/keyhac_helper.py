@@ -37,7 +37,8 @@ class KeymapEx(KeymapInterface):
         def _new_hook(x, y, vk):
             orig_hook(x, y, vk)
             self.setTimer(self._updateFocusWindow, 0)
-            self._onKeyDown(vk)
+            scan = 0x00
+            return self._hook_onKeyDown(vk, scan)
 
         keyhac_hook.hook.mousedown = _new_hook
 
@@ -47,7 +48,8 @@ class KeymapEx(KeymapInterface):
 
         def _new_hook(x, y, vk):
             orig_hook(x, y, vk)
-            self._onKeyUp(vk)
+            scan = 0x00
+            return self._hook_onKeyUp(vk, scan)
 
         keyhac_hook.hook.mouseup = _new_hook
 
@@ -71,11 +73,11 @@ class KeymapEx(KeymapInterface):
     def _updateFocusWindow(self):
         self._keymap._updateFocusWindow()
 
-    def _onKeyDown(self, vk: int):
-        self._keymap._onKeyDown(vk)
+    def _hook_onKeyDown(self, vk: int, scan: int):
+        self._keymap._hook_onKeyDown(vk, scan)
 
-    def _onKeyUp(self, vk: int):
-        self._keymap._onKeyUp(vk)
+    def _hook_onKeyUp(self, vk: int, scan: int):
+        self._keymap._hook_onKeyUp(vk, scan)
 
     def beginInput(self) -> None:
         self._keymap.beginInput()
