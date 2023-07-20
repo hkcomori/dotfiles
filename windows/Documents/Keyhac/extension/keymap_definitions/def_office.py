@@ -9,8 +9,8 @@ def init(keymap: KeymapEx):
     word = keymap.defineWindowKeymap(exe_name='WORD.EXE')
     excel = keymap.defineWindowKeymap(exe_name='EXCEL.EXE')
     powerpoint = keymap.defineWindowKeymap(exe_name='POWERPNT.EXE')
-    outlook_main = keymap.defineWindowKeymap(exe_name='OUTLOOK.EXE', window_text='* - Outlook')
-    outlook_child = keymap.defineWindowKeymap(exe_name='OUTLOOK.EXE', check_func=lambda wnd: not outlook_main.check(wnd))
+    outlook_main = keymap.defineWindowKeymap(exe_name='OUTLOOK.EXE', class_name='OutlookGrid')
+    outlook_child = keymap.defineWindowKeymap(exe_name='OUTLOOK.EXE', class_name='_WwG')
     office = WindowKeymapGroup(     # noqa: F841
         word,
         excel,
