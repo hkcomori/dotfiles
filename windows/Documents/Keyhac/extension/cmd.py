@@ -80,7 +80,7 @@ def make(*args: Union[str, CmdFunc]) -> CmdFunc:
             input_seq.append(i)
         else:
             if len(input_seq) > 0:
-                send_func = keymap.sendInput_FromString(input_seq)
+                send_func = keymap.InputKeyCommand(*input_seq)
                 func_seq.append(send_func)
                 input_seq = []
             func_seq.append(i)
@@ -150,7 +150,7 @@ def activate_window_under_mouse_pointer():
 
 def send_under_mouse_pointer(*keys: str):
     """マウスカーソル座標のウィンドウにキー入力する"""
-    _send_input = keymap.sendInput_FromString(keys)
+    _send_input = keymap.InputKeyCommand(*keys)
 
     def _send_under_mouse_pointer():
         cursor = Cursor()

@@ -79,22 +79,9 @@ class KeymapEx(KeymapInterface):
     def _hook_onKeyUp(self, vk: int, scan: int):
         self._keymap._hook_onKeyUp(vk, scan)
 
-    def beginInput(self) -> None:
-        self._keymap.beginInput()
-
-    def setInput_FromString(self, s: str) -> None:
-        self._keymap.setInput_FromString(s)
-
-    def endInput(self) -> None:
-        self._keymap.endInput()
-
-    def sendInput_FromString(self, keys: Sequence[str]) -> Callable[[], None]:
-        def _sendInput_FromString():
-            self.beginInput()
-            for key in keys:
-                self.setInput_FromString(KeyCondition(key).to_keyhac())
-            self.endInput()
-        return _sendInput_FromString
+    def InputKeyCommand(self, *keys: str) -> Callable[[], None]:
+        conv_keys = tuple(KeyCondition(key).to_keyhac() for key in keys)
+        return self._keymap.InputKeyCommand(*conv_keys)
 
 
 class WindowKeymapEx(WindowKeymapInterface):

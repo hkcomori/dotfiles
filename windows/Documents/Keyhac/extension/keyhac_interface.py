@@ -78,13 +78,5 @@ class KeymapInterface(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def beginInput(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def setInput_FromString(self, s: str) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def endInput(self) -> None:
+    def InputKeyCommand(self, *keys: str) -> Callable[[], None]:
         raise NotImplementedError
