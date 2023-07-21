@@ -1,4 +1,5 @@
 import collections.abc
+import enum
 from functools import singledispatch
 from typing import (
     Callable,
@@ -21,6 +22,26 @@ from .keyhac_interface import (
 def nop():
     """Function that does nothing to assign to a key"""
     pass
+
+
+class Verb(enum.Enum):
+    """ShellExecute: 実行する操作"""
+    OPEN = 'open'
+    """ファイルを開く、またはプログラムを起動する"""
+    EDIT = 'edit'
+    """ファイルを編集する"""
+    PROPERTIES = 'properties'
+    """ファイルのプロパティを表示する"""
+
+
+class SwMode(enum.Enum):
+    """ShellExecute: ウィンドウ表示モード"""
+    NORMAL = 'normal'
+    """通常状態"""
+    MAXIMIZED = 'maximized'
+    """最大化状態"""
+    MINIMIZED = 'minimized'
+    """最小化状態"""
 
 
 class KeymapEx(KeymapInterface):
@@ -82,6 +103,22 @@ class KeymapEx(KeymapInterface):
     def InputKeyCommand(self, *keys: str) -> Callable[[], None]:
         conv_keys = tuple(KeyCondition(key).to_keyhac() for key in keys)
         return self._keymap.InputKeyCommand(*conv_keys)
+
+    def ShellExecuteCommand(
+        self,
+        verb: str,
+        filename: str,
+        param: Optional[str],
+        directory: Optional[str],
+        swmode: Optional[str] = None
+    ):
+        # Validate arguments
+        Verb(verb)
+        if swmode is not None:
+            SwMode(swmode)
+
+        return self._keymap.ShellExecuteCommand(
+            verb, filename, param, directory, swmode)
 
 
 class WindowKeymapEx(WindowKeymapInterface):

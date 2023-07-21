@@ -80,3 +80,14 @@ class KeymapInterface(metaclass=ABCMeta):
     @abstractmethod
     def InputKeyCommand(self, *keys: str) -> Callable[[], None]:
         raise NotImplementedError
+
+    @abstractmethod
+    def ShellExecuteCommand(
+        self,
+        verb: str,
+        filename: str,
+        param: Optional[str],
+        directory: Optional[str],
+        swmode: Optional[str] = None
+    ):
+        raise NotImplementedError

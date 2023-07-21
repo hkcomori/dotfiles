@@ -1,4 +1,3 @@
-import enum
 from logging import getLogger
 import os
 from typing import (
@@ -7,10 +6,6 @@ from typing import (
     Union,
 )
 
-import pyauto
-import keyhac
-
-from .task import background_task
 from .keyhac_interface import (
     CmdFunc,
 )
@@ -39,36 +34,15 @@ def init(_keymap: KeymapEx):
     keymap = _keymap
 
 
-class Verb(enum.Enum):
-    """ShellExecute: 実行する操作"""
-    OPEN = 'open'
-    """ファイルを開く、またはプログラムを起動する"""
-    EDIT = 'edit'
-    """ファイルを編集する"""
-    PROPERTIES = 'properties'
-    """ファイルのプロパティを表示する"""
-
-
-class SwMode(enum.Enum):
-    """ShellExecute: ウィンドウ表示モード"""
-    NORMAL = 'normal'
-    """通常状態"""
-    MAXIMIZED = 'maximized'
-    """最大化状態"""
-    MINIMIZED = 'minimized'
-    """最小化状態"""
-
-
-@background_task
 def open(
     file: str,
     param: Optional[str] = None,
     directory: Optional[str] = None,
-    swmode: SwMode = SwMode.NORMAL,
+    swmode: Optional[str] = 'normal',
 ):
     """ファイルを開く、またはプログラムを起動する"""
-    verb = Verb.OPEN
-    return pyauto.shellExecute(verb.value, file, param, directory, swmode.value)
+    verb = 'open'
+    keymap.ShellExecuteCommand(verb, file, param, directory, swmode)()
 
 
 def make(*args: Union[str, CmdFunc]) -> CmdFunc:
