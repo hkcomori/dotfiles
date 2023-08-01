@@ -31,4 +31,4 @@ def init(keymap: KeymapEx):
     outlook_child['F19'] = cmd.send_under_mouse_pointer('A-F4')
 
     outlook_child['XButton1'] = cmd.send_under_mouse_pointer('C-S-Comma')
-    outlook_child['XButton1'] = cmd.send_under_mouse_pointer('C-S-Period')
+    outlook_child['XButton2'] = cmd.send_under_mouse_pointer('C-S-Period')
