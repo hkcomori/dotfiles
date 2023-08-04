@@ -65,16 +65,21 @@ def init(keymap: KeymapEx):
     # Disable minimize window
     global_keymap["W-C-Down"] = None
 
+    # Switch virtual desktop
     global_keymap["W-Home"] = "W-C-Left"
     global_keymap["W-End"] = "W-C-Right"
     global_keymap["U0-Home"] = "W-C-Left"
     global_keymap["U0-End"] = "W-C-Right"
     global_keymap["U0-XButton1"] = "W-C-Left"
     global_keymap["U0-XButton2"] = "W-C-Right"
-    global_keymap["U0-WheelUp"] = "W-PageUp"
-    global_keymap["U0-WheelDown"] = "W-PageDown"
+
+    # Switch window in current zone
     global_keymap["U0-PageUp"] = "W-PageUp"
     global_keymap["U0-PageDown"] = "W-PageDown"
+
+    # Fast scroll
+    global_keymap["U0-WheelUp"] = "WheelUp", "WheelUp", "WheelUp", "WheelUp", "WheelUp"
+    global_keymap["U0-WheelDown"] = "WheelDown", "WheelDown", "WheelDown", "WheelDown", "WheelDown"
 
     global_keymap["U0-F1"] = "MediaPlay"
     global_keymap["U0-F2"] = "VolumeMute"

@@ -51,10 +51,8 @@ def init(keymap: KeymapEx):
     vscode['C-WheelUp'] = 'C-PageUp'
     vscode['C-WheelDown'] = 'C-PageDown'
 
-    vscode['A-WheelUp'] = 'A-WheelUp'
     vscode['U2-WheelUp'] = 'A-WheelUp'
     vscode['U0-WheelUp'] = 'A-WheelUp'
 
-    vscode['A-WheelDown'] = 'A-WheelDown'
     vscode['U2-WheelDown'] = 'A-WheelDown'
     vscode['U0-WheelDown'] = 'A-WheelDown'
