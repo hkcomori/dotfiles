@@ -1,6 +1,6 @@
-from ctypes import (    # noqa: F401
-    windll,
-    WINFUNCTYPE,
+from ctypes import (    # type: ignore  # noqa: F401
+    windll,             # type: ignore
+    WINFUNCTYPE,        # type: ignore
     pointer,
     sizeof,
     create_unicode_buffer,

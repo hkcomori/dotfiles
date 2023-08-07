@@ -10,6 +10,10 @@ from .share import (
 )
 
 
+class WindowNotFoundError(ValueError):
+    pass
+
+
 class Window(Entity):
     def __init__(self, window_id: int):
         self._window_id = window_id

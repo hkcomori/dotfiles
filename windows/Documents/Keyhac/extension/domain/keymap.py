@@ -1,40 +1,112 @@
 from abc import abstractmethod
+from typing import (
+    Callable,
+)
+
+from extension.vendor.injector import (
+    inject,
+)
 
 from .share import (
     ValueObject,
     Repository,
 )
-from .key import KeyInput
-from .action import Action
 
 
-class Keymap(ValueObject):
+class Action(ValueObject):
     """
-    Keymap
+    Action
     """
-    def __init__(self, keys: str, action: Action):
-        self.keys = tuple(KeyInput.create(k) for k in keys.split(' '))
-        self.action = action
+
+    def __init__(self, value: Callable[[], None]) -> None:
+        self._value = value
+
+    def __add__(self, other) -> 'Action':
+        """Group two Actions"""
+        if not isinstance(other, Action):
+            raise TypeError(f'other: expect to Action, but {type(other).__name__}')
+        return ActionSequence(self, other)
+
+    def __mul__(self, times) -> 'Action':
+        """Repeat Actions"""
+        if not isinstance(times, int):
+            raise TypeError(f'times: expect to int, but {type(times).__name__}')
+        return ActionSequence(*([self] * times))
+
+    @ValueObject.final
+    def __call__(self) -> None:
+        """Performs action"""
+        self.perform()
+
+    def perform(self) -> None:
+        """Performs action"""
+        self._value()
+
+
+class ActionSequence(Action):
+    """
+    Provide an interface to group multiple Actions and operate them all at once
+    """
+
+    def __init__(self, *actions: 'Action'):
+        self._actions = actions
+
+    @Action.final
+    def __hash__(self) -> int:
+        return hash(self._actions)
+
+    @Action.final
+    def __add__(self, other) -> 'Action':
+        """Group two Actions"""
+        if isinstance(other, ActionSequence):
+            return ActionSequence(*self._actions, *other._actions)
+        if isinstance(other, Action):
+            return ActionSequence(*self._actions, other)
+        raise TypeError(f'other: expect to Action, but {type(other).__name__}')
+
+    @Action.final
+    def __mul__(self, times) -> 'Action':
+        """Repeat Actions"""
+        if not isinstance(times, int):
+            raise TypeError(f'times: expect to int, but {type(times).__name__}')
+        return ActionSequence(*([*self._actions] * times))
+
+    @Action.final
+    def perform(self):
+        """Performs grouped Actions in order"""
+        for action in self._actions:
+            action.perform()
 
 
 class KeymapRegistry(Repository):
     @abstractmethod
-    def assign(self, *keymap: Keymap):
+    def __setitem__(self, keys: str, action: Action):
         raise NotImplementedError
 
+    @property
     @abstractmethod
-    def registerOnActive(self, action: Action):
+    def applying_func(self):
+        raise NotImplementedError
+
+    @applying_func.setter
+    def applying_func(self, action: Action):
         raise NotImplementedError
 
 
 class KeymapRegistryGroup(KeymapRegistry):
-    def __init__(self, *repos: KeymapRegistry):
-        self._repos = repos
+    @inject
+    def __init__(self, *regs: KeymapRegistry):
+        self._regs = regs
 
-    def assign(self, *keymap: Keymap):
-        for repo in self._repos:
-            repo.assign(*keymap)
+    def __setitem__(self, keys: str, action: Action):
+        for reg in self._regs:
+            reg[keys] = action
 
-    def registerOnActive(self, action: Action):
-        for repo in self._repos:
-            repo.registerOnActive(action)
+    @property
+    def applying_func(self):
+        return self._regs[0].applying_func
+
+    @applying_func.setter
+    def applying_func(self, action: Action):
+        for reg in self._regs:
+            reg.applying_func = action
