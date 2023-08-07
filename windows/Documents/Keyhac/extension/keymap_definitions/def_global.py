@@ -77,10 +77,6 @@ def init(keymap: KeymapEx):
     global_keymap["U0-PageUp"] = "W-PageUp"
     global_keymap["U0-PageDown"] = "W-PageDown"
 
-    # Fast scroll
-    global_keymap["U0-WheelUp"] = "WheelUp", "WheelUp", "WheelUp", "WheelUp", "WheelUp"
-    global_keymap["U0-WheelDown"] = "WheelDown", "WheelDown", "WheelDown", "WheelDown", "WheelDown"
-
     global_keymap["U0-F1"] = "MediaPlay"
     global_keymap["U0-F2"] = "VolumeMute"
     global_keymap["U0-F3"] = "VolumeDown"

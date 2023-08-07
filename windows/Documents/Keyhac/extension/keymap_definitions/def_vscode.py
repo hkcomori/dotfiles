@@ -50,9 +50,3 @@ def init(keymap: KeymapEx):
     # Switch tabs by wheel
     vscode['C-WheelUp'] = 'C-PageUp'
     vscode['C-WheelDown'] = 'C-PageDown'
-
-    vscode['U2-WheelUp'] = 'A-WheelUp'
-    vscode['U0-WheelUp'] = 'A-WheelUp'
-
-    vscode['U2-WheelDown'] = 'A-WheelDown'
-    vscode['U0-WheelDown'] = 'A-WheelDown'
