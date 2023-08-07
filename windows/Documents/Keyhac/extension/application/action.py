@@ -15,8 +15,8 @@ from extension.domain.window import (
     WindowFactory,
     WindowNotFoundError,
 )
-from extension.infrastructure.win32.desktop import (
-    DesktopFactoryWin32,
+from extension.domain.desktop import (
+    DesktopFactory,
 )
 from extension.keyhac_helper import (
     KeymapEx,
@@ -25,9 +25,15 @@ from extension.keyhac_helper import (
 
 class ActionService():
     @inject
-    def __init__(self, keymap: KeymapEx, window_factory: WindowFactory):
+    def __init__(
+        self,
+        keymap: KeymapEx,
+        window_factory: WindowFactory,
+        desktop_factory: DesktopFactory,
+    ):
         self._keymap = keymap
         self._window_factory = window_factory
+        self._desktop_factory = desktop_factory
 
     def _open_file(
         self,
@@ -108,5 +114,5 @@ class ActionService():
     def turn_off_monitor(self) -> Action:
         """モニターの電源を切る"""
         return Action(
-            DesktopFactoryWin32().from_active().lock_on
+            self._desktop_factory.from_active().lock_on
         )
