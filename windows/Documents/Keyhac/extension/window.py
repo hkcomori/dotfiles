@@ -9,7 +9,9 @@ from ctypes.wintypes import (
     POINT,
     HWND,
     BOOL,
+    DWORD,
     LPARAM,
+    LPDWORD,
 )
 import enum
 from logging import getLogger
@@ -86,7 +88,8 @@ class Window(metaclass=MetaSingleton):
         return str(self._hwnd)
 
     def _get_thread_info(self):
-        thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, 0)
+        d = DWORD()
+        thread_id: int = user32.GetWindowThreadProcessId(self._hwnd, pointer(d))
         self._thread: Thread = Thread(thread_id)
         pyauto_window = pyauto.Window.fromHWND(self._hwnd)
         self._process_name: str = pyauto_window.getProcessName()
