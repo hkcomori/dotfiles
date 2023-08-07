@@ -89,5 +89,5 @@ class KeymapInterface(metaclass=ABCMeta):
         param: Optional[str],
         directory: Optional[str],
         swmode: Optional[str] = None
-    ):
+    ) -> Callable[[], None]:
         raise NotImplementedError
