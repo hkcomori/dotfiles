@@ -17,6 +17,7 @@ jobs:
           ref: ${{ github.ref }}
       - name: Setup
         run: |
+          sudo apt-get update
           ./setup
       - name: Test
         run: |
