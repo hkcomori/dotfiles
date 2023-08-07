@@ -7,16 +7,20 @@ from extension.vendor.injector import (
     inject,
 )
 
-from extension.domain.keymap import (
+from .keymap import (
     Action,
 )
-from extension.domain.window import (
+from .window import (
     WindowQuery,
     WindowFactory,
     WindowNotFoundError,
 )
-from extension.domain.desktop import (
+from .desktop import (
     DesktopFactory,
+)
+from .shell import (
+    Command,
+    ShellService,
 )
 from extension.keyhac_helper import (
     KeymapEx,
@@ -30,22 +34,12 @@ class ActionService():
         keymap: KeymapEx,
         window_factory: WindowFactory,
         desktop_factory: DesktopFactory,
+        shell_service: ShellService,
     ):
         self._keymap = keymap
         self._window_factory = window_factory
         self._desktop_factory = desktop_factory
-
-    def _open_file(
-        self,
-        file: str,
-        param: str = '',
-        directory: str = '',
-        swmode: str = 'normal',
-    ):
-        """ファイルを開く、またはプログラムを起動する"""
-        verb = 'open'
-        return self._keymap.ShellExecuteCommand(
-            verb, file, param, directory, swmode)
+        self._shell_service = shell_service
 
     def _launch_or_activate(
         self,
@@ -58,32 +52,29 @@ class ActionService():
         try:
             window = self._window_factory.from_find(_query)
         except WindowNotFoundError:
-            return self._open_file(process_path)
+            return self._shell_service.run(Command(process_path))
         else:
             return window.activate
 
     @property
     def open_onedrive(self) -> Action:
         """OneDriveフォルダを開く"""
-        return Action(self._open_file(
-            f'{os.getenv("OneDrive")}',
-        ))
+        file = f'{os.getenv("OneDrive")}'
+        return Action(self._shell_service.run(Command(file)))
 
     @property
     def open_documents(self) -> Action:
         """Documentsフォルダを開く"""
-        return Action(self._open_file(
-            os.popen(
-                'powershell.exe -Command "([Environment])::GetFolderPath("""MyDocuments""")"'
-            ).read().rstrip('\n').replace(os.sep, '/'),
-        ))
+        file = os.popen(
+            'powershell.exe -Command "([Environment])::GetFolderPath("""MyDocuments""")"'
+        ).read().rstrip('\n').replace(os.sep, '/')
+        return Action(self._shell_service.run(Command(file)))
 
     @property
     def launch_obsidian(self) -> Action:
         """Obsidianを開く"""
-        return Action(self._open_file(
-            f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe',
-        ))
+        file = f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe'
+        return Action(self._shell_service.run(Command(file)))
 
     @property
     def launch_calc(self) -> Action:
