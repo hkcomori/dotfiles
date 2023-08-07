@@ -63,17 +63,17 @@ class WindowQuery(ValueObject):
 
 class WindowFactory(Factory):
     @abstractmethod
-    def from_id(cls, window_id: int) -> 'Window':
+    def from_id(self, window_id: int) -> 'Window':
         raise NotImplementedError
 
     @abstractmethod
-    def from_active(cls) -> 'Window':
+    def from_active(self) -> 'Window':
         raise NotImplementedError
 
     @abstractmethod
-    def from_pointer(cls) -> 'Window':
+    def from_pointer(self) -> 'Window':
         raise NotImplementedError
 
     @abstractmethod
-    def from_find(cls, query: WindowQuery) -> 'Window':
+    def from_find(self, query: WindowQuery) -> 'Window':
         raise NotImplementedError
