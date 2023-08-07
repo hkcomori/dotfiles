@@ -1,9 +1,7 @@
+import enum
 from ctypes import (    # type: ignore  # noqa: F401
     windll,             # type: ignore
     WINFUNCTYPE,        # type: ignore
-    pointer,
-    sizeof,
-    create_unicode_buffer,
 )
 from ctypes.wintypes import (
     HWND,
@@ -31,6 +29,53 @@ class HRESULT:
 
 
 WNDENUMPROC = WINFUNCTYPE(BOOL, HWND, LPARAM)
+
+
+class GetWindowCmd(enum.IntEnum):
+    """
+    指定したウィンドウと、ハンドルを取得するウィンドウの間のリレーションシップ。
+
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindow
+    """
+
+    GW_CHILD = 5
+    GW_ENABLEDPOPUP = 6
+    GW_HWNDFIRST = 0
+    GW_HWNDLAST = 1
+    GW_HWNDNEXT = 2
+    GW_HWNDPREV = 3
+    GW_OWNER = 4
+
+
+class ShowWindowCmd(enum.IntEnum):
+    """
+    ウィンドウの表示方法を制御します。
+
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
+    """
+
+    SW_HIDE = 0
+    SW_SHOWNORMAL = 1
+    SW_NORMAL = 1
+    SW_SHOWMINIMIZED = 2
+    SW_SHOWMAXIMIZED = 3
+    SW_MAXIMIZE = 3
+    SW_SHOWNOACTIVATE = 4
+    SW_SHOW = 5
+    SW_MINIMIZE = 6
+    SW_SHOWMINNOACTIVE = 7
+    SW_SHOWNA = 8
+    SW_RESTORE = 9
+    SW_SHOWDEFAULT = 10
+    SW_FORCEMINIMIZE = 11
+
+
+GetLastError = windll.kernel32.GetLastError
+"""
+https://learn.microsoft.com/ja-jp/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror
+"""
+GetLastError.argtypes = tuple()
+GetLastError.restype = DWORD
 
 
 SendMessage = windll.user32.SendMessageW
@@ -121,6 +166,14 @@ IsIconic.argtypes = (HWND,)
 IsIconic.restype = BOOL
 
 
+IsWindow = windll.user32.IsWindow
+"""
+https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-iswindow
+"""
+IsWindow.argtypes = (HWND,)
+IsWindow.restype = BOOL
+
+
 ShowWindow = windll.user32.ShowWindow
 """
 https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
@@ -191,3 +244,11 @@ https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-attachthr
 """
 AttachThreadInput.argtypes = (DWORD, DWORD, BOOL,)
 AttachThreadInput.restype = BOOL
+
+
+ImmGetDefaultIMEWnd = windll.imm32.ImmGetDefaultIMEWnd
+"""
+https://learn.microsoft.com/ja-jp/windows/win32/api/imm/nf-imm-immgetdefaultimewnd
+"""
+ImmGetDefaultIMEWnd.argtypes = (HWND,)
+ImmGetDefaultIMEWnd.restype = HWND

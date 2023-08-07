@@ -1,7 +1,4 @@
 from abc import abstractmethod
-from typing import (
-    Optional,
-)
 
 from .share import (
     Entity,
@@ -14,32 +11,24 @@ class WindowNotFoundError(ValueError):
     pass
 
 
-class Window(Entity):
-    def __init__(self, window_id: int):
-        self._window_id = window_id
+class WindowId(ValueObject):
+    def __init__(self, value: int):
+        self._value = value
 
     def __hash__(self) -> int:
-        return hash(self._window_id)
+        return hash(self.value)
 
-    @abstractmethod
-    def activate(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def ime_on(self) -> None:
-        raise NotImplementedError
-
-    @abstractmethod
-    def ime_off(self) -> None:
-        raise NotImplementedError
+    @property
+    def value(self) -> int:
+        return self._value
 
 
 class WindowQuery(ValueObject):
     def __init__(
         self,
-        exe_name: Optional[str] = None,
-        class_name: Optional[str] = None,
-        window_text: Optional[str] = None,
+        exe_name: str = '',
+        class_name: str = '',
+        window_text: str = '',
     ):
         self._exe_name = exe_name
         self._class_name = class_name
@@ -63,6 +52,30 @@ class WindowQuery(ValueObject):
     @property
     def window_text(self):
         return self._window_text
+
+
+class Window(Entity):
+    def __init__(self, window_id: WindowId):
+        self._window_id = window_id
+
+    def __hash__(self) -> int:
+        return hash(self._window_id)
+
+    @property
+    def window_id(self) -> WindowId:
+        return self._window_id
+
+    @abstractmethod
+    def activate(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def ime_on(self) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
+    def ime_off(self) -> None:
+        raise NotImplementedError
 
 
 class WindowFactory(Factory):
