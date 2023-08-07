@@ -15,6 +15,9 @@ from .window import (
     Cursor,
     Window,
 )
+from .infrastructure.win32.desktop import (
+    DesktopFactoryWin32,
+)
 
 
 logger = getLogger(__name__)
@@ -162,3 +165,8 @@ def ime_off():
 
 def ime_toggle():
     logger.debug("ime_toggle")
+
+
+def turn_off_monitor():
+    desktop = DesktopFactoryWin32().from_active()
+    desktop.lock_on()
