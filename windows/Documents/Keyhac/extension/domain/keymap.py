@@ -79,6 +79,11 @@ class ActionSequence(Action):
 
 
 class KeymapRegistry(Repository):
+    def __add__(self, other) -> 'KeymapRegistry':
+        if not isinstance(other, KeymapRegistry):
+            raise TypeError(f'other: expect to KeymapRegistry, but {type(other).__name__}')
+        return KeymapRegistryGroup(self, other)
+
     @abstractmethod
     def __setitem__(self, keys: str, action: Action):
         raise NotImplementedError
@@ -94,9 +99,15 @@ class KeymapRegistry(Repository):
 
 
 class KeymapRegistryGroup(KeymapRegistry):
-    @inject
     def __init__(self, *regs: KeymapRegistry):
         self._regs = regs
+
+    def __add__(self, other) -> 'KeymapRegistry':
+        if isinstance(other, KeymapRegistryGroup):
+            return KeymapRegistryGroup(*self._regs, *other._regs)
+        if isinstance(other, KeymapRegistry):
+            return KeymapRegistryGroup(*self._regs, other)
+        raise TypeError(f'other: expect to KeymapRegistry, but {type(other).__name__}')
 
     def __setitem__(self, keys: str, action: Action):
         for reg in self._regs:
