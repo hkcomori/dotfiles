@@ -10,6 +10,7 @@ from extension.vendor.injector import (
 
 from .share import (
     ValueObject,
+    Service,
 )
 from .exception import (
     DomainTypeError,
@@ -93,7 +94,7 @@ class ActionSequence(Action):
             action.perform()
 
 
-class ActionService():
+class ActionService(Service):
     @inject
     def __init__(
         self,
