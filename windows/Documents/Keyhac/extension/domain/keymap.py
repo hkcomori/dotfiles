@@ -2,12 +2,16 @@ from abc import abstractmethod
 
 from .share import (
     Repository,
+    Service,
 )
 from .exception import (
     DomainTypeError,
 )
 from .action import (
     Action,
+)
+from .window import (
+    WindowQuery,
 )
 
 
@@ -54,3 +58,9 @@ class KeymapRegistryGroup(KeymapRegistry):
     def applying_func(self, action: Action):
         for reg in self._regs:
             reg.applying_func = action
+
+
+class KeymapService(Service):
+    @abstractmethod
+    def from_query(self, query: WindowQuery) -> KeymapRegistry:
+        raise NotImplementedError
