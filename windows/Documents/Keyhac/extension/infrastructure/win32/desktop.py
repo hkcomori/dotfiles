@@ -1,4 +1,4 @@
-from ...domain.desktop import (
+from extension.domain.desktop import (
     Desktop,
     DesktopFactory,
 )

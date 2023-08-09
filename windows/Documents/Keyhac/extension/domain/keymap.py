@@ -3,10 +3,6 @@ from typing import (
     Callable,
 )
 
-from extension.vendor.injector import (
-    inject,
-)
-
 from .share import (
     ValueObject,
     Repository,

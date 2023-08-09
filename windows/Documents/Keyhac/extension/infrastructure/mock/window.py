@@ -6,6 +6,7 @@ from extension.domain.exception import (
     DomainRuntimeError,
 )
 from extension.domain.window import (
+    WindowId,
     WindowQuery,
     Window,
     WindowFactory,
@@ -17,7 +18,7 @@ class WindowMock(Window):
 
     def __init__(
         self,
-        window_id: int,
+        window_id: WindowId,
         exe_name: str = '',
         class_name: str = '',
         window_text: str = '',
@@ -49,11 +50,11 @@ class WindowMock(Window):
     @classmethod
     def init_dummy(cls):
         cls.window_list = [
-            WindowMock(1, 'hoge1.exe', 'hoge_class', 'hoge1', True),
-            WindowMock(2, 'hoge2.exe', 'hoge_class', 'hoge2'),
-            WindowMock(3, 'hoge3.exe', 'hoge_class', 'hoge3'),
-            WindowMock(4, 'fuga1.exe', 'fuga_class', 'fuga1'),
-            WindowMock(5, 'fuga2.exe', 'fuga_class', 'fuga2'),
+            WindowMock(WindowId(1), 'hoge1.exe', 'hoge_class', 'hoge1', True),
+            WindowMock(WindowId(2), 'hoge2.exe', 'hoge_class', 'hoge2'),
+            WindowMock(WindowId(3), 'hoge3.exe', 'hoge_class', 'hoge3'),
+            WindowMock(WindowId(4), 'fuga1.exe', 'fuga_class', 'fuga1'),
+            WindowMock(WindowId(5), 'fuga2.exe', 'fuga_class', 'fuga2'),
         ]
 
 
@@ -61,8 +62,8 @@ class WindowFactoryMock(WindowFactory):
     def __init__(self):
         WindowMock.init_dummy()
 
-    def from_id(self, window_id: int) -> 'Window':
-        return WindowMock.window_list[window_id - 1]
+    def from_id(self, window_id: WindowId) -> 'Window':
+        return next((i for i in WindowMock.window_list if i._window_id == window_id))
 
     def from_active(self) -> 'Window':
         for w in WindowMock.window_list:
