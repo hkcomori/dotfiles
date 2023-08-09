@@ -7,10 +7,6 @@ from .share import (
 )
 
 
-class WindowNotFoundError(ValueError):
-    pass
-
-
 class WindowId(ValueObject):
     def __init__(self, value: int):
         self._value = value

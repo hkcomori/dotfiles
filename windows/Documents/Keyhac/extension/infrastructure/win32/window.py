@@ -15,12 +15,15 @@ import re
 
 import pyauto   # type: ignore
 
+from extension.domain.exception import (
+    DomainRuntimeError,
+    WindowNotFoundError,
+)
 from extension.domain.window import (
     WindowId,
     WindowQuery,
     Window,
     WindowFactory,
-    WindowNotFoundError,
 )
 from .share import (
     WNDENUMPROC,
@@ -138,7 +141,7 @@ class WindowWin32(Window):
                 break
         if self._hwnd == GetWindow(new_hwnd, GetWindowCmd.GW_OWNER):
             return self.__class__(WindowId(new_hwnd.value))
-        raise RuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
+        raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
 
 
 class WindowFactoryWin32(WindowFactory):
@@ -275,7 +278,7 @@ class Thread():
     def from_current(cls) -> 'Thread':
         thread_id = currentThread().ident
         if thread_id is None:
-            raise RuntimeError('currentThread failure')
+            raise DomainRuntimeError('currentThread failure')
         return cls(thread_id)
 
     def attach(self, other: 'Thread') -> 'Thread.AttacheInput':
@@ -292,7 +295,7 @@ class Thread():
                 self._attached = AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
                 if not self._attached:
                     err = GetLastError()
-                    raise RuntimeError(f'AttachThreadInput failed {err}: self={self._self_thread_id}, other={self._other_thread_id}')
+                    raise DomainRuntimeError(f'AttachThreadInput failed {err}: self={self._self_thread_id}, other={self._other_thread_id}')
 
         def __exit__(self, exc_type, exc_value, traceback):
             if self._attached:

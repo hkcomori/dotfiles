@@ -10,10 +10,12 @@ from extension.vendor.injector import (
 from .keymap import (
     Action,
 )
+from .exception import (
+    WindowNotFoundError,
+)
 from .window import (
     WindowQuery,
     WindowFactory,
-    WindowNotFoundError,
 )
 from .desktop import (
     DesktopFactory,

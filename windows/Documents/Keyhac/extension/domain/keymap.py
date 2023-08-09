@@ -11,6 +11,9 @@ from .share import (
     ValueObject,
     Repository,
 )
+from .exception import (
+    DomainTypeError,
+)
 
 
 class Action(ValueObject):
@@ -24,13 +27,13 @@ class Action(ValueObject):
     def __add__(self, other) -> 'Action':
         """Group two Actions"""
         if not isinstance(other, Action):
-            raise TypeError(f'other: expect to Action, but {type(other).__name__}')
+            raise DomainTypeError(other, Action)
         return ActionSequence(self, other)
 
     def __mul__(self, times) -> 'Action':
         """Repeat Actions"""
         if not isinstance(times, int):
-            raise TypeError(f'times: expect to int, but {type(times).__name__}')
+            raise DomainTypeError(times, int)
         return ActionSequence(*([self] * times))
 
     @ValueObject.final
@@ -62,13 +65,13 @@ class ActionSequence(Action):
             return ActionSequence(*self._actions, *other._actions)
         if isinstance(other, Action):
             return ActionSequence(*self._actions, other)
-        raise TypeError(f'other: expect to Action, but {type(other).__name__}')
+        raise DomainTypeError(other, Action)
 
     @Action.final
     def __mul__(self, times) -> 'Action':
         """Repeat Actions"""
         if not isinstance(times, int):
-            raise TypeError(f'times: expect to int, but {type(times).__name__}')
+            raise DomainTypeError(times, int)
         return ActionSequence(*([*self._actions] * times))
 
     @Action.final
@@ -81,7 +84,7 @@ class ActionSequence(Action):
 class KeymapRegistry(Repository):
     def __add__(self, other) -> 'KeymapRegistry':
         if not isinstance(other, KeymapRegistry):
-            raise TypeError(f'other: expect to KeymapRegistry, but {type(other).__name__}')
+            raise DomainTypeError(other, KeymapRegistry)
         return KeymapRegistryGroup(self, other)
 
     @abstractmethod
@@ -107,7 +110,7 @@ class KeymapRegistryGroup(KeymapRegistry):
             return KeymapRegistryGroup(*self._regs, *other._regs)
         if isinstance(other, KeymapRegistry):
             return KeymapRegistryGroup(*self._regs, other)
-        raise TypeError(f'other: expect to KeymapRegistry, but {type(other).__name__}')
+        raise DomainTypeError(other, KeymapRegistry)
 
     def __setitem__(self, keys: str, action: Action):
         for reg in self._regs:

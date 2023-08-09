@@ -2,6 +2,9 @@ from typing import (
     List,
 )
 
+from extension.domain.exception import (
+    DomainRuntimeError,
+)
 from extension.domain.window import (
     WindowQuery,
     Window,
@@ -65,7 +68,7 @@ class WindowFactoryMock(WindowFactory):
         for w in WindowMock.window_list:
             if w.is_active is True:
                 return w
-        raise RuntimeError('Active window not found')
+        raise DomainRuntimeError('Active window not found')
 
     def from_pointer(self) -> 'Window':
         return WindowMock.window_list[3]
