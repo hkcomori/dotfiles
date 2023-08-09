@@ -26,9 +26,6 @@ from .shell import (
     Command,
     ShellService,
 )
-from extension.keyhac_helper import (
-    KeymapEx,
-)
 
 
 class Action(ValueObject):
@@ -100,12 +97,10 @@ class ActionService():
     @inject
     def __init__(
         self,
-        keymap: KeymapEx,
         window_factory: WindowFactory,
         desktop_factory: DesktopFactory,
         shell_service: ShellService,
     ):
-        self._keymap = keymap
         self._window_factory = window_factory
         self._desktop_factory = desktop_factory
         self._shell_service = shell_service
