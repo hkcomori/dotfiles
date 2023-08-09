@@ -40,6 +40,9 @@ class Action(ValueObject):
     def __init__(self, value: Callable[[], None]) -> None:
         self._value = value
 
+    def __hash__(self) -> int:
+        return hash(self._value)
+
     def __add__(self, other) -> 'Action':
         """Group two Actions"""
         if not isinstance(other, Action):
