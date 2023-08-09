@@ -126,13 +126,11 @@ class ActionService(Service):
         else:
             return window.activate
 
-    @property
     def open_onedrive(self) -> Action:
         """OneDriveフォルダを開く"""
         file = f'{os.getenv("OneDrive")}'
         return Action(self._shell_service.run(Command(file)))
 
-    @property
     def open_documents(self) -> Action:
         """Documentsフォルダを開く"""
         file = os.popen(
@@ -140,13 +138,11 @@ class ActionService(Service):
         ).read().rstrip('\n').replace(os.sep, '/')
         return Action(self._shell_service.run(Command(file)))
 
-    @property
     def launch_obsidian(self) -> Action:
         """Obsidianを開く"""
         file = f'{os.getenv("USERPROFILE")}/AppData/Local/Obsidian/Obsidian.exe'
         return Action(self._shell_service.run(Command(file)))
 
-    @property
     def launch_calc(self) -> Action:
         """電卓を開く"""
         return Action(self._launch_or_activate(
@@ -161,21 +157,18 @@ class ActionService(Service):
         """架空のキー入力を送信する"""
         return Action(self._input_service.send(*keys))
 
-    @property
     def ime_on(self) -> Action:
         """IMEをONにする"""
         return Action(
             self._window_factory.from_active().ime_on
         )
 
-    @property
     def ime_off(self) -> Action:
         """IMEをOFFにする"""
         return Action(
             self._window_factory.from_active().ime_off
         )
 
-    @property
     def turn_off_monitor(self) -> Action:
         """モニターの電源を切る"""
         return Action(
