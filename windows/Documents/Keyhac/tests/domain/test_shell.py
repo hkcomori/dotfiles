@@ -1,5 +1,9 @@
 from extension.domain.shell import (
     Command,
+    ShellService,
+)
+from .mock import (
+    Dependency,
 )
 
 
@@ -29,3 +33,13 @@ def test_command():
     assert command1 is command1
     assert command1 is not command3
     assert command1 is not command2
+
+
+def test_shell_service():
+    command1 = Command(
+        'file\\NAME',
+        'param',
+        'working/directory',
+    )
+    shell_service: ShellService = Dependency().resolve(ShellService)
+    shell_service.run(command1)
