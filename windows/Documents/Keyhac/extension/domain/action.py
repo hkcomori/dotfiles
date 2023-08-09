@@ -27,6 +27,9 @@ from .shell import (
     Command,
     ShellService,
 )
+from .input import (
+    InputService,
+)
 
 
 class Action(ValueObject):
@@ -101,10 +104,12 @@ class ActionService(Service):
         window_factory: WindowFactory,
         desktop_factory: DesktopFactory,
         shell_service: ShellService,
+        input_service: InputService,
     ):
         self._window_factory = window_factory
         self._desktop_factory = desktop_factory
         self._shell_service = shell_service
+        self._input_service = input_service
 
     def _launch_or_activate(
         self,
@@ -151,6 +156,10 @@ class ActionService(Service):
                 window_text='電卓'
             ),
         ))
+
+    def send(self, *keys: str) -> Action:
+        """架空のキー入力を送信する"""
+        return Action(self._input_service.send(*keys))
 
     @property
     def ime_on(self) -> Action:
