@@ -16,12 +16,31 @@ class KeymapKeyhac(metaclass=ABCMeta):
     https://crftwr.github.io/keyhac/doc/ja/classkeyhac__keymap_1_1_keymap.html
     """
     @abstractmethod
+    def defineModifier(self, src_key: str, dest_key: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def defineWindowKeymap(
         self,
         exe_name: Optional[str] = None,
         class_name: Optional[str] = None,
         window_text: Optional[str] = None,
     ) -> 'WindowKeymapKeyhac':
+        raise NotImplementedError
+
+    @abstractmethod
+    def InputKeyCommand(self, *keys: str) -> Callable[[], None]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def ShellExecuteCommand(
+        self,
+        verb: str,
+        filename: str,
+        param: str,
+        directory: str,
+        swmode: Optional[str] = None
+    ) -> Callable[[], None]:
         raise NotImplementedError
 
 

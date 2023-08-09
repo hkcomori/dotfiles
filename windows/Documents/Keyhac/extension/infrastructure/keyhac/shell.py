@@ -10,14 +10,14 @@ from extension.domain.shell import (
     Command,
     ShellService,
 )
-from extension.keyhac_helper import (
-    KeymapEx,
+from .share import (
+    KeymapKeyhac,
 )
 
 
 class ShellServiceKeyhac(ShellService):
     @inject
-    def __init__(self, keymap: KeymapEx) -> None:
+    def __init__(self, keymap: KeymapKeyhac) -> None:
         self._keymap = keymap
 
     def run(self, command: Command) -> Callable[[], None]:
