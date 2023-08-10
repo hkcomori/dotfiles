@@ -2,7 +2,7 @@ from abc import abstractmethod
 
 from .share import (
     Entity,
-    Factory,
+    Service,
 )
 
 
@@ -20,7 +20,7 @@ class Desktop(Entity):
         raise NotImplementedError
 
 
-class DesktopFactory(Factory):
+class DesktopService(Service):
     @abstractmethod
     def from_active(self) -> Desktop:
         raise NotImplementedError

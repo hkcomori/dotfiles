@@ -1,6 +1,6 @@
 from extension.domain.desktop import (
     Desktop,
-    DesktopFactory,
+    DesktopService,
 )
 
 
@@ -9,6 +9,6 @@ class DesktopMock(Desktop):
         pass
 
 
-class DesktopFactoryMock(DesktopFactory):
+class DesktopServiceMock(DesktopService):
     def from_active(self) -> DesktopMock:
         return DesktopMock()

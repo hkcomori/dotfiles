@@ -4,11 +4,11 @@ from extension.vendor.injector import (
 
 from extension.domain.window import (
     Window,
-    WindowFactory,
+    WindowService,
 )
 from extension.domain.desktop import (
     Desktop,
-    DesktopFactory,
+    DesktopService,
 )
 from extension.domain.input import (
     InputService,
@@ -18,11 +18,11 @@ from extension.domain.shell import (
 )
 from extension.infrastructure.mock.window import (
     WindowMock,
-    WindowFactoryMock,
+    WindowServiceMock,
 )
 from extension.infrastructure.mock.desktop import (
     DesktopMock,
-    DesktopFactoryMock,
+    DesktopServiceMock,
 )
 from extension.infrastructure.mock.input import (
     InputServiceMock,
@@ -38,9 +38,9 @@ class Dependency:
 
     def config(self, binder):
         binder.bind(Window, WindowMock)
-        binder.bind(WindowFactory, WindowFactoryMock)
+        binder.bind(WindowService, WindowServiceMock)
         binder.bind(Desktop, DesktopMock)
-        binder.bind(DesktopFactory, DesktopFactoryMock)
+        binder.bind(DesktopService, DesktopServiceMock)
         binder.bind(InputService, InputServiceMock)
         binder.bind(ShellService, ShellServiceMock)
 

@@ -23,7 +23,7 @@ from extension.domain.window import (
     WindowId,
     WindowQuery,
     Window,
-    WindowFactory,
+    WindowService,
 )
 from .share import (
     WNDENUMPROC,
@@ -65,7 +65,7 @@ class IMEWindowNotFoundError(WindowNotFoundError):
 
 class WindowWin32(Window):
     def activate(self) -> None:
-        old = WindowFactoryWin32().from_active()
+        old = WindowServiceWin32().from_active()
 
         if IsIconic(self._hwnd):
             ShowWindow(self._hwnd, ShowWindowCmd.SW_RESTORE)
@@ -144,7 +144,7 @@ class WindowWin32(Window):
         raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
 
 
-class WindowFactoryWin32(WindowFactory):
+class WindowServiceWin32(WindowService):
     def from_id(self, window_id: WindowId) -> WindowWin32:
         return WindowWin32(window_id)
 

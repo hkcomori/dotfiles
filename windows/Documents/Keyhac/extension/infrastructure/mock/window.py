@@ -9,7 +9,7 @@ from extension.domain.window import (
     WindowId,
     WindowQuery,
     Window,
-    WindowFactory,
+    WindowService,
 )
 
 
@@ -58,7 +58,7 @@ class WindowMock(Window):
         ]
 
 
-class WindowFactoryMock(WindowFactory):
+class WindowServiceMock(WindowService):
     def __init__(self):
         WindowMock.init_dummy()
 

@@ -18,10 +18,10 @@ from .exception import (
 )
 from .window import (
     WindowQuery,
-    WindowFactory,
+    WindowService,
 )
 from .desktop import (
-    DesktopFactory,
+    DesktopService,
 )
 from .shell import (
     Command,
@@ -104,13 +104,13 @@ class ActionService(Service):
     @inject
     def __init__(
         self,
-        window_factory: WindowFactory,
-        desktop_factory: DesktopFactory,
+        window_service: WindowService,
+        desktop_service: DesktopService,
         shell_service: ShellService,
         input_service: InputService,
     ):
-        self._window_factory = window_factory
-        self._desktop_factory = desktop_factory
+        self._window_service = window_service
+        self._desktop_service = desktop_service
         self._shell_service = shell_service
         self._input_service = input_service
 
@@ -123,7 +123,7 @@ class ActionService(Service):
         exe_name = os.path.basename(process_path)
         _query = WindowQuery(exe_name=exe_name) if query is None else query
         try:
-            window = self._window_factory.from_find(_query)
+            window = self._window_service.from_find(_query)
         except WindowNotFoundError:
             return self._shell_service.run(Command(process_path))
         else:
@@ -163,17 +163,17 @@ class ActionService(Service):
     def ime_on(self) -> Action:
         """IMEをONにする"""
         return Action(
-            self._window_factory.from_active().ime_on
+            self._window_service.from_active().ime_on
         )
 
     def ime_off(self) -> Action:
         """IMEをOFFにする"""
         return Action(
-            self._window_factory.from_active().ime_off
+            self._window_service.from_active().ime_off
         )
 
     def turn_off_monitor(self) -> Action:
         """モニターの電源を切る"""
         return Action(
-            self._desktop_factory.from_active().lock_on
+            self._desktop_service.from_active().lock_on
         )

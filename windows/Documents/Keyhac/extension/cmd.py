@@ -16,7 +16,7 @@ from .window import (
     Window,
 )
 from .infrastructure.win32.desktop import (
-    DesktopFactoryWin32,
+    DesktopServiceWin32,
 )
 
 
@@ -168,5 +168,5 @@ def ime_toggle():
 
 
 def turn_off_monitor():
-    desktop = DesktopFactoryWin32().from_active()
+    desktop = DesktopServiceWin32().from_active()
     desktop.lock_on()

@@ -1,6 +1,6 @@
 from extension.domain.desktop import (
     Desktop,
-    DesktopFactory,
+    DesktopService,
 )
 from .share import (
     SendMessage,
@@ -15,6 +15,6 @@ class DesktopWin32(Desktop):
         SendMessage(-1, WM_SYSCOMMAND, SC_MONITORPOWER, MONITOR_OFF)
 
 
-class DesktopFactoryWin32(DesktopFactory):
+class DesktopServiceWin32(DesktopService):
     def from_active(self) -> Desktop:
         return DesktopWin32()

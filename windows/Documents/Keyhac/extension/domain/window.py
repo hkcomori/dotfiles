@@ -3,7 +3,7 @@ from abc import abstractmethod
 from .share import (
     Entity,
     ValueObject,
-    Factory,
+    Service,
 )
 
 
@@ -74,7 +74,7 @@ class Window(Entity):
         raise NotImplementedError
 
 
-class WindowFactory(Factory):
+class WindowService(Service):
     @abstractmethod
     def from_id(self, window_id: int) -> 'Window':
         raise NotImplementedError
