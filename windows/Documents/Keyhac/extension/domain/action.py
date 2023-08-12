@@ -28,6 +28,7 @@ from .shell import (
     ShellService,
 )
 from .input import (
+    Input,
     InputService,
 )
 
@@ -158,7 +159,8 @@ class ActionService(Service):
 
     def send(self, *keys: str) -> Action:
         """架空のキー入力を送信する"""
-        return Action(self._input_service.send(*keys))
+        inputs = Input.from_sequence(*keys)
+        return Action(self._input_service.send(*inputs))
 
     def ime_on(self) -> Action:
         """IMEをONにする"""

@@ -9,6 +9,9 @@ from extension.domain.keymap import (
 from extension.domain.action import (
     Action,
 )
+from extension.domain.input import (
+    Input,
+)
 from extension.domain.window import WindowQuery
 from .share import (
     KeymapKeyhac,
@@ -22,8 +25,9 @@ class KeymapRegistryKeyhac(KeymapRegistry):
         self._keymap = keymap
         self._window_keymap = window_keymap
 
-    def __setitem__(self, keys: str, action: Action):
-        self._window_keymap[keys] = action.perform
+    def __setitem__(self, input: Input, action: Action):
+        key = input.value
+        self._window_keymap[key] = action.perform
 
     @property
     def applying_func(self):

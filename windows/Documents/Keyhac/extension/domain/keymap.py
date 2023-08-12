@@ -10,6 +10,9 @@ from .exception import (
 from .action import (
     Action,
 )
+from .input import (
+    Input,
+)
 from .window import (
     WindowQuery,
 )
@@ -22,7 +25,7 @@ class KeymapRegistry(Repository):
         return KeymapRegistryGroup(self, other)
 
     @abstractmethod
-    def __setitem__(self, keys: str, action: Action):
+    def __setitem__(self, input: Input, action: Action):
         raise NotImplementedError
 
     @property
@@ -46,9 +49,9 @@ class KeymapRegistryGroup(KeymapRegistry):
             return KeymapRegistryGroup(*self._regs, other)
         raise DomainTypeError(other, KeymapRegistry)
 
-    def __setitem__(self, keys: str, action: Action):
+    def __setitem__(self, input: Input, action: Action):
         for reg in self._regs:
-            reg[keys] = action
+            reg[input] = action
 
     @property
     def applying_func(self):

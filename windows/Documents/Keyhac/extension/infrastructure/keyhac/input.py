@@ -7,6 +7,7 @@ from extension.vendor.injector import (
 )
 
 from extension.domain.input import (
+    Input,
     InputService,
 )
 from .share import (
@@ -19,5 +20,6 @@ class InputServiceKeyhac(InputService):
     def __init__(self, keymap: KeymapKeyhac) -> None:
         self._keymap = keymap
 
-    def send(self, *keys: str) -> Callable[[], None]:
+    def send(self, *inputs: Input) -> Callable[[], None]:
+        keys = [i.value for i in inputs]
         return self._keymap.InputKeyCommand(*keys)
