@@ -95,7 +95,7 @@ class ActionSequence(Action):
         return ActionSequence(*([*self._actions] * times))
 
     @Action.final
-    def perform(self):
+    def perform(self) -> None:
         """Performs grouped Actions in order"""
         for action in self._actions:
             action.perform()
