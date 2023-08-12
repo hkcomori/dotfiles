@@ -88,5 +88,5 @@ class WindowService(Service):
         raise NotImplementedError
 
     @abstractmethod
-    def from_find(self, query: WindowQuery) -> 'Window':
+    def from_query(self, query: WindowQuery) -> 'Window':
         raise NotImplementedError

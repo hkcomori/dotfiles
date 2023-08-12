@@ -124,7 +124,7 @@ class ActionService(Service):
         exe_name = os.path.basename(process_path)
         _query = WindowQuery(exe_name=exe_name) if query is None else query
         try:
-            window = self._window_service.from_find(_query)
+            window = self._window_service.from_query(_query)
         except WindowNotFoundError:
             return self._shell_service.run(Command(process_path))
         else:
