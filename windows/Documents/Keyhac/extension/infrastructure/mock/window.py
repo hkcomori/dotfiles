@@ -32,20 +32,20 @@ class WindowMock(Window):
         self.is_active = is_active
         self.ime_enabled = ime_enabled
 
-    def __hash__(self) -> int:
-        return hash(self._window_id)
-
-    def activate(self) -> None:
+    def activate(self) -> bool:
         for w in self.__class__.window_list:
             if w.is_active is True:
                 w.is_active = False
         self.is_active = True
+        return True
 
-    def ime_on(self) -> None:
+    def ime_on(self) -> bool:
         self.ime_enabled = True
+        return True
 
-    def ime_off(self) -> None:
+    def ime_off(self) -> bool:
         self.ime_enabled = False
+        return True
 
     @classmethod
     def init_dummy(cls):

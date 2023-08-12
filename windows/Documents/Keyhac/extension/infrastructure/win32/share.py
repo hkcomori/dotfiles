@@ -2,22 +2,24 @@ import enum
 from ctypes import (    # type: ignore  # noqa: F401
     windll,             # type: ignore
     WINFUNCTYPE,        # type: ignore
+    c_wchar,
+    c_ulong,
+    _Pointer,
+    Array,
 )
 from ctypes.wintypes import (
-    HWND,
     DWORD,
     INT,
     UINT,
     LONG,
     BOOL,
-    LPVOID,
     POINT,
-    LPWSTR,
-    LPDWORD,
-    LPPOINT,
     LPARAM,
     WPARAM,
 )
+
+
+HWND = LONG
 
 
 class HRESULT:
@@ -31,224 +33,223 @@ class HRESULT:
 WNDENUMPROC = WINFUNCTYPE(BOOL, HWND, LPARAM)
 
 
-class GetWindowCmd(enum.IntEnum):
+class GetWindowCmd(enum.Enum):
     """
     指定したウィンドウと、ハンドルを取得するウィンドウの間のリレーションシップ。
 
     https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindow
     """
 
-    GW_CHILD = 5
-    GW_ENABLEDPOPUP = 6
-    GW_HWNDFIRST = 0
-    GW_HWNDLAST = 1
-    GW_HWNDNEXT = 2
-    GW_HWNDPREV = 3
-    GW_OWNER = 4
+    GW_CHILD = UINT(5)
+    GW_ENABLEDPOPUP = UINT(6)
+    GW_HWNDFIRST = UINT(0)
+    GW_HWNDLAST = UINT(1)
+    GW_HWNDNEXT = UINT(2)
+    GW_HWNDPREV = UINT(3)
+    GW_OWNER = UINT(4)
 
 
-class ShowWindowCmd(enum.IntEnum):
+class ShowWindowCmd(enum.Enum):
     """
     ウィンドウの表示方法を制御します。
 
     https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
     """
 
-    SW_HIDE = 0
-    SW_SHOWNORMAL = 1
-    SW_NORMAL = 1
-    SW_SHOWMINIMIZED = 2
-    SW_SHOWMAXIMIZED = 3
-    SW_MAXIMIZE = 3
-    SW_SHOWNOACTIVATE = 4
-    SW_SHOW = 5
-    SW_MINIMIZE = 6
-    SW_SHOWMINNOACTIVE = 7
-    SW_SHOWNA = 8
-    SW_RESTORE = 9
-    SW_SHOWDEFAULT = 10
-    SW_FORCEMINIMIZE = 11
+    SW_HIDE = UINT(0)
+    SW_SHOWNORMAL = UINT(1)
+    SW_NORMAL = UINT(1)
+    SW_SHOWMINIMIZED = UINT(2)
+    SW_SHOWMAXIMIZED = UINT(3)
+    SW_MAXIMIZE = UINT(3)
+    SW_SHOWNOACTIVATE = UINT(4)
+    SW_SHOW = UINT(5)
+    SW_MINIMIZE = UINT(6)
+    SW_SHOWMINNOACTIVE = UINT(7)
+    SW_SHOWNA = UINT(8)
+    SW_RESTORE = UINT(9)
+    SW_SHOWDEFAULT = UINT(10)
+    SW_FORCEMINIMIZE = UINT(11)
 
 
-GetLastError = windll.kernel32.GetLastError
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror
-"""
-GetLastError.argtypes = tuple()
-GetLastError.restype = DWORD
+def GetLastError() -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror
+    """
+    res: int = windll.kernel32.GetLastError()
+    return res
 
 
-SendMessage = windll.user32.SendMessageW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-sendmessagew
-"""
-SendMessage.argtypes = (HWND, UINT, WPARAM, LPARAM,)
-SendMessage.restype = INT
+def SendMessage(hwnd: int, msg: int, wParam: int, lParam: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-sendmessagew
+    """
+    res: int = windll.user32.SendMessageW(HWND(hwnd), UINT(msg), WPARAM(wParam), LPARAM(lParam))
+    return res
 
 
-PostMessage = windll.user32.PostMessageW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-postmessagew
-"""
-PostMessage.argtypes = (HWND, INT, INT, INT,)
-PostMessage.restype = INT
+def PostMessage(hwnd: int, msg: int, wParam: int, lParam: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-postmessagew
+    """
+    res: bool = windll.user32.PostMessageW(HWND(hwnd), UINT(msg), WPARAM(wParam), LPARAM(lParam))
+    return res
 
 
-DwmGetWindowAttribute = windll.dwmapi.DwmGetWindowAttribute
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/dwmapi/nf-dwmapi-dwmgetwindowattribute
-"""
-DwmGetWindowAttribute.argtypes = (HWND, DWORD, LPVOID, DWORD,)
-DwmGetWindowAttribute.restype = HRESULT
+def DwmGetWindowAttribute(hwnd: int, dwAttribute: int, pvAttribute: _Pointer, cbAttribute: int) -> HRESULT:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/dwmapi/nf-dwmapi-dwmgetwindowattribute
+    """
+    res: int = windll.dwmapi.DwmGetWindowAttribute(HWND(hwnd), DWORD(dwAttribute), pvAttribute, DWORD(cbAttribute))
+    return HRESULT(res)
 
 
-GetWindowThreadProcessId = windll.user32.GetWindowThreadProcessId
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowthreadprocessid
-"""
-GetWindowThreadProcessId.argtypes = (HWND, LPDWORD,)
-GetWindowThreadProcessId.restype = DWORD
+def GetWindowThreadProcessId(hwnd: int, lpdwProcessId: _Pointer) -> int:
+    """
+    """
+    res: int = windll.user32.GetWindowThreadProcessId(HWND(hwnd), lpdwProcessId)
+    return res
 
 
-GetWindowTextLengthW = windll.user32.GetWindowTextLengthW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowtextlengthw
-"""
-GetWindowTextLengthW.argtypes = (HWND,)
-GetWindowTextLengthW.restype = INT
+def GetWindowTextLengthW(hwnd: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowtextlengthw
+    """
+    res: int = windll.user32.GetWindowTextLengthW(HWND(hwnd))
+    return res
 
 
-GetWindowTextW = windll.user32.GetWindowTextW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowtextw
-"""
-GetWindowTextW.argtypes = (HWND, LPWSTR, INT,)
-GetWindowTextW.restype = INT
+def GetWindowTextW(hwnd: int, lpString: Array, nMaxCount: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowtextw
+    """
+    res: int = windll.user32.GetWindowTextW(HWND(hwnd), lpString, INT(nMaxCount))
+    return res
 
 
-GetClassNameW = windll.user32.GetClassNameW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getclassnamew
-"""
-GetClassNameW.argtypes = (HWND, LPWSTR, INT,)
-GetClassNameW.restype = INT
+def GetClassNameW(hwnd: int, lpString: Array, nMaxCount: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getclassnamew
+    """
+    res: int = windll.user32.GetClassNameW(HWND(hwnd), lpString, INT(nMaxCount))
+    return res
 
 
-SetForegroundWindow = windll.user32.SetForegroundWindow
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-setforegroundwindow
-"""
-SetForegroundWindow.argtypes = (HWND,)
-SetForegroundWindow.restype = BOOL
+def SetForegroundWindow(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-setforegroundwindow
+    """
+    res: bool = windll.user32.SetForegroundWindow(HWND(hwnd))
+    return res
 
 
-GetForegroundWindow = windll.user32.GetForegroundWindow
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getforegroundwindow
-"""
-GetForegroundWindow.argtypes = ()
-GetForegroundWindow.restype = HWND
+def GetForegroundWindow() -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getforegroundwindow
+    """
+    res: int = windll.user32.GetForegroundWindow()
+    return res
 
 
-GetWindow = windll.user32.GetWindow
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindow
-"""
-GetWindow.argtypes = (HWND, UINT,)
-GetWindow.restype = HWND
+def GetWindow(hwnd: int, uCmd: GetWindowCmd) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindow
+    """
+    res: int = windll.user32.GetWindow(HWND(hwnd), uCmd.value)
+    return res
 
 
-IsIconic = windll.user32.IsIconic
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-isiconic
-"""
-IsIconic.argtypes = (HWND,)
-IsIconic.restype = BOOL
+def IsIconic(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-isiconic
+    """
+    res: bool = windll.user32.IsIconic(HWND(hwnd))
+    return res
 
 
-IsWindow = windll.user32.IsWindow
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-iswindow
-"""
-IsWindow.argtypes = (HWND,)
-IsWindow.restype = BOOL
+def IsWindow(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-iswindow
+    """
+    res: bool = windll.user32.IsWindow(HWND(hwnd))
+    return res
 
 
-ShowWindow = windll.user32.ShowWindow
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
-"""
-ShowWindow.argtypes = (HWND, INT,)
-ShowWindow.restype = BOOL
+def ShowWindow(hwnd: int, nCmdShow: ShowWindowCmd) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-showwindow
+    """
+    res: bool = windll.user32.ShowWindow(HWND(hwnd), nCmdShow.value)
+    return res
 
 
-GetWindowLongW = windll.user32.GetWindowLongW
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowlongw
-"""
-GetWindowLongW.argtypes = (HWND, INT,)
-GetWindowLongW.restype = LONG
+def GetWindowLongW(hwnd: int, nIndex: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowlongw
+    """
+    res: int = windll.user32.GetWindowLongW(HWND(hwnd), INT(nIndex))
+    return res
 
 
-GetParent = windll.user32.GetParent
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getparent
-"""
-GetParent.argtypes = (HWND,)
-GetParent.restype = HWND
+def GetParent(hwnd) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getparent
+    """
+    res: int = windll.user32.GetParent(HWND(hwnd))
+    return res
 
 
-WindowFromPoint = windll.user32.WindowFromPoint
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-windowfrompoint
-"""
-WindowFromPoint.argtypes = (POINT,)
-WindowFromPoint.restype = HWND
+def WindowFromPoint(point: POINT) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-windowfrompoint
+    """
+    res: int = windll.user32.WindowFromPoint(point)
+    return res
 
 
-GetFocus = windll.user32.GetFocus
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getfocus
-"""
-GetFocus.argtypes = ()
-GetFocus.restype = HWND
+def GetFocus() -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getfocus
+    """
+    res: int = windll.user32.GetFocus()
+    return res
 
 
-EnumWindows = windll.user32.EnumWindows
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-enumwindows
-"""
-EnumWindows.argtypes = (WNDENUMPROC, LPARAM,)
-EnumWindows.restype = BOOL
+def EnumWindows(lpEnumFunc: WINFUNCTYPE, lParam: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-enumwindows
+    """
+    res: bool = windll.user32.EnumWindows(lpEnumFunc, LPARAM(lParam))
+    return res
 
 
-IsWindowVisible = windll.user32.IsWindowVisible
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-iswindowvisible
-"""
-IsWindowVisible.argtypes = (HWND,)
-IsWindowVisible.restype = BOOL
+def IsWindowVisible(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-iswindowvisible
+    """
+    res: bool = windll.user32.IsWindowVisible(HWND(hwnd))
+    return res
 
 
-GetCursorPos = windll.user32.GetCursorPos
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getcursorpos
-"""
-GetCursorPos.argtypes = (LPPOINT,)
-GetCursorPos.restype = BOOL
+def GetCursorPos(lpPoint: _Pointer) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getcursorpos
+    """
+    res: bool = windll.user32.GetCursorPos(lpPoint)
+    return res
 
 
-AttachThreadInput = windll.user32.AttachThreadInput
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-attachthreadinput
-"""
-AttachThreadInput.argtypes = (DWORD, DWORD, BOOL,)
-AttachThreadInput.restype = BOOL
+def AttachThreadInput(idAttach: int, idAttachTo: int, fAttach: bool) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-attachthreadinput
+    """
+    res: bool = windll.user32.AttachThreadInput(DWORD(idAttach), DWORD(idAttachTo), BOOL(fAttach))
+    return res
 
 
-ImmGetDefaultIMEWnd = windll.imm32.ImmGetDefaultIMEWnd
-"""
-https://learn.microsoft.com/ja-jp/windows/win32/api/imm/nf-imm-immgetdefaultimewnd
-"""
-ImmGetDefaultIMEWnd.argtypes = (HWND,)
-ImmGetDefaultIMEWnd.restype = HWND
+def ImmGetDefaultIMEWnd(hwnd: int) -> int:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/imm/nf-imm-immgetdefaultimewnd
+    """
+    res: int = windll.imm32.ImmGetDefaultIMEWnd(HWND(hwnd))
+    return res

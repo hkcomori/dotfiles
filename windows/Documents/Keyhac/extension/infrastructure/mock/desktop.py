@@ -5,8 +5,8 @@ from extension.domain.desktop import (
 
 
 class DesktopMock(Desktop):
-    def lock_on(self) -> None:
-        pass
+    def lock_on(self) -> bool:
+        return True
 
 
 class DesktopServiceMock(DesktopService):

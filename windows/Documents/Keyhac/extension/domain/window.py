@@ -1,5 +1,8 @@
 from abc import abstractmethod
 
+from .exception import (
+    DomainTypeError,
+)
 from .share import (
     Entity,
     ValueObject,
@@ -57,20 +60,25 @@ class Window(Entity):
     def __hash__(self) -> int:
         return hash(self._window_id)
 
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Window):
+            raise DomainTypeError(other, Window)
+        return self._window_id == other._window_id
+
     @property
     def window_id(self) -> WindowId:
         return self._window_id
 
     @abstractmethod
-    def activate(self) -> None:
+    def activate(self) -> bool:
         raise NotImplementedError
 
     @abstractmethod
-    def ime_on(self) -> None:
+    def ime_on(self) -> bool:
         raise NotImplementedError
 
     @abstractmethod
-    def ime_off(self) -> None:
+    def ime_off(self) -> bool:
         raise NotImplementedError
 
 

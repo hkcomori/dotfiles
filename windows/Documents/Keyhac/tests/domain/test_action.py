@@ -14,13 +14,39 @@ class Count:
         self.value -= 1
 
 
+class IncAction(Action):
+    def __init__(self, count: Count) -> None:
+        super().__init__()
+        self.count = count
+
+    def __hash__(self) -> int:
+        return hash(self.__class__)
+
+    def perform(self) -> bool:
+        self.count.inc()
+        return True
+
+
+class DecAction(Action):
+    def __init__(self, count: Count) -> None:
+        super().__init__()
+        self.count = count
+
+    def __hash__(self) -> int:
+        return hash(self.__class__)
+
+    def perform(self) -> bool:
+        self.count.dec()
+        return True
+
+
 def test_action():
     count = Count()
-    inc = Action(count.inc)
+    inc = IncAction(count)
     inc.perform()
     assert count.value == 1
 
-    dec = Action(count.dec)
+    dec = DecAction(count)
     dec.perform()
     assert count.value == 0
 
@@ -33,7 +59,7 @@ def test_action():
     (inc + dec * 2).perform()
     assert count.value == 4
 
-    inc2 = Action(count.inc)
+    inc2 = IncAction(count)
     assert inc == inc
     assert inc == inc2
     assert inc != dec

@@ -16,7 +16,7 @@ class Desktop(Entity):
         return hash(self.__class__)
 
     @abstractmethod
-    def lock_on(self) -> None:
+    def lock_on(self) -> bool:
         raise NotImplementedError
 
 

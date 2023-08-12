@@ -10,9 +10,6 @@ from .exception import (
 from .action import (
     Action,
 )
-from .input import (
-    Input,
-)
 from .window import (
     WindowQuery,
 )
@@ -25,7 +22,7 @@ class KeymapRegistry(Repository):
         return KeymapRegistryGroup(self, other)
 
     @abstractmethod
-    def __setitem__(self, input: Input, action: Action):
+    def __setitem__(self, key: str, action: Action):
         raise NotImplementedError
 
     @property
@@ -49,9 +46,9 @@ class KeymapRegistryGroup(KeymapRegistry):
             return KeymapRegistryGroup(*self._regs, other)
         raise DomainTypeError(other, KeymapRegistry)
 
-    def __setitem__(self, input: Input, action: Action):
+    def __setitem__(self, key: str, action: Action):
         for reg in self._regs:
-            reg[input] = action
+            reg[key] = action
 
     @property
     def applying_func(self):
@@ -64,6 +61,42 @@ class KeymapRegistryGroup(KeymapRegistry):
 
 
 class KeymapService(Service):
+    @property
+    @abstractmethod
+    def user_modifier0(self) -> str:
+        raise NotImplementedError
+
+    @user_modifier0.setter
+    def user_modifier0(self, key: str) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def user_modifier1(self) -> str:
+        raise NotImplementedError
+
+    @user_modifier1.setter
+    def user_modifier1(self, key: str) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def user_modifier2(self) -> str:
+        raise NotImplementedError
+
+    @user_modifier2.setter
+    def user_modifier2(self, key: str) -> None:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def user_modifier3(self) -> str:
+        raise NotImplementedError
+
+    @user_modifier3.setter
+    def user_modifier3(self, key: str) -> None:
+        raise NotImplementedError
+
     @abstractmethod
     def from_query(self, query: WindowQuery) -> KeymapRegistry:
         raise NotImplementedError
