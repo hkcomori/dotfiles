@@ -18,7 +18,7 @@ class DomainTypeError(DomainError, TypeError):
 
 class DomainValueError(DomainError, ValueError):
     """
-    ドメインモデル内で発生する TypeError で使用する。
+    ドメインモデル内で発生する ValueError で使用する。
     """
 
     def __init__(self, variable: object):

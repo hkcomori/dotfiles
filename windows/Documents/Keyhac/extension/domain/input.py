@@ -11,6 +11,7 @@ from .share import (
 
 
 class Input(ValueObject):
+    """入力"""
     def __init__(self, value: str):
         self._value = value
 
@@ -24,12 +25,15 @@ class Input(ValueObject):
 
     @classmethod
     def from_sequence(cls, *values: str) -> Sequence['Input']:
+        """複数の入力を一括生成する"""
         return tuple((cls(s) for s in values))
 
 
 class InputService(Service):
+    """入力を操作するインターフェース"""
     @abstractmethod
     def send(self, *inputs: Input) -> Callable[[], None]:
+        """入力を送信する"""
         raise NotImplementedError
 
 

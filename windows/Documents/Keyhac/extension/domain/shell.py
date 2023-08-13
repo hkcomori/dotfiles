@@ -10,6 +10,7 @@ from .share import (
 
 
 class Command(ValueObject):
+    """コマンド"""
     def __init__(
         self,
         file: str,
@@ -29,18 +30,22 @@ class Command(ValueObject):
 
     @property
     def file(self) -> str:
+        """実行ファイルのパス"""
         return self._file
 
     @property
     def param(self) -> str:
+        """引数"""
         return self._param
 
     @property
     def working_directory(self) -> str:
+        """作業ディレクトリ"""
         return self._working_directory
 
 
 class ShellService(Service):
+    """シェルを操作するインターフェース"""
     @abstractmethod
     def run(self, command: Command) -> Callable[[], None]:
         raise NotImplementedError

@@ -16,6 +16,7 @@ from .window import (
 
 
 class KeymapRegistry(Repository):
+    """キーマップを登録するインターフェース"""
     def __add__(self, other) -> 'KeymapRegistry':
         if not isinstance(other, KeymapRegistry):
             raise DomainTypeError(other, KeymapRegistry)
@@ -28,6 +29,9 @@ class KeymapRegistry(Repository):
     @property
     @abstractmethod
     def applying_func(self):
+        """
+        キーマップが有効になるウィンドウがアクティブになったときに実行するアクション
+        """
         raise NotImplementedError
 
     @applying_func.setter
@@ -36,6 +40,7 @@ class KeymapRegistry(Repository):
 
 
 class KeymapRegistryGroup(KeymapRegistry):
+    """複数の KeymapRegistry を束ねて一括操作するインターフェース"""
     def __init__(self, *regs: KeymapRegistry):
         self._regs = regs
 
@@ -61,9 +66,11 @@ class KeymapRegistryGroup(KeymapRegistry):
 
 
 class KeymapService(Service):
+    """キーマップを操作するインターフェース"""
     @property
     @abstractmethod
     def user_modifier0(self) -> str:
+        """ユーザー定義モディファイアキー0"""
         raise NotImplementedError
 
     @user_modifier0.setter
@@ -73,6 +80,7 @@ class KeymapService(Service):
     @property
     @abstractmethod
     def user_modifier1(self) -> str:
+        """ユーザー定義モディファイアキー1"""
         raise NotImplementedError
 
     @user_modifier1.setter
@@ -82,6 +90,7 @@ class KeymapService(Service):
     @property
     @abstractmethod
     def user_modifier2(self) -> str:
+        """ユーザー定義モディファイアキー2"""
         raise NotImplementedError
 
     @user_modifier2.setter
@@ -91,6 +100,7 @@ class KeymapService(Service):
     @property
     @abstractmethod
     def user_modifier3(self) -> str:
+        """ユーザー定義モディファイアキー3"""
         raise NotImplementedError
 
     @user_modifier3.setter
@@ -99,4 +109,5 @@ class KeymapService(Service):
 
     @abstractmethod
     def from_query(self, query: WindowQuery) -> KeymapRegistry:
+        """WindowQueryに合致するウィンドウのKeymapRegistryを取得する"""
         raise NotImplementedError
