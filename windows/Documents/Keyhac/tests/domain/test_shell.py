@@ -2,7 +2,7 @@ from extension.domain.shell import (
     Command,
     ShellService,
 )
-from .mock import (
+from .dependency import (
     Dependency,
 )
 

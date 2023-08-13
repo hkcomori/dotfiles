@@ -75,4 +75,4 @@ class WindowServiceMock(WindowService):
         return WindowMock.window_list[3]
 
     def from_query(self, query: WindowQuery) -> 'Window':
-        raise NotImplementedError
+        return WindowMock.window_list[2]

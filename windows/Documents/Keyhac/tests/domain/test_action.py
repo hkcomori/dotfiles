@@ -1,6 +1,32 @@
+from .dependency import Dependency
+from extension.domain.require_injection import (
+    ShellService,
+    InputService,
+    WindowService,
+    DesktopService,
+)
 from extension.domain.action import (
     Action,
+    ReverseAction,
+    NopAction,
+    CommandAction,
+    InputAction,
+    ImeOnAction,
+    ImeOffAction,
+    WindowActivateAction,
+    MonitorOffAction,
+    ActionService,
 )
+from extension.domain.shell import (
+    Command,
+)
+
+
+dependency = Dependency()
+shell_service = dependency.resolve(ShellService)
+input_service = dependency.resolve(InputService)
+window_service = dependency.resolve(WindowService)
+desktop_service = dependency.resolve(DesktopService)
 
 
 class Count:
@@ -43,14 +69,14 @@ class DecAction(Action):
 def test_action():
     count = Count()
     inc = IncAction(count)
-    inc.perform()
+    assert inc.perform() is True
     assert count.value == 1
 
     dec = DecAction(count)
-    dec.perform()
+    assert ReverseAction(dec).perform() is not True
     assert count.value == 0
 
-    (inc + inc).perform()
+    assert (inc + inc).value() is None
     assert count.value == 2
 
     (inc * 3).perform()
@@ -59,6 +85,9 @@ def test_action():
     (inc + dec * 2).perform()
     assert count.value == 4
 
+    (inc + ReverseAction(inc) + inc).perform()
+    assert count.value == 6
+
     inc2 = IncAction(count)
     assert inc == inc
     assert inc == inc2
@@ -66,3 +95,59 @@ def test_action():
     assert inc is inc
     assert inc is not inc2
     assert inc is not dec
+
+
+def test_nop():
+    act = NopAction()
+    act.perform()
+
+
+def test_command():
+    command = Command('hoge')
+    act = CommandAction(shell_service, command)
+    act.perform()
+
+
+def test_input():
+    act = InputAction(input_service, 'C-A')
+    act.perform()
+
+
+def test_ime_on():
+    act = ImeOnAction(window_service.from_active)
+    act.perform()
+
+
+def test_ime_off():
+    act = ImeOffAction(window_service.from_active)
+    act.perform()
+
+
+def test_window_activate():
+    act = WindowActivateAction(window_service.from_pointer)
+    act.perform()
+
+
+def test_monitor_off():
+    act = MonitorOffAction(desktop_service)
+    act.perform()
+
+
+def test_action_service():
+    action_service = ActionService(
+        window_service,
+        desktop_service,
+        shell_service,
+        input_service,
+    )
+
+    action_service.nop().perform()
+    action_service.open_onedrive().perform()
+    action_service.open_documents().perform()
+    action_service.launch_obsidian().perform()
+    action_service.launch_calc().perform()
+    action_service.send('C-X', 'C-S').perform()
+    action_service.ime_on().perform()
+    action_service.ime_off().perform()
+    action_service.activate_window().perform()
+    action_service.turn_off_monitor().perform()
