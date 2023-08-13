@@ -1,19 +1,10 @@
-from extension.vendor.injector import (
-    Injector,
-)
-
-from extension.domain.window import (
+from extension.domain.require_injection import (
+    AbstractDependency,
     Window,
     WindowService,
-)
-from extension.domain.desktop import (
     Desktop,
     DesktopService,
-)
-from extension.domain.input import (
     InputService,
-)
-from extension.domain.shell import (
     ShellService,
 )
 from extension.infrastructure.mock.window import (
@@ -32,17 +23,11 @@ from extension.infrastructure.mock.shell import (
 )
 
 
-class Dependency:
-    def __init__(self):
-        self.injector = Injector(self.config)
-
-    def config(self, binder):
+class Dependency(AbstractDependency):
+    def config(self, binder) -> None:
         binder.bind(Window, WindowMock)
         binder.bind(WindowService, WindowServiceMock)
         binder.bind(Desktop, DesktopMock)
         binder.bind(DesktopService, DesktopServiceMock)
         binder.bind(InputService, InputServiceMock)
         binder.bind(ShellService, ShellServiceMock)
-
-    def resolve(self, cls):
-        return self.injector.get(cls)

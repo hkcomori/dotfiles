@@ -1,16 +1,10 @@
-from abc import ABCMeta, abstractmethod
-from typing import (
-    Type,
-    TypeVar,
-)
-
 from .vendor.injector import (
-    Injector,
     Binder,
     InstanceProvider,
 )
 
 from .domain.require_injection import (
+    AbstractDependency,
     KeymapRegistry,
     KeymapService,
     Window,
@@ -33,19 +27,6 @@ from .infrastructure.win32 import (
     WindowWin32,
     WindowServiceWin32,
 )
-
-
-T1 = TypeVar('T1')
-
-
-class AbstractDependency(metaclass=ABCMeta):
-    @abstractmethod
-    def config(self, binder: Binder) -> None:
-        raise NotImplementedError
-
-    def resolve(self, class_: Type[T1]) -> T1:
-        injector = Injector(self.config)
-        return injector.get(class_)
 
 
 class Dependency(AbstractDependency):
