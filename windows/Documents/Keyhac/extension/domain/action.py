@@ -137,7 +137,7 @@ class CommandAction(Action):
         return hash(self._shell_service)
 
     def perform(self) -> bool:
-        self._shell_service.run(self._command)
+        self._shell_service.run(self._command)()
         return True
 
 
