@@ -1,6 +1,12 @@
 ﻿from logging import basicConfig, getLogger, DEBUG
 
-from extension import init
+from extension.dependency import Dependency
+from extension import (
+    KeymapKeyhac,
+)
+from extension import (
+    AllConfig,
+)
 
 
 basicConfig(
@@ -11,5 +17,6 @@ basicConfig(
 logger = getLogger(__name__)
 
 
-def configure(keymap):
-    init(keymap)
+def configure(keymap: KeymapKeyhac):
+    config = Dependency(keymap).resolve(AllConfig)
+    config.apply()

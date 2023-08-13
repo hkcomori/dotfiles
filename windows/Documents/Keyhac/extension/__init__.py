@@ -1,12 +1,6 @@
-from .keyhac_interface import (
-    KeymapInterface,
+from .infrastructure.keyhac import (    # noqa: F401
+    KeymapKeyhac,
 )
-from .keyhac_helper import KeymapEx
-from . import cmd
-from . import keymap_definitions
-
-
-def init(_keymap: KeymapInterface):
-    keymap = KeymapEx(_keymap)
-    cmd.init(keymap)
-    keymap_definitions.init(keymap)
+from .application import (              # noqa: F401
+    AllConfig,
+)
