@@ -1,3 +1,8 @@
+import pytest
+
+from extension.domain.exception import (
+    DomainValueError,
+)
 from extension.domain.window import (
     WindowId,
     WindowQuery,
@@ -17,6 +22,14 @@ def test_window_id():
     assert window_id1 is window_id1
     assert window_id1 is not window_id2
     assert window_id1 is not window_id3
+
+
+@pytest.mark.parametrize('value', [
+    0, -1, -32768,
+])
+def test_window_id_value_error(value):
+    with pytest.raises(DomainValueError):
+        WindowId(value)
 
 
 def test_window_query():

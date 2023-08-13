@@ -16,6 +16,16 @@ class DomainTypeError(DomainError, TypeError):
         super().__init__(msg)
 
 
+class DomainValueError(DomainError, ValueError):
+    """
+    ドメインモデル内で発生する TypeError で使用する。
+    """
+
+    def __init__(self, variable: object):
+        msg = f'{variable} is out of range'
+        super().__init__(msg)
+
+
 class DomainRuntimeError(DomainError, RuntimeError):
     """
     ドメインモデル内で発生する RuntimeError で使用する。

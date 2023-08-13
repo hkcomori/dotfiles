@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 from .exception import (
     DomainTypeError,
+    DomainValueError,
 )
 from .share import (
     Entity,
@@ -12,6 +13,8 @@ from .share import (
 
 class WindowId(ValueObject):
     def __init__(self, value: int):
+        if not value > 0:
+            raise DomainValueError(value)
         self._value = value
 
     def __hash__(self) -> int:
