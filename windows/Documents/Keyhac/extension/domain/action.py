@@ -224,6 +224,13 @@ class ActionService(Service):
         self._shell_service = shell_service
         self._input_service = input_service
 
+    @staticmethod
+    def _get_special_folder(name: str) -> str:
+        """特殊フォルダーパスを取得する"""
+        cmd = f'powershell.exe -Command "([Environment])::GetFolderPath("""{name}""")"'
+        folder = os.popen(cmd).read().rstrip('\n').replace(os.sep, '/')
+        return folder
+
     def nop(self) -> Action:
         return NopAction()
 
@@ -234,9 +241,7 @@ class ActionService(Service):
 
     def open_documents(self) -> Action:
         """Documentsフォルダを開く"""
-        file = os.popen(
-            'powershell.exe -Command "([Environment])::GetFolderPath("""MyDocuments""")"'
-        ).read().rstrip('\n').replace(os.sep, '/')
+        file = self._get_special_folder('MyDocuments')
         return CommandAction(self._shell_service, Command(file))
 
     def launch_obsidian(self) -> Action:
