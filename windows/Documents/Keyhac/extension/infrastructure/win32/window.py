@@ -7,7 +7,6 @@ from ctypes import (
 )
 from threading import currentThread
 from typing import (
-    Optional,
     Tuple,
 )
 import re
@@ -16,6 +15,7 @@ import pyauto   # type: ignore
 
 from extension.domain.exception import (
     DomainTypeError,
+    DomainValueError,
     DomainRuntimeError,
     WindowNotFoundError,
 )
@@ -62,71 +62,38 @@ MAX_CLASS_NAME_LENGTH = 256
 """クラス名の最大長"""
 
 
-HWND = int
-
-
-class IMEWindowNotFoundError(WindowNotFoundError):
-    pass
-
-
-class WindowWin32(Window):
+class WindowInfo:
     def __init__(self, window_id: WindowId):
-        super().__init__(window_id)
-        self._thread: Optional[Thread] = None
-        self._exe_name: Optional[str] = None
-
-    def activate(self) -> bool:
-        old = WindowServiceWin32().from_active()
-
-        if IsIconic(self._hwnd):
-            ShowWindow(self._hwnd, ShowWindowCmd.SW_RESTORE)
-
-        if old == self:
-            return True
-
-        with self.thread.attach(old.thread):
-            self._set_foreground(old)
-
-        return True
-
-    def ime_on(self) -> bool:
-        ime = IME(self._hwnd)
-        ime.status = IME.Status.ON
-        return True
-
-    def ime_off(self) -> bool:
-        ime = IME(self._hwnd)
-        ime.status = IME.Status.OFF
-        return True
+        self._window_id = window_id
 
     @property
-    def _hwnd(self) -> HWND:
-        return HWND(self._window_id.value)
+    def window_id(self) -> WindowId:
+        return self._window_id
 
     def _get_thread_info(self) -> Tuple['Thread', str]:
         pid = c_ulong()
-        thread_id: int = GetWindowThreadProcessId(self._hwnd, pointer(pid))
+        thread_id: int = GetWindowThreadProcessId(self.window_id.value, pointer(pid))
         thread = Thread(thread_id)
-        pyauto_window = pyauto.Window.fromHWND(self._hwnd)
+        pyauto_window = pyauto.Window.fromHWND(self.window_id.value)
         exe_name = pyauto_window.getProcessName()
         return thread, exe_name
 
     @property
     def thread(self) -> 'Thread':
-        if self._thread is None:
+        if not hasattr(self, '_thread'):
             self._thread, self._exe_name = self._get_thread_info()
         return self._thread
 
     @property
     def exe_name(self) -> str:
-        if self._exe_name is None:
+        if not hasattr(self, '_exe_name'):
             self._thread, self._exe_name = self._get_thread_info()
         return self._exe_name
 
     def _get_title(self):
-        length = GetWindowTextLengthW(self._hwnd)
+        length = GetWindowTextLengthW(self.window_id.value)
         buff = create_unicode_buffer(length + 1)
-        GetWindowTextW(self._hwnd, buff, length + 1)
+        GetWindowTextW(self.window_id.value, buff, length + 1)
         return buff.value
 
     @property
@@ -137,7 +104,7 @@ class WindowWin32(Window):
 
     def _get_class_name(self) -> str:
         buff = create_unicode_buffer(MAX_CLASS_NAME_LENGTH + 1)
-        GetClassNameW(self._hwnd, buff, MAX_CLASS_NAME_LENGTH + 1)
+        GetClassNameW(self.window_id.value, buff, MAX_CLASS_NAME_LENGTH + 1)
         return buff.value
 
     @property
@@ -146,60 +113,139 @@ class WindowWin32(Window):
             self._class_name: str = self._get_class_name()
         return self._class_name
 
+    @property
+    def is_minimized(self) -> bool:
+        return IsIconic(self.window_id.value)
+
+    @property
+    def is_child(self) -> bool:
+        GWL_STYLE = -16
+        WS_CHILD = 0x40000000
+        return GetWindowLongW(self.window_id.value, GWL_STYLE) & WS_CHILD != 0
+
+    @property
+    def is_visible(self) -> bool:
+        return IsWindowVisible(self.window_id.value)
+
+    @property
+    def is_cloaked(self) -> bool:
+        cloaked = BOOL()
+        DWMWA_CLOAKED = 14
+        result: HRESULT = DwmGetWindowAttribute(
+            self.window_id.value, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
+        return bool(result) and bool(cloaked)
+
+
+class WindowWin32(Window):
+    def __init__(self, window_id: WindowId):
+        if not IsWindow(window_id.value):
+            raise WindowNotFoundError(f'hwnd={window_id.value} is not window')
+        super().__init__(window_id)
+        self._window_info = WindowInfo(window_id)
+
+    def activate(self) -> bool:
+        active_window = WindowServiceWin32().from_active()
+
+        if self._window_info.is_minimized:
+            self._disable_minimize()
+
+        if active_window == self:
+            return True
+
+        with self.thread.attach(active_window.thread):
+            self._set_foreground(active_window)
+
+        return True
+
+    def ime_on(self) -> bool:
+        ime = IME(self.window_id)
+        ime.status = IME.Status.ON
+        return True
+
+    def ime_off(self) -> bool:
+        ime = IME(self.window_id)
+        ime.status = IME.Status.OFF
+        return True
+
+    @property
+    def thread(self) -> 'Thread':
+        return self._window_info.thread
+
+    @property
+    def exe_name(self) -> str:
+        return self._window_info.exe_name
+
+    @property
+    def title(self) -> str:
+        return self._window_info.title
+
+    @property
+    def class_name(self) -> str:
+        return self._window_info.class_name
+
+    def _disable_minimize(self) -> None:
+        ShowWindow(self.window_id.value, ShowWindowCmd.SW_RESTORE)
+
     def _set_foreground(self, current: 'WindowWin32') -> 'WindowWin32':
-        SetForegroundWindow(self._hwnd)
+        SetForegroundWindow(self.window_id.value)
         while True:
-            new_hwnd: HWND = GetForegroundWindow()
-            if new_hwnd == 0:
+            hwnd = GetForegroundWindow()
+            try:
+                new_id = WindowId(hwnd)
+            except DomainValueError:
                 continue
-            if new_hwnd == self._hwnd:
+            if new_id == self.window_id:
                 return self
-            if new_hwnd != current._hwnd:
+            if new_id != current.window_id:
                 break
-        if self._hwnd == GetWindow(new_hwnd, GetWindowCmd.GW_OWNER):
-            return self.__class__(WindowId(new_hwnd))
-        raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_hwnd}')
+        if self.window_id == WindowId(GetWindow(new_id.value, GetWindowCmd.GW_OWNER)):
+            return self.__class__(new_id)
+        raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_id}')
 
 
 class WindowServiceWin32(WindowService):
     def from_id(self, window_id: WindowId) -> WindowWin32:
+        window_info = WindowInfo(window_id)
+        if not window_info.is_visible or window_info.is_cloaked:
+            raise WindowNotFoundError(f'hwnd={window_id.value} is not visible')
         return WindowWin32(window_id)
 
     def from_pointer(self) -> WindowWin32:
         point = Cursor().point
         hwnd = WindowFromPoint(point)
-        if hwnd == 0:
-            raise WindowNotFoundError(f'point=({point.x}, {point.y})')
-        return self._get_first_ancestor(hwnd)
+        window_id = WindowId(hwnd)
+        return self._get_first_ancestor(window_id)
 
     @staticmethod
-    def _get_first_ancestor(hwnd: HWND) -> 'WindowWin32':
+    def _get_first_ancestor(window_id: WindowId) -> 'WindowWin32':
         """
         Returns the first ancestor of self that isn't itself a child.
         See: AutoHotkey/source/window.cpp: GetNonChildParent
         """
-        GWL_STYLE = -16
-        WS_CHILD = 0x40000000
-        parent_prev = hwnd
+        parent_prev = window_id
         while True:
-            if (GetWindowLongW(parent_prev, GWL_STYLE) & WS_CHILD) == 0:
-                if parent_prev != 0:
-                    return WindowWin32(WindowId(parent_prev))
-            parent = GetParent(parent_prev)
-            if parent == 0:
-                return WindowWin32(WindowId(parent_prev))
+            if not WindowInfo(parent_prev).is_child:
+                return WindowWin32(parent_prev)
+            hwnd = GetParent(parent_prev.value)
+            try:
+                parent = WindowId(hwnd)
+            except DomainValueError:
+                return WindowWin32(parent_prev)
             parent_prev = parent
 
     def from_active(self) -> WindowWin32:
         hwnd = GetForegroundWindow()
-        if hwnd == 0:
+        try:
+            fore_window_id = WindowId(hwnd)
+        except DomainValueError:
             raise WindowNotFoundError('No foreground window')
-        wnd = WindowWin32(WindowId(hwnd))
-        with wnd.thread.attach(Thread.from_current()):
-            hwnd_focus = GetFocus()
-        if hwnd_focus != 0:
-            return WindowWin32(WindowId(hwnd_focus))
-        return wnd
+        wnd = WindowWin32(fore_window_id)
+        try:
+            with wnd.thread.attach(Thread.from_current()):
+                focus_window_id = WindowId(GetFocus())
+        except (DomainValueError, DomainRuntimeError):
+            return wnd
+        return WindowWin32(focus_window_id)
 
     def from_query(self, query: WindowQuery) -> WindowWin32:
         exe_name = query.exe_name
@@ -207,14 +253,16 @@ class WindowServiceWin32(WindowService):
         class_name = query.class_name
         founds = []
 
-        def _callback(hwnd: HWND, lParam: LPARAM) -> bool:
-            if hwnd == 0:
+        def _callback(hwnd: int, lParam: LPARAM) -> bool:
+            try:
+                window_id = WindowId(hwnd)
+                window = self.from_id(window_id)
+            except (DomainValueError, WindowNotFoundError):
                 return True
-            window = WindowWin32(WindowId(hwnd))
             if all((
-                any((exe_name == '', re.search(exe_name, window.exe_name, re.IGNORECASE))),
-                any((window_text == '', re.search(window_text, window.title, re.IGNORECASE))),
-                any((class_name == '', re.search(class_name, window.class_name, re.IGNORECASE))),
+                exe_name == '' or re.search(exe_name, window.exe_name, re.IGNORECASE),
+                window_text == '' or re.search(window_text, window.title, re.IGNORECASE),
+                class_name == '' or re.search(class_name, window.class_name, re.IGNORECASE),
             )):
                 founds.append(window)
                 return False
@@ -225,20 +273,6 @@ class WindowServiceWin32(WindowService):
         if len(founds) > 0:
             return founds[0]
         raise WindowNotFoundError(f'No matched: proc={exe_name}, title={window_text}, class={class_name}')
-
-    def is_visible(self, hwnd: HWND) -> bool:
-        if not IsWindowVisible(hwnd):
-            return False
-        if self.is_cloaked(hwnd):
-            return False
-        return True
-
-    def is_cloaked(self, hwnd: HWND) -> bool:
-        cloaked = BOOL()
-        DWMWA_CLOAKED = 14
-        result: HRESULT = DwmGetWindowAttribute(
-            hwnd, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
-        return bool(result) and bool(cloaked)
 
 
 class Cursor():
@@ -258,19 +292,22 @@ class IME():
         ON = 0x01
         OFF = 0x00
 
-    def __init__(self, hwnd: HWND):
-        self._hwnd = ImmGetDefaultIMEWnd(hwnd)
-        if not IsWindow(self._hwnd):
-            raise IMEWindowNotFoundError(f'hwnd={self._hwnd}')
+    def __init__(self, window_id: WindowId):
+        hwnd = ImmGetDefaultIMEWnd(window_id.value)
+        self._window_id = WindowId(hwnd)
+
+    @property
+    def window_id(self) -> WindowId:
+        return self._window_id
 
     @property
     def status(self) -> 'IME.Status':
-        result = SendMessage(self._hwnd, 0x283, 0x5, 0x00)
+        result = SendMessage(self.window_id.value, 0x283, 0x5, 0x00)
         return IME.Status(result)
 
     @status.setter
     def status(self, status: 'IME.Status'):
-        SendMessage(self._hwnd, 0x283, 0x6, status.value)
+        SendMessage(self.window_id.value, 0x283, 0x6, status.value)
 
 
 class Thread():
