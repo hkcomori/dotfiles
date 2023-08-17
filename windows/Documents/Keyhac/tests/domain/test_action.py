@@ -8,6 +8,7 @@ from extension.domain.require_injection import (
 from extension.domain.action import (
     Action,
     ReverseAction,
+    DelayAction,
     NopAction,
     CommandAction,
     InputAction,
@@ -95,6 +96,11 @@ def test_action():
     assert inc is inc
     assert inc is not inc2
     assert inc is not dec
+
+
+def test_delay():
+    act = DelayAction(0.1, NopAction())
+    act.perform()
 
 
 def test_nop():

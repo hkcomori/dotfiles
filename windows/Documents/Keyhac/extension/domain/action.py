@@ -1,5 +1,8 @@
 from abc import abstractmethod
 import os
+from threading import (
+    Timer,
+)
 from typing import (
     Callable,
 )
@@ -116,6 +119,39 @@ class ReverseAction(Action):
     @Action.final
     def perform(self) -> bool:
         return not self._action.perform()
+
+
+class DelayAction(Action):
+    """
+    アクションを遅延させる。
+    """
+
+    def __init__(self, second: float, action: 'Action'):
+        self._second = second
+        self._action = action
+
+    @Action.final
+    def __hash__(self) -> int:
+        return hash(self._action)
+
+    @Action.final
+    def __add__(self, other) -> 'Action':
+        """Group two Actions"""
+        if isinstance(other, Action):
+            return self.__class__(self._second, self._action + other)
+        raise DomainTypeError(other, Action)
+
+    @Action.final
+    def __mul__(self, times) -> 'Action':
+        """Repeat Actions"""
+        if not isinstance(times, int):
+            raise DomainTypeError(times, int)
+        return self.__class__(self._second, self._action * times)
+
+    @Action.final
+    def perform(self) -> bool:
+        Timer(self._second, self._action.perform).start()
+        return True
 
 
 class NopAction(Action):
@@ -276,4 +312,4 @@ class ActionService(Service):
 
     def turn_off_monitor(self) -> Action:
         """モニターの電源を切る"""
-        return MonitorOffAction(self._desktop_service)
+        return DelayAction(0.1, MonitorOffAction(self._desktop_service))
