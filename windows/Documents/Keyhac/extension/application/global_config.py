@@ -1,3 +1,5 @@
+from itertools import combinations
+
 from extension.domain.window import WindowQuery
 from .abstract_config import AbstractConfig
 
@@ -9,6 +11,13 @@ class GlobalConfig(AbstractConfig):
         global_keymap = self._keymap_service.from_query(WindowQuery())
 
         global_keymap["Insert"] = act.nop()
+
+        global_keymap["F19"] = act.activate_window() + act.trigger("F22")
+        mods = ['C', 'A', 'S', 'W', 'U0', 'U1', 'U2', 'U3']
+        for n in range(1, len(mods) + 1):
+            for c in combinations(mods, n):
+                prefix = '-'.join(c) + '-'
+                global_keymap[prefix + "F19"] = act.activate_window() + act.trigger(prefix + "F22")
 
         global_keymap["W-Insert"] = act.activate_window() + act.send("C-A", "C-C")
 

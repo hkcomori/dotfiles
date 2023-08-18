@@ -11,10 +11,10 @@ class AcrobatConfig(AbstractConfig):
             class_name='AVL_AVView',
         ))
 
-        obsidian['F19'] = act.send('C-W')
+        obsidian['F22'] = act.send('C-W')
 
         # Zoom to fit page width
-        obsidian['C-F19'] = act.send('C-0')
+        obsidian['C-F22'] = act.send('C-0')
 
         # Back / Forward
         obsidian['XButton1'] = act.send('A-Left')

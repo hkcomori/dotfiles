@@ -10,7 +10,7 @@ class WindowsConfig(AbstractConfig):
             exe_name='explorer.exe',
             class_name='DirectUIHWND',
         ))
-        explorer['F19'] = act.activate_window() + act.send('C-W')
+        explorer['F22'] = act.send('C-W')
 
         explorer_location = self._keymap_service.from_query(WindowQuery(
             exe_name='explorer.exe',

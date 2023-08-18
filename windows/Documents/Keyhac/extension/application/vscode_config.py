@@ -47,9 +47,9 @@ class VScodeConfig(AbstractConfig):
         vscode['C-XButton2'] = act.activate_window() + act.send('C-PageDown')
 
         # Close/open/reopen tabs by pressing both back and forward
-        vscode['F19'] = act.activate_window() + act.send('C-W')
-        vscode['C-F19'] = act.activate_window() + act.send('C-T')
-        vscode['S-F19'] = act.activate_window() + act.send('C-S-T')
+        vscode['F22'] = act.send('C-W')
+        vscode['C-F22'] = act.send('C-T')
+        vscode['S-F22'] = act.send('C-S-T')
 
         # Switch tabs by wheel
         vscode['C-WheelUp'] = act.send('C-PageUp')

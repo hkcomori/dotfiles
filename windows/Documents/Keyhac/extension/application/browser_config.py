@@ -28,9 +28,9 @@ class BrowserConfig(AbstractConfig):
         browser['C-XButton2'] = act.activate_window() + act.send('C-Tab')
 
         # Close/open/reopen tabs by pressing both back and forward
-        browser['F19'] = act.activate_window() + act.send('C-W')
-        browser['C-F19'] = act.activate_window() + act.send('C-T')
-        browser['S-F19'] = act.activate_window() + act.send('C-S-T')
+        browser['F22'] = act.send('C-W')
+        browser['C-F22'] = act.send('C-T')
+        browser['S-F22'] = act.send('C-S-T')
 
         # Switch tabs by wheel
         browser['C-WheelUp'] = act.activate_window() + act.send('C-S-Tab')
@@ -42,4 +42,4 @@ class BrowserConfig(AbstractConfig):
             + self._keymap_service.from_query(WindowQuery(exe_name='vivaldi.exe', window_text='Developer Tools - *'))   # noqa: W503
         )
         # Close window by pressing both back and forward
-        devtools['F19'] = act.activate_window() + act.send('C-W')
+        devtools['F22'] = act.send('C-W')

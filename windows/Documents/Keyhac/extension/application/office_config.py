@@ -24,7 +24,7 @@ class OfficeConfig(AbstractConfig):
         outlook_child['C-F'] = act.send('F4')
 
         # Close message window by pressing both back and forward
-        outlook_child['F19'] = act.activate_window() + act.send('A-F4')
+        outlook_child['F22'] = act.send('A-F4')
 
         outlook_child['XButton1'] = act.activate_window() + act.send('C-S-Comma')
         outlook_child['XButton2'] = act.activate_window() + act.send('C-S-Period')

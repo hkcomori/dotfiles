@@ -10,7 +10,7 @@ class ObsidianConfig(AbstractConfig):
             exe_name='Obsidian.exe',
         ))
 
-        obsidian['F19'] = act.send('C-W')
+        obsidian['F22'] = act.send('C-W')
 
         obsidian['C-E'] = act.send('C-E') + act.ime_off()
         obsidian['C-F'] = act.send('C-F') + act.ime_off()
