@@ -9,6 +9,7 @@ from .browser_config import BrowserConfig
 from .vscode_config import VScodeConfig
 from .spark_config import SparkConfig
 from .office_config import OfficeConfig
+from .acrobat_config import AcrobatConfig
 from .obsidian_config import ObsidianConfig
 from .captureontouch_config import TouchConfig
 
@@ -23,6 +24,7 @@ class AllConfig(AbstractConfig):
             VScodeConfig(keymap_service, action_service),
             SparkConfig(keymap_service, action_service),
             OfficeConfig(keymap_service, action_service),
+            AcrobatConfig(keymap_service, action_service),
             ObsidianConfig(keymap_service, action_service),
             TouchConfig(keymap_service, action_service),
         )
