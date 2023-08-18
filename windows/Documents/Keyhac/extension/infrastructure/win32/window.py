@@ -187,6 +187,9 @@ class WindowWin32(Window):
         ShowWindow(self.window_id.value, ShowWindowCmd.SW_RESTORE)
 
     def _set_foreground(self, current: 'WindowWin32') -> 'WindowWin32':
+        """
+        See: AutoHotkey/source/window.cpp: AttemptSetForeground
+        """
         SetForegroundWindow(self.window_id.value)
         while True:
             hwnd = GetForegroundWindow()
@@ -198,8 +201,14 @@ class WindowWin32(Window):
                 return self
             if new_id != current.window_id:
                 break
-        if self.window_id == WindowId(GetWindow(new_id.value, GetWindowCmd.GW_OWNER)):
-            return self.__class__(new_id)
+        owner_hwnd = GetWindow(new_id.value, GetWindowCmd.GW_OWNER)
+        try:
+            owner_window_id = WindowId(owner_hwnd)
+        except DomainValueError:
+            raise WindowNotFoundError(f'Owner window of hwnd={new_id}')
+        else:
+            if self.window_id == owner_window_id:
+                return self.__class__(new_id)
         raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_id}')
 
 
