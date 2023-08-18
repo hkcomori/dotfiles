@@ -23,3 +23,7 @@ class InputServiceKeyhac(InputService):
     def send(self, *inputs: Input) -> Callable[[], None]:
         keys = [i.value for i in inputs]
         return self._keymap.InputKeyCommand(*keys)
+
+    def trigger(self, input: Input) -> Callable[[], None]:
+        key = input.value
+        return self._keymap.TriggerActionCommand(key)

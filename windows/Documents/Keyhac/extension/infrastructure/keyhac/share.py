@@ -33,6 +33,10 @@ class KeymapKeyhac(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def TriggerActionCommand(self, key: str) -> Callable[[], None]:
+        raise NotImplementedError
+
+    @abstractmethod
     def ShellExecuteCommand(
         self,
         verb: str,

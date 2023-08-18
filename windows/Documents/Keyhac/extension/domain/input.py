@@ -36,6 +36,11 @@ class InputService(Service):
         """入力を送信する"""
         raise NotImplementedError
 
+    @abstractmethod
+    def trigger(self, input: Input) -> Callable[[], None]:
+        """入力に割り当てられたアクションをトリガする"""
+        raise NotImplementedError
+
 
 class KeyCondition:
     def __init__(self, keys: str):

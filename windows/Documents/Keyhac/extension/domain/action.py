@@ -191,6 +191,21 @@ class InputAction(Action):
         return True
 
 
+class TriggerAction(Action):
+    """入力に割り当てられたアクションを実行する"""
+
+    def __init__(self, input_service: InputService, key: str):
+        self._input_service = input_service
+        self._input = Input(key)
+
+    def __hash__(self) -> int:
+        return hash(self._input_service)
+
+    def perform(self) -> bool:
+        self._input_service.trigger(self._input)()
+        return True
+
+
 class ImeOnAction(Action):
     """IMEをONにする"""
     def __init__(self, get_window_func: Callable[[], Window]):
@@ -297,6 +312,10 @@ class ActionService(Service):
     def send(self, *keys: str) -> Action:
         """架空のキー入力を送信する"""
         return InputAction(self._input_service, *keys)
+
+    def trigger(self, key: str) -> Action:
+        """入力に割り当てられたアクションを実行する"""
+        return TriggerAction(self._input_service, key)
 
     def ime_on(self) -> Action:
         """IMEをONにする"""
