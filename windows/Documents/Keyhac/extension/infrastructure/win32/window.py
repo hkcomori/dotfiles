@@ -5,11 +5,11 @@ from ctypes import (
     sizeof,
     create_unicode_buffer,
 )
+from fnmatch import fnmatch
 from threading import currentThread
 from typing import (
     Tuple,
 )
-import re
 
 import pyauto   # type: ignore
 
@@ -284,9 +284,9 @@ class WindowServiceWin32(WindowService):
             if window.class_name == 'ApplicationFrameWindow':
                 return EnumChildWindows(hwnd, WNDENUMPROC(_callback), 0)
             elif all((
-                exe_name == '' or re.search(exe_name, window.exe_name, re.IGNORECASE),
-                window_text == '' or re.search(window_text, window.window_text, re.IGNORECASE),
-                class_name == '' or re.search(class_name, window.class_name, re.IGNORECASE),
+                exe_name == '' or fnmatch(window.exe_name, exe_name),
+                window_text == '' or fnmatch(window.window_text, window_text),
+                class_name == '' or fnmatch(window.class_name, class_name),
             )):
                 founds.append(window)
                 return False

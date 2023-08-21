@@ -7,7 +7,7 @@ class CalculatorConfig(AbstractConfig):
         act = self._action_service
 
         explorer = self._keymap_service.from_query(WindowQuery(
-            exe_name='Calculator.exe',
+            exe_name='Calculator*.exe',
             class_name='Windows.UI.Core.CoreWindow',
             window_text='電卓',
         ))
