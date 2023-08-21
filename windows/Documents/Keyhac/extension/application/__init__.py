@@ -5,6 +5,7 @@ from extension.domain.keymap import KeymapService
 from .abstract_config import AbstractConfig
 from .global_config import GlobalConfig
 from .windows_config import WindowsConfig
+from .calculator_config import CalculatorConfig
 from .browser_config import BrowserConfig
 from .vscode_config import VScodeConfig
 from .spark_config import SparkConfig
@@ -20,6 +21,7 @@ class AllConfig(AbstractConfig):
         self._configs = (
             GlobalConfig(keymap_service, action_service),
             WindowsConfig(keymap_service, action_service),
+            CalculatorConfig(keymap_service, action_service),
             BrowserConfig(keymap_service, action_service),
             VScodeConfig(keymap_service, action_service),
             SparkConfig(keymap_service, action_service),
