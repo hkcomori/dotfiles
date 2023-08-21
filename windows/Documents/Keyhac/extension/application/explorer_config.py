@@ -2,7 +2,7 @@ from extension.domain.window import WindowQuery
 from .abstract_config import AbstractConfig
 
 
-class WindowsConfig(AbstractConfig):
+class ExplorerConfig(AbstractConfig):
     def apply(self) -> None:
         act = self._action_service
 
