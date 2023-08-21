@@ -51,6 +51,7 @@ from .share import (
     WindowFromPoint,
     GetFocus,
     EnumWindows,
+    EnumChildWindows,
     IsWindowVisible,
     GetCursorPos,
     AttachThreadInput,
@@ -90,17 +91,17 @@ class WindowInfo:
             self._thread, self._exe_name = self._get_thread_info()
         return self._exe_name
 
-    def _get_title(self):
+    def _get_window_text(self):
         length = GetWindowTextLengthW(self.window_id.value)
         buff = create_unicode_buffer(length + 1)
         GetWindowTextW(self.window_id.value, buff, length + 1)
         return buff.value
 
     @property
-    def title(self) -> str:
+    def window_text(self) -> str:
         if not hasattr(self, '_title'):
-            self._title: str = self._get_title()
-        return self._title
+            self._window_text: str = self._get_window_text()
+        return self._window_text
 
     def _get_class_name(self) -> str:
         buff = create_unicode_buffer(MAX_CLASS_NAME_LENGTH + 1)
@@ -144,16 +145,23 @@ class WindowWin32(Window):
         self._window_info = WindowInfo(window_id)
 
     def activate(self) -> bool:
-        active_window = WindowServiceWin32().from_active()
+        current_wnd = WindowServiceWin32().from_active()
 
         if self._window_info.is_minimized:
             self._disable_minimize()
 
-        if active_window == self:
+        if current_wnd == self:
             return True
 
-        with self.thread.attach(active_window.thread):
-            self._set_foreground(active_window)
+        try:
+            with Thread.from_current().attach(current_wnd.thread):
+                with current_wnd.thread.attach(self.thread):
+                    self._set_foreground(current_wnd)
+        except DomainRuntimeError:
+            new_wnd = self._set_foreground(current_wnd)
+            if new_wnd != self:
+                raise DomainRuntimeError(
+                    f'Activate failure: expect to {self}, but {new_wnd}')
 
         return True
 
@@ -176,8 +184,8 @@ class WindowWin32(Window):
         return self._window_info.exe_name
 
     @property
-    def title(self) -> str:
-        return self._window_info.title
+    def window_text(self) -> str:
+        return self._window_info.window_text
 
     @property
     def class_name(self) -> str:
@@ -268,9 +276,12 @@ class WindowServiceWin32(WindowService):
                 window = self.from_id(window_id)
             except (DomainValueError, WindowNotFoundError):
                 return True
-            if all((
+            # UWPアプリはトップレベルウィンドウではないので、子ウィンドウを検索する
+            if window.class_name == 'ApplicationFrameWindow':
+                return EnumChildWindows(hwnd, WNDENUMPROC(_callback), 0)
+            elif all((
                 exe_name == '' or re.search(exe_name, window.exe_name, re.IGNORECASE),
-                window_text == '' or re.search(window_text, window.title, re.IGNORECASE),
+                window_text == '' or re.search(window_text, window.window_text, re.IGNORECASE),
                 class_name == '' or re.search(class_name, window.class_name, re.IGNORECASE),
             )):
                 founds.append(window)
@@ -305,6 +316,12 @@ class IME():
         hwnd = ImmGetDefaultIMEWnd(window_id.value)
         self._window_id = WindowId(hwnd)
 
+    def __repr__(self) -> str:
+        return f'IME({self.window_id})'
+
+    def __str__(self) -> str:
+        return str(self.window_id)
+
     @property
     def window_id(self) -> WindowId:
         return self._window_id
@@ -328,6 +345,9 @@ class Thread():
             raise DomainTypeError(other, self.__class__)
         return self._thread_id == other._thread_id
 
+    def __repr__(self) -> str:
+        return f'Thread({self._thread_id})'
+
     def __str__(self) -> str:
         return str(self._thread_id)
 
@@ -342,7 +362,7 @@ class Thread():
         return Thread.AttacheInput(self._thread_id, other._thread_id)
 
     class AttacheInput:
-        def __init__(self, self_thread_id, other_thread_id):
+        def __init__(self, self_thread_id: int, other_thread_id: int):
             self._self_thread_id = self_thread_id
             self._other_thread_id = other_thread_id
             self._attached = False

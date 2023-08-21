@@ -26,11 +26,23 @@ class WindowMock(Window):
         ime_enabled: bool = False,
     ):
         super().__init__(window_id)
-        self.exe_name = exe_name
-        self.class_name = class_name
-        self.window_text = window_text
+        self._exe_name = exe_name
+        self._class_name = class_name
+        self._window_text = window_text
         self.is_active = is_active
         self.ime_enabled = ime_enabled
+
+    @property
+    def exe_name(self) -> str:
+        return self._exe_name
+
+    @property
+    def class_name(self) -> str:
+        return self._class_name
+
+    @property
+    def window_text(self) -> str:
+        return self._window_text
 
     def activate(self) -> bool:
         for w in self.__class__.window_list:

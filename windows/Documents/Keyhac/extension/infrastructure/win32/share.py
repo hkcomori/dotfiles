@@ -17,16 +17,21 @@ from ctypes.wintypes import (
     LPARAM,
     WPARAM,
 )
+from typing import (
+    Optional,
+)
 
 
 HWND = LONG
 
 
 class HRESULT:
+    """https://learn.microsoft.com/ja-jp/windows/win32/seccrypto/common-hresult-values"""
     def __init__(self, hresult: int):
         self._hresult = hresult
 
     def __bool__(self) -> bool:
+        """https://learn.microsoft.com/ja-jp/windows/win32/api/winerror/nf-winerror-succeeded"""
         return self._hresult >= 0
 
 
@@ -106,6 +111,7 @@ def DwmGetWindowAttribute(hwnd: int, dwAttribute: int, pvAttribute: _Pointer, cb
 
 def GetWindowThreadProcessId(hwnd: int, lpdwProcessId: _Pointer) -> int:
     """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getwindowthreadprocessid
     """
     res: int = windll.user32.GetWindowThreadProcessId(HWND(hwnd), lpdwProcessId)
     return res
@@ -220,6 +226,14 @@ def EnumWindows(lpEnumFunc: WINFUNCTYPE, lParam: int) -> bool:
     https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-enumwindows
     """
     res: bool = windll.user32.EnumWindows(lpEnumFunc, LPARAM(lParam))
+    return res
+
+
+def EnumChildWindows(hwndParent: int, lpEnumFunc: WINFUNCTYPE, lParam: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-enumchildwindows
+    """
+    res: bool = windll.user32.EnumChildWindows(hwndParent, lpEnumFunc, LPARAM(lParam))
     return res
 
 

@@ -304,8 +304,9 @@ class ActionService(Service):
         """電卓を開く"""
         return ReverseAction(WindowActivateAction(
             lambda: self._window_service.from_query(WindowQuery(
-                exe_name='ApplicationFrameHost.exe',
-                window_text='電卓'
+                exe_name='Calculator.exe',
+                class_name='Windows.UI.Core.CoreWindow',
+                window_text='電卓',
             )),
         )) + CommandAction(self._shell_service, Command('calc.exe'))
 

@@ -86,10 +86,34 @@ class Window(Entity):
             raise DomainTypeError(other, Window)
         return self._window_id == other._window_id
 
+    def __repr__(self) -> str:
+        return f"Window({self.window_id}, '{self.exe_name}', '{self.class_name}', '{self.window_text}')"
+
+    def __str__(self) -> str:
+        return f"('{self.exe_name}', '{self.class_name}', '{self.window_text}')"
+
     @property
     def window_id(self) -> WindowId:
         """ウィンドウの識別番号"""
         return self._window_id
+
+    @property
+    @abstractmethod
+    def exe_name(self) -> str:
+        """ウィンドウのプロセス名"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def class_name(self) -> str:
+        """ウィンドウのクラス名"""
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def window_text(self) -> str:
+        """ウィンドウのタイトル"""
+        raise NotImplementedError
 
     @abstractmethod
     def activate(self) -> bool:
