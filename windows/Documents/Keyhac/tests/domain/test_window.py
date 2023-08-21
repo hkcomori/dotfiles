@@ -23,6 +23,9 @@ def test_window_id():
     assert window_id1 is not window_id2
     assert window_id1 is not window_id3
 
+    assert repr(window_id1) == 'WindowId(3)'
+    assert str(window_id1) == '3'
+
 
 @pytest.mark.parametrize('value', [
     0, -1, -32768,
@@ -58,3 +61,6 @@ def test_window_query():
     assert query1 is query1
     assert query1 is not query3
     assert query1 is not query2
+
+    assert repr(query1) == "WindowQuery('EXE NAME', 'class NAME', 'WindowText')"
+    assert str(query1) == "('EXE NAME', 'class NAME', 'WindowText')"

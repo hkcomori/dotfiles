@@ -21,6 +21,12 @@ class WindowId(ValueObject):
     def __hash__(self) -> int:
         return hash(self.value)
 
+    def __repr__(self) -> str:
+        return f'WindowId({self.value})'
+
+    def __str__(self) -> str:
+        return str(self.value)
+
     @property
     def value(self) -> int:
         return self._value
@@ -44,6 +50,12 @@ class WindowQuery(ValueObject):
             self._class_name,
             self._window_text,
         ))
+
+    def __repr__(self) -> str:
+        return f"WindowQuery('{self.exe_name}', '{self.class_name}', '{self.window_text}')"
+
+    def __str__(self) -> str:
+        return f"('{self.exe_name}', '{self.class_name}', '{self.window_text}')"
 
     @property
     def exe_name(self):
