@@ -25,12 +25,16 @@ class WindowMock(Window):
         is_active: bool = False,
         ime_enabled: bool = False,
     ):
-        super().__init__(window_id)
+        self._window_id = window_id
         self._exe_name = exe_name
         self._class_name = class_name
         self._window_text = window_text
         self.is_active = is_active
         self.ime_enabled = ime_enabled
+
+    @property
+    def window_id(self) -> WindowId:
+        return self._window_id
 
     @property
     def exe_name(self) -> str:

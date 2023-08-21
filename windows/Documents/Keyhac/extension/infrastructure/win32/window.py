@@ -141,7 +141,7 @@ class WindowWin32(Window):
     def __init__(self, window_id: WindowId):
         if not IsWindow(window_id.value):
             raise WindowNotFoundError(f'hwnd={window_id.value} is not window')
-        super().__init__(window_id)
+        self._window_id = window_id
         self._window_info = WindowInfo(window_id)
 
     def activate(self) -> bool:
@@ -174,6 +174,10 @@ class WindowWin32(Window):
         ime = IME(self.window_id)
         ime.status = IME.Status.OFF
         return True
+
+    @property
+    def window_id(self) -> WindowId:
+        return self._window_id
 
     @property
     def thread(self) -> 'Thread':

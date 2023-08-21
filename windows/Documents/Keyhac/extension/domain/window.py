@@ -75,16 +75,13 @@ class WindowQuery(ValueObject):
 
 class Window(Entity):
     """ウィンドウを操作するためのインターフェース"""
-    def __init__(self, window_id: WindowId):
-        self._window_id = window_id
-
     def __hash__(self) -> int:
-        return hash(self._window_id)
+        return hash(self.window_id)
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, Window):
             raise DomainTypeError(other, Window)
-        return self._window_id == other._window_id
+        return self.window_id == other.window_id
 
     def __repr__(self) -> str:
         return f"Window({self.window_id}, '{self.exe_name}', '{self.class_name}', '{self.window_text}')"
@@ -95,7 +92,7 @@ class Window(Entity):
     @property
     def window_id(self) -> WindowId:
         """ウィンドウの識別番号"""
-        return self._window_id
+        raise NotImplementedError
 
     @property
     @abstractmethod
