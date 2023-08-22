@@ -5,7 +5,6 @@ from ctypes import (
     sizeof,
     create_unicode_buffer,
 )
-from fnmatch import fnmatch
 from threading import currentThread
 from typing import (
     Optional,
@@ -298,9 +297,6 @@ class WindowServiceWin32(WindowService):
         query: WindowQuery,
         parent: Optional[WindowWin32],
     ) -> WindowWin32:
-        exe_name = query.exe_name
-        window_text = query.window_text
-        class_name = query.class_name
         founds = []
 
         def _callback(hwnd: int, lParam: LPARAM) -> bool:
@@ -312,11 +308,7 @@ class WindowServiceWin32(WindowService):
             # UWPアプリはトップレベルウィンドウではないので、子ウィンドウを検索する
             if window.class_name == 'ApplicationFrameWindow':
                 return EnumChildWindows(hwnd, WNDENUMPROC(_callback), 0)
-            elif all((
-                exe_name == '' or fnmatch(window.exe_name, exe_name),
-                window_text == '' or fnmatch(window.window_text, window_text),
-                class_name == '' or fnmatch(window.class_name, class_name),
-            )):
+            elif query.match(window):
                 founds.append(window)
                 return False
             return True
@@ -326,7 +318,7 @@ class WindowServiceWin32(WindowService):
 
         if len(founds) > 0:
             return founds[0]
-        raise WindowNotFoundError(f'No matched: proc={exe_name}, title={window_text}, class={class_name}')
+        raise WindowNotFoundError(f'No window matched: {repr(query)}')
 
 
 class Cursor():

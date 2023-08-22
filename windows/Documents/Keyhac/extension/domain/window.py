@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from fnmatch import fnmatch
 
 from .exception import (
     DomainTypeError,
@@ -71,6 +72,14 @@ class WindowQuery(ValueObject):
     def window_text(self):
         """ウィンドウのタイトル"""
         return self._window_text
+
+    def match(self, wnd: 'Window') -> bool:
+        """ウィンドウが検索条件にマッチするかを判定する"""
+        return all((
+            self.exe_name == '' or fnmatch(wnd.exe_name, self.exe_name),
+            self.window_text == '' or fnmatch(wnd.window_text, self.window_text),
+            self.class_name == '' or fnmatch(wnd.class_name, self.class_name),
+        ))
 
 
 class Window(Entity):
