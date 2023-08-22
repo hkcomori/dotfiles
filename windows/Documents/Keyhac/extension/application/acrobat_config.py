@@ -11,7 +11,12 @@ class AcrobatConfig(AbstractConfig):
             class_name='AVL_AVView',
         ))
 
+        # Close Tab
         obsidian['F22'] = act.send('C-W')
+
+        # Switch Tabs
+        obsidian['C-PageUp'] = act.send('C-S-Tab')
+        obsidian['C-PageDown'] = act.send('C-Tab')
 
         # Zoom to fit page width
         obsidian['C-F22'] = act.send('C-0')
