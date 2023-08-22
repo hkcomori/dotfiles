@@ -8,6 +8,7 @@ from ctypes import (
 from fnmatch import fnmatch
 from threading import currentThread
 from typing import (
+    Optional,
     Tuple,
 )
 
@@ -52,7 +53,6 @@ from .share import (
     GetParent,
     WindowFromPoint,
     GetFocus,
-    EnumWindows,
     EnumChildWindows,
     IsWindowVisible,
     GetCursorPos,
@@ -291,6 +291,13 @@ class WindowServiceWin32(WindowService):
         return WindowWin32(focus_window_id)
 
     def from_query(self, query: WindowQuery) -> WindowWin32:
+        return self._from_query(query, None)
+
+    def _from_query(
+        self,
+        query: WindowQuery,
+        parent: Optional[WindowWin32],
+    ) -> WindowWin32:
         exe_name = query.exe_name
         window_text = query.window_text
         class_name = query.class_name
@@ -314,7 +321,8 @@ class WindowServiceWin32(WindowService):
                 return False
             return True
 
-        EnumWindows(WNDENUMPROC(_callback), 0)
+        hwnd = parent.window_id.value if parent is not None else 0
+        EnumChildWindows(hwnd, WNDENUMPROC(_callback), 0)
 
         if len(founds) > 0:
             return founds[0]
