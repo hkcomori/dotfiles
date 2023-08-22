@@ -11,12 +11,21 @@ class OfficeConfig(AbstractConfig):
         powerpoint = self._keymap_service.from_query(WindowQuery(exe_name='POWERPNT.EXE'))
         outlook_main = self._keymap_service.from_query(WindowQuery(exe_name='OUTLOOK.EXE', class_name='OutlookGrid'))
         outlook_child = self._keymap_service.from_query(WindowQuery(exe_name='OUTLOOK.EXE', class_name='_WwG'))
-        office = word + excel + powerpoint  # noqa: F841
+        office = word + excel + powerpoint
+
+        excel_search = self._keymap_service.from_query(WindowQuery(
+            exe_name='EXCEL.EXE',
+            class_name='EDTBX',
+        ))
 
         excel['A-WheelDown'] = act.send('PageDown')
         excel['U0-WheelDown'] = act.send('PageDown')
         excel['A-WheelUp'] = act.send('PageUp')
         excel['U0-WheelUp'] = act.send('PageUp')
+
+        excel_search.applying_func = act.ime_off()
+
+        office['F22'] = act.send('A-F4')
 
         outlook_main['C-E'] = act.send('C-E') + act.ime_off()
 
