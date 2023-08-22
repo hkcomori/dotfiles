@@ -234,15 +234,16 @@ class WindowWin32(Window):
                 return self
             if new_id != current.window_id:
                 break
+        new_wnd = self.__class__(new_id)
         owner_hwnd = GetWindow(new_id.value, GetWindowCmd.GW_OWNER)
         try:
             owner_window_id = WindowId(owner_hwnd)
         except DomainValueError:
-            raise WindowNotFoundError(f'Owner window of hwnd={new_id}')
-        else:
-            if self.window_id == owner_window_id:
-                return self.__class__(new_id)
-        raise DomainRuntimeError(f'SetForegroundWindow failure: target={self}, current={current}, new={new_id}')
+            return new_wnd
+        if self.window_id == owner_window_id:
+            return new_wnd
+        raise DomainRuntimeError(
+            f'activate failure: target={self}, new={new_wnd}')
 
 
 class WindowServiceWin32(WindowService):
@@ -256,7 +257,11 @@ class WindowServiceWin32(WindowService):
         point = Cursor().point
         hwnd = WindowFromPoint(point)
         window_id = WindowId(hwnd)
-        return self._get_first_ancestor(window_id)
+        wnd = WindowWin32(window_id)
+        ancestor_wnd = self._get_first_ancestor(window_id)
+        if ancestor_wnd.class_name == 'ApplicationFrameWindow':
+            return wnd
+        return ancestor_wnd
 
     @staticmethod
     def _get_first_ancestor(window_id: WindowId) -> 'WindowWin32':
