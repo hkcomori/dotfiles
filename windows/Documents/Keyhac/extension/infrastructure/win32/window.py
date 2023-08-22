@@ -76,9 +76,8 @@ class AttachThreadInputError(DomainRuntimeError):
 class SetForegroundError(DomainRuntimeError):
     """フォアグラウンド化に失敗したときのエラー"""
 
-    def __init__(self, err_code: int, target: Window):
-        err = SystemError(err_code)
-        msg = f'{err.name}: {repr(target)}'
+    def __init__(self, target: Window):
+        msg = f'{repr(target)}'
         super().__init__(msg)
 
 
@@ -223,7 +222,7 @@ class WindowWin32(Window):
         See: AutoHotkey/source/window.cpp: AttemptSetForeground
         """
         if not SetForegroundWindow(self.window_id.value):
-            raise SetForegroundError(GetLastError(), self)
+            raise SetForegroundError(self)
         while True:
             hwnd = GetForegroundWindow()
             try:
