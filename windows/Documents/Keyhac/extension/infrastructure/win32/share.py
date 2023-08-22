@@ -77,6 +77,15 @@ class ShowWindowCmd(enum.Enum):
     SW_FORCEMINIMIZE = UINT(11)
 
 
+@enum.unique
+class SystemError(enum.IntEnum):
+    """
+    システムエラーコード
+    https://learn.microsoft.com/ja-jp/windows/win32/debug/system-error-codes
+    """
+    ERROR_ACCESS_DENIED = 5
+
+
 def GetLastError() -> int:
     """
     https://learn.microsoft.com/ja-jp/windows/win32/api/errhandlingapi/nf-errhandlingapi-getlasterror
@@ -154,6 +163,14 @@ def GetForegroundWindow() -> int:
     https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-getforegroundwindow
     """
     res: int = windll.user32.GetForegroundWindow()
+    return res
+
+
+def BringWindowToTop(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-bringwindowtotop
+    """
+    res: bool = windll.user32.BringWindowToTop(HWND(hwnd))
     return res
 
 

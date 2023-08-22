@@ -26,6 +26,7 @@ from extension.domain.window import (
     WindowService,
 )
 from .share import (
+    SystemError,
     POINT,
     BOOL,
     LPARAM,
@@ -42,6 +43,7 @@ from .share import (
     GetClassNameW,
     SetForegroundWindow,
     GetForegroundWindow,
+    BringWindowToTop,
     GetWindow,
     IsIconic,
     IsWindow,
@@ -61,6 +63,24 @@ from .share import (
 
 MAX_CLASS_NAME_LENGTH = 256
 """クラス名の最大長"""
+
+
+class AttacheThreadInputError(DomainRuntimeError):
+    """スレッド入力の接続に失敗したときのエラー"""
+
+    def __init__(self, err_code: int, thread_id1: int, thread_id2: int):
+        err = SystemError(err_code)
+        msg = f'{err.name}: Thread({thread_id1}), Thread({thread_id2})'
+        super().__init__(msg)
+
+
+class SetForegroundError(DomainRuntimeError):
+    """フォアグラウンド化に失敗したときのエラー"""
+
+    def __init__(self, err_code: int, target: Window):
+        err = SystemError(err_code)
+        msg = f'{err.name}: {repr(target)}'
+        super().__init__(msg)
 
 
 class WindowInfo:
@@ -156,13 +176,14 @@ class WindowWin32(Window):
         try:
             with Thread.from_current().attach(current_wnd.thread):
                 with current_wnd.thread.attach(self.thread):
-                    self._set_foreground(current_wnd)
-        except DomainRuntimeError:
-            new_wnd = self._set_foreground(current_wnd)
-            if new_wnd != self:
-                raise DomainRuntimeError(
-                    f'Activate failure: expect to {self}, but {new_wnd}')
+                    wnd = self._set_foreground(current_wnd)
+                    BringWindowToTop(wnd.window_id.value)
+                    return True
+        except AttacheThreadInputError:
+            pass
 
+        wnd = self._set_foreground(current_wnd)
+        BringWindowToTop(wnd.window_id.value)
         return True
 
     def ime_on(self) -> bool:
@@ -202,7 +223,8 @@ class WindowWin32(Window):
         """
         See: AutoHotkey/source/window.cpp: AttemptSetForeground
         """
-        SetForegroundWindow(self.window_id.value)
+        if not SetForegroundWindow(self.window_id.value):
+            raise SetForegroundError(GetLastError(), self)
         while True:
             hwnd = GetForegroundWindow()
             try:
@@ -375,8 +397,8 @@ class Thread():
             if self._self_thread_id != self._other_thread_id:
                 self._attached = AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
                 if not self._attached:
-                    err = GetLastError()
-                    raise DomainRuntimeError(f'AttachThreadInput failed {err}: self={self._self_thread_id}, other={self._other_thread_id}')
+                    raise AttacheThreadInputError(
+                        GetLastError(), self._self_thread_id, self._other_thread_id)
 
         def __exit__(self, exc_type, exc_value, traceback):
             if self._attached:
