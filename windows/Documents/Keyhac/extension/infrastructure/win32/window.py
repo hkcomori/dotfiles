@@ -64,7 +64,7 @@ MAX_CLASS_NAME_LENGTH = 256
 """クラス名の最大長"""
 
 
-class AttacheThreadInputError(DomainRuntimeError):
+class AttachThreadInputError(DomainRuntimeError):
     """スレッド入力の接続に失敗したときのエラー"""
 
     def __init__(self, err_code: int, thread_id1: int, thread_id2: int):
@@ -178,7 +178,7 @@ class WindowWin32(Window):
                     wnd = self._set_foreground(current_wnd)
                     BringWindowToTop(wnd.window_id.value)
                     return True
-        except AttacheThreadInputError:
+        except AttachThreadInputError:
             pass
 
         wnd = self._set_foreground(current_wnd)
@@ -402,7 +402,7 @@ class Thread():
             if self._self_thread_id != self._other_thread_id:
                 self._attached = AttachThreadInput(self._self_thread_id, self._other_thread_id, True)
                 if not self._attached:
-                    raise AttacheThreadInputError(
+                    raise AttachThreadInputError(
                         GetLastError(), self._self_thread_id, self._other_thread_id)
 
         def __exit__(self, exc_type, exc_value, traceback):
