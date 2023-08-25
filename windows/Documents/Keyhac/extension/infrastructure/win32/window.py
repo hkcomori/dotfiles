@@ -6,6 +6,7 @@ from ctypes import (
     create_unicode_buffer,
 )
 from threading import currentThread
+from time import sleep
 from typing import (
     Iterator,
     Optional,
@@ -236,6 +237,7 @@ class WindowWin32(Window):
             try:
                 new_wnd = WindowServiceWin32().from_active()
             except WindowNotFoundError:
+                sleep(0.1)
                 continue
             if new_wnd == self:
                 return self
