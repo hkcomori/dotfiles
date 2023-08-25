@@ -41,6 +41,7 @@ from .share import (
     GetWindowTextLengthW,
     GetWindowTextW,
     GetClassNameW,
+    IsHungAppWindow,
     SetForegroundWindow,
     GetForegroundWindow,
     BringWindowToTop,
@@ -154,6 +155,10 @@ class WindowInfo:
             self.window_id.value, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
         return bool(result) and bool(cloaked)
 
+    @property
+    def is_hang(self) -> bool:
+        return IsHungAppWindow(self.window_id.value)
+
 
 class WindowWin32(Window):
     def __init__(self, window_id: WindowId):
@@ -163,6 +168,9 @@ class WindowWin32(Window):
         self._window_info = WindowInfo(window_id)
 
     def activate(self) -> bool:
+        if self._window_info.is_hang:
+            raise DomainRuntimeError(f'Window not responding: {repr(self)}')
+
         current_wnd = WindowServiceWin32().from_active()
 
         if self._window_info.is_minimized:

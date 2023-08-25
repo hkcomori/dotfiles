@@ -150,6 +150,14 @@ def GetClassNameW(hwnd: int, lpString: Array, nMaxCount: int) -> int:
     return res
 
 
+def IsHungAppWindow(hwnd: int) -> bool:
+    """
+    https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-ishungappwindow
+    """
+    res: bool = windll.user32.IsHungAppWindow(hwnd)
+    return res
+
+
 def SetForegroundWindow(hwnd: int) -> bool:
     """
     https://learn.microsoft.com/ja-jp/windows/win32/api/winuser/nf-winuser-setforegroundwindow
