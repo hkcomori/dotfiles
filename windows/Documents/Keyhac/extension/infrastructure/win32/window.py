@@ -138,7 +138,7 @@ class WindowInfo:
         return IsIconic(self.window_id.value)
 
     @property
-    def is_child(self) -> bool:
+    def has_parent(self) -> bool:
         GWL_STYLE = -16
         WS_CHILD = 0x40000000
         return GetWindowLongW(self.window_id.value, GWL_STYLE) & WS_CHILD != 0
@@ -273,12 +273,12 @@ class WindowServiceWin32(WindowService):
     @staticmethod
     def _get_first_ancestor(window_id: WindowId) -> 'WindowWin32':
         """
-        Returns the first ancestor of self that isn't itself a child.
+        Returns the first ancestor who has no parents.
         See: AutoHotkey/source/window.cpp: GetNonChildParent
         """
         parent_prev = window_id
         while True:
-            if not WindowInfo(parent_prev).is_child:
+            if not WindowInfo(parent_prev).has_parent:
                 return WindowWin32(parent_prev)
             hwnd = GetParent(parent_prev.value)
             try:
