@@ -7,6 +7,7 @@ from ctypes import (
 )
 from threading import currentThread
 from typing import (
+    Iterator,
     Optional,
     Tuple,
 )
@@ -232,25 +233,32 @@ class WindowWin32(Window):
         if not SetForegroundWindow(self.window_id.value):
             raise SetForegroundError(self)
         while True:
-            hwnd = GetForegroundWindow()
             try:
-                new_id = WindowId(hwnd)
-            except DomainValueError:
+                new_wnd = WindowServiceWin32().from_active()
+            except WindowNotFoundError:
                 continue
-            if new_id == self.window_id:
+            if new_wnd == self:
                 return self
-            if new_id != current.window_id:
+            if new_wnd != current:
                 break
-        new_wnd = self.__class__(new_id)
-        owner_hwnd = GetWindow(new_id.value, GetWindowCmd.GW_OWNER)
-        try:
-            owner_window_id = WindowId(owner_hwnd)
-        except DomainValueError:
-            return new_wnd
-        if self.window_id == owner_window_id:
+        if new_wnd._is_owned_by(self) or new_wnd._has_ancestor(self):
             return new_wnd
         raise DomainRuntimeError(
             f'activate failure: target={self}, new={new_wnd}')
+
+    def _has_ancestor(self, other: Window) -> bool:
+        for w in WindowServiceWin32()._get_ancestors_of(self):
+            if w == other:
+                return True
+        return False
+
+    def _is_owned_by(self, other: Window) -> bool:
+        hwnd = GetWindow(self.window_id.value, GetWindowCmd.GW_OWNER)
+        try:
+            window_id = WindowId(hwnd)
+        except DomainValueError:
+            return False
+        return other.window_id == window_id
 
 
 class WindowServiceWin32(WindowService):
@@ -265,27 +273,10 @@ class WindowServiceWin32(WindowService):
         hwnd = WindowFromPoint(point)
         window_id = WindowId(hwnd)
         wnd = WindowWin32(window_id)
-        ancestor_wnd = self._get_first_ancestor(window_id)
-        if ancestor_wnd.class_name == 'ApplicationFrameWindow':
+        *_, origin_wnd = [w for w in self._get_ancestors_of(wnd)]
+        if origin_wnd.class_name == 'ApplicationFrameWindow':
             return wnd
-        return ancestor_wnd
-
-    @staticmethod
-    def _get_first_ancestor(window_id: WindowId) -> 'WindowWin32':
-        """
-        Returns the first ancestor who has no parents.
-        See: AutoHotkey/source/window.cpp: GetNonChildParent
-        """
-        parent_prev = window_id
-        while True:
-            if not WindowInfo(parent_prev).has_parent:
-                return WindowWin32(parent_prev)
-            hwnd = GetParent(parent_prev.value)
-            try:
-                parent = WindowId(hwnd)
-            except DomainValueError:
-                return WindowWin32(parent_prev)
-            parent_prev = parent
+        return origin_wnd
 
     def from_active(self) -> WindowWin32:
         hwnd = GetForegroundWindow()
@@ -331,6 +322,29 @@ class WindowServiceWin32(WindowService):
         if len(founds) > 0:
             return founds[0]
         raise WindowNotFoundError(f'No window matched: {repr(query)}')
+
+    def _get_parent_of(self, child_wnd: WindowWin32) -> 'WindowWin32':
+        """
+        Return parent window of child_wnd
+        """
+        hwnd = GetParent(child_wnd.window_id.value)
+        try:
+            wnd = WindowId(hwnd)
+        except DomainValueError:
+            raise WindowNotFoundError(f'No parent window: {repr(self)}')
+        return WindowWin32(wnd)
+
+    def _get_ancestors_of(self, wnd: WindowWin32) -> Iterator[WindowWin32]:
+        """
+        Return iterators tracing ancestors of wnd in younger order
+        """
+        parent = wnd
+        while True:
+            try:
+                parent = self._get_parent_of(parent)
+            except WindowNotFoundError:
+                break
+            yield parent
 
 
 class Cursor():
