@@ -297,7 +297,7 @@ class WindowServiceWin32(WindowService):
         try:
             with wnd.thread.attach(Thread.from_current()):
                 focus_window_id = WindowId(GetFocus())
-        except (DomainValueError, DomainRuntimeError):
+        except (AttachThreadInputError, DomainValueError):
             return wnd
         return WindowWin32(focus_window_id)
 
