@@ -13,6 +13,7 @@ from .office_config import OfficeConfig
 from .acrobat_config import AcrobatConfig
 from .obsidian_config import ObsidianConfig
 from .captureontouch_config import TouchConfig
+from .honeyview_config import HoneyviewConfig
 
 
 class AllConfig(AbstractConfig):
@@ -29,6 +30,7 @@ class AllConfig(AbstractConfig):
             AcrobatConfig(keymap_service, action_service),
             ObsidianConfig(keymap_service, action_service),
             TouchConfig(keymap_service, action_service),
+            HoneyviewConfig(keymap_service, action_service),
         )
         keymap_service.user_modifier0 = 'Apps'
         keymap_service.user_modifier1 = 'Kana'
