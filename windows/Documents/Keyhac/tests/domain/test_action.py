@@ -67,7 +67,7 @@ class DecAction(Action):
         return True
 
 
-def test_action():
+def test_Action():
     count = Count()
     inc = IncAction(count)
     assert inc.perform() is True
@@ -98,48 +98,48 @@ def test_action():
     assert inc is not dec
 
 
-def test_delay():
+def test_DelayAction():
     act = DelayAction(0.1, NopAction())
     act.perform()
 
 
-def test_nop():
+def test_NopAction():
     act = NopAction()
     act.perform()
 
 
-def test_command():
+def test_CommandAction():
     command = Command('hoge')
     act = CommandAction(shell_service, command)
     act.perform()
 
 
-def test_input():
+def test_InputAction():
     act = InputAction(input_service, 'C-A')
     act.perform()
 
 
-def test_ime_on():
+def test_ImeOnAction():
     act = ImeOnAction(window_service.from_active)
     act.perform()
 
 
-def test_ime_off():
+def test_ImeOffAction():
     act = ImeOffAction(window_service.from_active)
     act.perform()
 
 
-def test_window_activate():
+def test_WindowActivateAction():
     act = WindowActivateAction(window_service.from_pointer)
     act.perform()
 
 
-def test_monitor_off():
+def test_MonitorOffAction():
     act = MonitorOffAction(desktop_service)
     act.perform()
 
 
-def test_action_service():
+def test_ActionService():
     action_service = ActionService(
         window_service,
         desktop_service,

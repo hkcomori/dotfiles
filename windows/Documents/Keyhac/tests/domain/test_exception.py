@@ -7,12 +7,12 @@ from extension.domain.exception import (
 )
 
 
-def test_domain_error():
+def test_DomainError():
     e = DomainError('This is domain error')
     assert str(e) == 'This is domain error'
 
 
-def test_domain_type_error():
+def test_DomainTypeError():
     i = 1
     e = DomainTypeError(i, str)
     assert isinstance(e, DomainError)
@@ -20,21 +20,21 @@ def test_domain_type_error():
     assert str(e) == '1: expect to str, but int'
 
 
-def test_domain_runtime_error():
+def test_DomainRuntimeError():
     e = DomainRuntimeError('This is runtime error')
     assert isinstance(e, DomainError)
     assert isinstance(e, RuntimeError)
     assert str(e) == 'This is runtime error'
 
 
-def test_environment_not_found_error():
+def test_EnvironmentNotFoundError():
     e = EnvironmentNotFoundError('OneDrive')
     assert isinstance(e, DomainError)
     assert isinstance(e, RuntimeError)
     assert str(e) == 'OneDrive'
 
 
-def test_window_not_found_error():
+def test_WindowNotFoundError():
     e = WindowNotFoundError('This is window not found error')
     assert isinstance(e, DomainError)
     assert isinstance(e, RuntimeError)
