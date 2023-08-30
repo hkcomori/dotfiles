@@ -1,4 +1,5 @@
 import enum
+from collections import deque
 from ctypes import (
     c_ulong,
     pointer,
@@ -275,10 +276,10 @@ class WindowServiceWin32(WindowService):
         hwnd = WindowFromPoint(point)
         window_id = WindowId(hwnd)
         wnd = WindowWin32(window_id)
-        *_, origin_wnd = [w for w in self._get_ancestors_of(wnd)]
-        if origin_wnd.class_name == 'ApplicationFrameWindow':
+        orig_wnd = self._get_origin_of(wnd)
+        if orig_wnd is None or orig_wnd.class_name == 'ApplicationFrameWindow':
             return wnd
-        return origin_wnd
+        return orig_wnd
 
     def from_active(self) -> WindowWin32:
         hwnd = GetForegroundWindow()
@@ -347,6 +348,13 @@ class WindowServiceWin32(WindowService):
             except WindowNotFoundError:
                 break
             yield parent
+
+    def _get_origin_of(self, wnd: WindowWin32) -> Optional[WindowWin32]:
+        ancestor_wnds = deque(self._get_ancestors_of(wnd), maxlen=1)
+        try:
+            return ancestor_wnds.pop()
+        except IndexError:
+            return None
 
 
 class Cursor():
