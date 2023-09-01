@@ -84,6 +84,7 @@ class SystemError(enum.IntEnum):
     https://learn.microsoft.com/ja-jp/windows/win32/debug/system-error-codes
     """
     ERROR_ACCESS_DENIED = 5
+    ERROR_INVALID_PARAMETER = 87
 
 
 def GetLastError() -> int:
