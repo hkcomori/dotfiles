@@ -7,7 +7,7 @@ from typing import (
     Callable,
 )
 
-from extension.vendor.injector import (
+from injector import (
     inject,
 )
 

@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from extension.vendor.injector import inject
+from injector import inject
 
 from extension.domain.keymap import KeymapService
 from extension.domain.action import ActionService

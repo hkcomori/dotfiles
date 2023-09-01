@@ -1,4 +1,4 @@
-from extension.vendor.injector import inject
+from injector import inject
 
 from extension.domain.action import ActionService
 from extension.domain.keymap import KeymapService

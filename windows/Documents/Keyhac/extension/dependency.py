@@ -1,4 +1,4 @@
-from .vendor.injector import (
+from injector import (
     Binder,
     InstanceProvider,
 )

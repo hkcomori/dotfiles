@@ -4,7 +4,7 @@ from typing import (
     TypeVar,
 )
 
-from extension.vendor.injector import (
+from injector import (
     Injector,
     Binder,
 )

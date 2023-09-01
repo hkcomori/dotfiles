@@ -1,4 +1,4 @@
-from extension.vendor.injector import (
+from injector import (
     inject,
 )
 
