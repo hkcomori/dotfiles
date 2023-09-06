@@ -11,6 +11,10 @@ from extension.domain.input import (
 from extension.domain.shell import (
     Command,
 )
+from extension.domain.process import (
+    Process,
+    ProcessQuery,
+)
 
 
 class DummyValueObject(ValueObject):
@@ -57,6 +61,30 @@ class DummyValueObject(ValueObject):
     Command,    # working_directory が不一致
     ('file', 'param1 param2', '/path/to/1'),
     ('file', 'param1 param2', '/path/to/2'),
+), (
+    Process,    # pid が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (2, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+), (
+    Process,    # exe が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (1, '/path/to/exe', ('/path/to/cmd', 'param1', 'this is param2')),
+), (
+    Process,    # cmdline が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param3')),
+), (
+    ProcessQuery,    # pid が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (2, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+), (
+    ProcessQuery,    # exe が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (1, '/path/to/exe', ('/path/to/cmd', 'param1', 'this is param2')),
+), (
+    ProcessQuery,    # cmdline が不一致
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param2')),
+    (1, '/path/to/exe', ('/path/to/exe', 'param1', 'this is param3')),
 )])
 def test_ValueObject(cls, args, args_ne):
     """ValueObjectの共通インターフェースをテストする"""
