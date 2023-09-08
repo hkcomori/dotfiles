@@ -7,7 +7,6 @@ from ctypes import (
     create_unicode_buffer,
 )
 from threading import currentThread
-from time import sleep
 from typing import (
     Iterator,
     Optional,
@@ -234,20 +233,15 @@ class WindowWin32(Window):
         """
         if not SetForegroundWindow(self.window_id.value):
             raise SetForegroundError(self)
-        while True:
-            try:
-                new_wnd = WindowServiceWin32().from_active()
-            except WindowNotFoundError:
-                sleep(0.1)
-                continue
+        new_wnd = None
+        for i in range(0, 3):
+            new_wnd = WindowServiceWin32().from_active()
             if new_wnd == self:
                 return self
-            if new_wnd != current:
-                break
-        if new_wnd._is_owned_by(self) or new_wnd._has_ancestor(self):
-            return new_wnd
+            if new_wnd._is_owned_by(self) or new_wnd._has_ancestor(self):
+                return new_wnd
         raise DomainRuntimeError(
-            f'activate failure: target={self}, new={new_wnd}')
+            f'activate failure: target={self}, new={new_wnd}, old={current}')
 
     def _has_ancestor(self, other: Window) -> bool:
         for w in WindowServiceWin32()._get_ancestors_of(self):
