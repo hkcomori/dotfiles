@@ -14,8 +14,8 @@ WSL_DOCUMENTS_DIR="$(wslpath "${WIN_DOCUMENTS_DIR}")"
 echo [Install Keyhac config]
 
 rsync -av "$(pwd)/windows/Documents/Keyhac/" "${WSL_APPDATA_DIR}/Keyhac/" \
-  --exclude "*/" --include "*.py" --exclude "*" --delete
+  --exclude "*/" --include={"*.py","*.pyd"} --exclude "*" --delete
 rsync -av "$(pwd)/windows/Documents/Keyhac/extension/" "${WSL_DOCUMENTS_DIR}/Keyhac/extension/" \
-  --exclude "tests/" --include={"*.py","*/"} --exclude "*" --delete
+  --exclude "tests/" --include={"*.py","*.pyd","*/"} --exclude "*" --delete
 
 # powershell.exe -ExecutionPolicy Bypass -file "$(dirname "$0")"/startup_keyhac.ps1
