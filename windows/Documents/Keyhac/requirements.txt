@@ -1,2 +1,2 @@
 injector==0.21.0
-typing-extensions==4.7.1
+typing-extensions==4.7.1; python_version < "3.10"
