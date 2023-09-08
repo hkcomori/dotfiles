@@ -7,15 +7,16 @@ from .dependency import (
 )
 
 
-def test_Command():
+class Test_Command():
     pass
 
 
-def test_ShellService():
-    command1 = Command(
-        'file\\NAME',
-        'param',
-        'working/directory',
-    )
-    shell_service: ShellService = Dependency().resolve(ShellService)
-    shell_service.run(command1)
+class Test_ShellService:
+    def test_run(self):
+        command1 = Command(
+            'file\\NAME',
+            'param',
+            'working/directory',
+        )
+        shell_service: ShellService = Dependency().resolve(ShellService)
+        shell_service.run(command1)
