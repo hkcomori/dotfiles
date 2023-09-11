@@ -1,3 +1,4 @@
+from abc import abstractmethod
 import enum
 from collections import deque
 from ctypes import (
@@ -8,13 +9,18 @@ from ctypes import (
 )
 from threading import currentThread
 from typing import (
+    Generic,
     Iterator,
     Optional,
     Tuple,
+    TypeVar,
 )
 
 import pyauto   # type: ignore
 
+from extension.domain.share import (
+    AbstractMeta,
+)
 from extension.domain.exception import (
     DomainTypeError,
     DomainValueError,
@@ -51,7 +57,6 @@ from .share import (
     IsIconic,
     IsWindow,
     ShowWindow,
-    GetWindowLongW,
     GetParent,
     WindowFromPoint,
     GetFocus,
@@ -65,6 +70,9 @@ from .share import (
 
 MAX_CLASS_NAME_LENGTH = 256
 """クラス名の最大長"""
+
+
+T = TypeVar('T')
 
 
 class AttachThreadInputError(DomainRuntimeError):
@@ -84,82 +92,76 @@ class SetForegroundError(DomainRuntimeError):
         super().__init__(msg)
 
 
-class WindowInfo:
+class WindowApiCache(Generic[T], metaclass=AbstractMeta):
+    """
+    ウィンドウに関する情報をAPIで取得し、キャッシュする
+    APIは実行コストが大きいので、必要なときだけ実行し、それ以降はキャッシュを利用する
+
+    @param window_id    対象ウィンドウのID
+    """
     def __init__(self, window_id: WindowId):
         self._window_id = window_id
+        self._value: Optional[T] = None
+
+    @abstractmethod
+    def _fetch(self) -> T:
+        raise NotImplementedError
 
     @property
-    def window_id(self) -> WindowId:
-        return self._window_id
+    def value(self) -> T:
+        if self._value is None:
+            self._value = self._fetch()
+        return self._value
 
-    def _get_thread_info(self) -> Tuple['Thread', str]:
+
+class ProcessInfo(WindowApiCache[Tuple['Thread', str]]):
+    """
+    ウィンドウのプロセス情報を取得する
+
+    @param window_id    対象ウィンドウのID
+    """
+    def _fetch(self) -> Tuple['Thread', str]:
         pid = c_ulong()
-        thread_id: int = GetWindowThreadProcessId(self.window_id.value, pointer(pid))
+        thread_id = GetWindowThreadProcessId(self._window_id.value, pointer(pid))
         thread = Thread(thread_id)
-        pyauto_window = pyauto.Window.fromHWND(self.window_id.value)
+        pyauto_window = pyauto.Window.fromHWND(self._window_id.value)
         exe_name = pyauto_window.getProcessName()
         return thread, exe_name
 
     @property
     def thread(self) -> 'Thread':
-        if not hasattr(self, '_thread'):
-            self._thread, self._exe_name = self._get_thread_info()
-        return self._thread
+        thread, _ = self.value
+        return thread
 
     @property
     def exe_name(self) -> str:
-        if not hasattr(self, '_exe_name'):
-            self._thread, self._exe_name = self._get_thread_info()
-        return self._exe_name
+        _, exe_name = self.value
+        return exe_name
 
-    def _get_window_text(self):
-        length = GetWindowTextLengthW(self.window_id.value)
-        buff = create_unicode_buffer(length + 1)
-        GetWindowTextW(self.window_id.value, buff, length + 1)
-        return buff.value
 
-    @property
-    def window_text(self) -> str:
-        if not hasattr(self, '_title'):
-            self._window_text: str = self._get_window_text()
-        return self._window_text
+class ClassName(WindowApiCache[str]):
+    """
+    ウィンドウのクラス名を取得する
 
-    def _get_class_name(self) -> str:
+    @param window_id    対象ウィンドウのID
+    """
+    def _fetch(self) -> str:
         buff = create_unicode_buffer(MAX_CLASS_NAME_LENGTH + 1)
-        GetClassNameW(self.window_id.value, buff, MAX_CLASS_NAME_LENGTH + 1)
+        GetClassNameW(self._window_id.value, buff, MAX_CLASS_NAME_LENGTH + 1)
         return buff.value
 
-    @property
-    def class_name(self) -> str:
-        if not hasattr(self, '_class_name'):
-            self._class_name: str = self._get_class_name()
-        return self._class_name
 
-    @property
-    def is_minimized(self) -> bool:
-        return IsIconic(self.window_id.value)
+class WindowText(WindowApiCache[str]):
+    """
+    ウィンドウテキストを取得する
 
-    @property
-    def has_parent(self) -> bool:
-        GWL_STYLE = -16
-        WS_CHILD = 0x40000000
-        return GetWindowLongW(self.window_id.value, GWL_STYLE) & WS_CHILD != 0
-
-    @property
-    def is_visible(self) -> bool:
-        return IsWindowVisible(self.window_id.value)
-
-    @property
-    def is_cloaked(self) -> bool:
-        cloaked = BOOL()
-        DWMWA_CLOAKED = 14
-        result: HRESULT = DwmGetWindowAttribute(
-            self.window_id.value, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
-        return bool(result) and bool(cloaked)
-
-    @property
-    def is_hang(self) -> bool:
-        return IsHungAppWindow(self.window_id.value)
+    @param window_id    対象ウィンドウのID
+    """
+    def _fetch(self) -> str:
+        length = GetWindowTextLengthW(self._window_id.value)
+        buff = create_unicode_buffer(length + 1)
+        GetWindowTextW(self._window_id.value, buff, length + 1)
+        return buff.value
 
 
 class WindowWin32(Window):
@@ -167,31 +169,31 @@ class WindowWin32(Window):
         if not IsWindow(window_id.value):
             raise WindowNotFoundError(f'hwnd={window_id.value} is not window')
         self._window_id = window_id
-        self._window_info = WindowInfo(window_id)
+        self._process_info = ProcessInfo(window_id)
+        self._class_name = ClassName(window_id)
+        self._window_text = WindowText(window_id)
 
     def activate(self) -> bool:
-        if self._window_info.is_hang:
+        platform = WindowPlatform()
+        if self._is_hang():
             raise DomainRuntimeError(f'Window not responding: {repr(self)}')
 
+        if self._is_minimized():
+            platform.restore_window(self)
+
         current_wnd = WindowServiceWin32().from_active()
-
-        if self._window_info.is_minimized:
-            self._disable_minimize()
-
         if current_wnd == self:
             return True
 
         try:
             with Thread.from_current().attach(current_wnd.thread):
                 with current_wnd.thread.attach(self.thread):
-                    wnd = self._set_foreground(current_wnd)
-                    BringWindowToTop(wnd.window_id.value)
+                    platform.set_foreground(self)
                     return True
         except AttachThreadInputError:
             pass
 
-        wnd = self._set_foreground(current_wnd)
-        BringWindowToTop(wnd.window_id.value)
+        platform.set_foreground(self)
         return True
 
     def ime_on(self) -> bool:
@@ -210,106 +212,164 @@ class WindowWin32(Window):
 
     @property
     def thread(self) -> 'Thread':
-        return self._window_info.thread
+        return self._process_info.thread
 
     @property
     def exe_name(self) -> str:
-        return self._window_info.exe_name
+        return self._process_info.exe_name
 
     @property
     def window_text(self) -> str:
-        return self._window_info.window_text
+        return self._window_text.value
 
     @property
     def class_name(self) -> str:
-        return self._window_info.class_name
+        return self._class_name.value
 
-    def _disable_minimize(self) -> None:
-        ShowWindow(self.window_id.value, ShowWindowCmd.SW_RESTORE)
+    def _is_minimized(self) -> bool:
+        return IsIconic(self.window_id.value)
 
-    def _set_foreground(self, current: 'WindowWin32') -> 'WindowWin32':
+    def _is_visible(self) -> bool:
+        return IsWindowVisible(self.window_id.value)
+
+    def _is_cloaked(self) -> bool:
+        cloaked = BOOL()
+        DWMWA_CLOAKED = 14
+        result: HRESULT = DwmGetWindowAttribute(
+            self.window_id.value, DWMWA_CLOAKED, pointer(cloaked), sizeof(cloaked))
+        return bool(result) and bool(cloaked)
+
+    def _is_uwp_frame(self) -> bool:
         """
-        See: AutoHotkey/source/window.cpp: AttemptSetForeground
+        UWPアプリのトップレベルウィンドウであるかを判定する
         """
-        if not SetForegroundWindow(self.window_id.value):
-            raise SetForegroundError(self)
-        new_wnd = None
-        for i in range(0, 3):
-            new_wnd = WindowServiceWin32().from_active()
-            if new_wnd == self:
-                return self
-            if new_wnd._is_owned_by(self) or new_wnd._has_ancestor(self):
-                return new_wnd
-        raise DomainRuntimeError(
-            f'activate failure: target={self}, new={new_wnd}, old={current}')
+        return self.class_name == 'ApplicationFrameWindow'
+
+    def _is_hang(self) -> bool:
+        return IsHungAppWindow(self.window_id.value)
 
     def _has_ancestor(self, other: Window) -> bool:
-        for w in WindowServiceWin32()._get_ancestors_of(self):
+        for w in WindowPlatform().get_ancestors_of(self):
             if w == other:
                 return True
         return False
 
-    def _is_owned_by(self, other: Window) -> bool:
-        hwnd = GetWindow(self.window_id.value, GetWindowCmd.GW_OWNER)
-        try:
-            window_id = WindowId(hwnd)
-        except DomainValueError:
+    def _owned_by(self, other: Window) -> bool:
+        owner = WindowPlatform().get_owner_of(self)
+        if owner is None:
             return False
-        return other.window_id == window_id
+        return other.window_id == owner.window_id
 
 
 class WindowServiceWin32(WindowService):
     def from_id(self, window_id: WindowId) -> WindowWin32:
-        window_info = WindowInfo(window_id)
-        if not window_info.is_visible or window_info.is_cloaked:
+        wnd = WindowWin32(window_id)
+        if not wnd._is_visible() or wnd._is_cloaked():
             raise WindowNotFoundError(f'hwnd={window_id.value} is not visible')
-        return WindowWin32(window_id)
+        return wnd
 
     def from_pointer(self) -> WindowWin32:
-        point = Cursor().point
-        hwnd = WindowFromPoint(point)
-        window_id = WindowId(hwnd)
-        wnd = WindowWin32(window_id)
-        orig_wnd = self._get_origin_of(wnd)
-        if orig_wnd is None or orig_wnd.class_name == 'ApplicationFrameWindow':
+        platform = WindowPlatform()
+        wnd = platform.get_window_on_pointer()
+        orig_wnd = platform.get_origin_of(wnd)
+        if orig_wnd is None or orig_wnd._is_uwp_frame():
             return wnd
         return orig_wnd
 
     def from_active(self) -> WindowWin32:
-        hwnd = GetForegroundWindow()
-        try:
-            fore_window_id = WindowId(hwnd)
-        except DomainValueError:
-            raise WindowNotFoundError('No foreground window')
-        wnd = WindowWin32(fore_window_id)
-        try:
-            with wnd.thread.attach(Thread.from_current()):
-                focus_window_id = WindowId(GetFocus())
-        except (AttachThreadInputError, DomainValueError):
-            return wnd
-        return WindowWin32(focus_window_id)
+        wnd = WindowPlatform().get_active_window()
+        if wnd is None:
+            raise WindowNotFoundError('Active window not found') from None
+        return wnd
 
     def from_query(self, query: WindowQuery) -> WindowWin32:
-        return self._from_query(query, None)
+        return WindowPlatform().find_window(query, None)
 
-    def _from_query(
+
+class WindowPlatform:
+    """
+    ウィンドウに関するAPI呼び出しを代行する
+    """
+
+    def get_active_window(self) -> Optional[WindowWin32]:
+        """
+        アクティブウィンドウを取得する
+
+        @return         アクティブウィンドウ（無ければNone）
+        """
+        platform = WindowPlatform()
+        foreground = platform.get_foreground_window()
+        if foreground is None:
+            return None
+            # raise WindowNotFoundError('Foreground window not found')
+        focus = platform.get_focus_window(foreground)
+        if focus is None:
+            return foreground
+        return focus
+
+    def get_foreground_window(self) -> Optional[WindowWin32]:
+        """
+        フォアグラウンドウィンドウを取得する
+
+        @return         フォアグラウンドウィンドウ（無ければNone）
+        """
+        hwnd = GetForegroundWindow()
+        try:
+            return WindowWin32(WindowId(hwnd))
+        except DomainValueError:
+            return None
+
+    def get_focus_window(self, fore_wnd: WindowWin32) -> Optional[WindowWin32]:
+        """
+        キーボードフォーカスがあるウィンドウを取得する
+
+        @param fore_wnd フォアグラウンドウィンドウ
+        @return         キーボードフォーカスがあるウィンドウ（無ければNone）
+        """
+        try:
+            with fore_wnd.thread.attach(Thread.from_current()):
+                focus_window_id = WindowId(GetFocus())
+        except (AttachThreadInputError, DomainValueError):
+            return None
+        return WindowWin32(focus_window_id)
+
+    def get_window_on_pointer(self) -> WindowWin32:
+        """
+        マウスカーソル下のウィンドウを取得する
+
+        @return         マウスカーソル下のウィンドウ
+        """
+        point = POINT()
+        GetCursorPos(pointer(point))
+        hwnd = WindowFromPoint(point)
+        window_id = WindowId(hwnd)
+        return WindowWin32(window_id)
+
+    def find_window(
         self,
         query: WindowQuery,
         parent: Optional[WindowWin32],
     ) -> WindowWin32:
+        """
+        queryに合致する最初のウィンドウを取得する
+        parentを指定すると、子ウィンドウのみを検索対象とする
+
+        @param query    検索条件
+        @param parent   親ウィンドウ
+        @return         queryに合致した最初のウィンドウ
+        """
         founds = []
 
         def _callback(hwnd: int, lParam: LPARAM) -> bool:
             try:
-                window_id = WindowId(hwnd)
-                window = self.from_id(window_id)
+                wnd = WindowWin32(WindowId(hwnd))
             except (DomainValueError, WindowNotFoundError):
                 return True
-            # UWPアプリはトップレベルウィンドウではないので、子ウィンドウを検索する
-            if window.class_name == 'ApplicationFrameWindow':
+            if wnd._is_uwp_frame():
+                # UWPアプリはトップレベルウィンドウが本体ではないので、子ウィンドウを検索する
                 return EnumChildWindows(hwnd, WNDENUMPROC(_callback), 0)
-            elif query.match(window):
-                founds.append(window)
+            elif query.match(wnd):
+                founds.append(wnd)
                 return False
             return True
 
@@ -320,43 +380,90 @@ class WindowServiceWin32(WindowService):
             return founds[0]
         raise WindowNotFoundError(f'No window matched: {repr(query)}')
 
-    def _get_parent_of(self, child_wnd: WindowWin32) -> 'WindowWin32':
+    def set_foreground(self, aim: Window) -> None:
         """
-        Return parent window of child_wnd
-        """
-        hwnd = GetParent(child_wnd.window_id.value)
-        try:
-            wnd = WindowId(hwnd)
-        except DomainValueError:
-            raise WindowNotFoundError(f'No parent window: {repr(self)}')
-        return WindowWin32(wnd)
+        aimをフォアグラウンドウィンドウにすることを試みる
+        結果がaim以外でも、以下は期待通りなので許容する
+        - aimの所有者ウィンドウ
+        - aimの祖先ウィンドウ
+        参考: AutoHotkey/source/window.cpp: AttemptSetForeground
 
-    def _get_ancestors_of(self, wnd: WindowWin32) -> Iterator[WindowWin32]:
+        @param aim  フォアグラウンドに設定するウィンドウ
         """
-        Return iterators tracing ancestors of wnd in younger order
+        if not SetForegroundWindow(aim.window_id.value):
+            raise SetForegroundError(aim)
+        new = None
+        for i in range(0, 3):
+            new = self.get_active_window()
+            if new is None:
+                continue
+            if new == aim or new._owned_by(aim) or new._has_ancestor(aim):
+                BringWindowToTop(new.window_id.value)
+                return
+        raise DomainRuntimeError(f'Unexpected foreground: expected to {aim}, but {new}')
+
+    def get_parent_of(self, wnd: Window) -> Optional[WindowWin32]:
+        """
+        wndの親ウィンドウを取得する
+
+        @param wnd  子ウィンドウ
+        @return     親ウィンドウ（無ければNone）
+        """
+        hwnd = GetParent(wnd.window_id.value)
+        try:
+            window_id = WindowId(hwnd)
+        except DomainValueError:
+            return None
+        return WindowWin32(window_id)
+
+    def get_ancestors_of(self, wnd: Window) -> Iterator[WindowWin32]:
+        """
+        wndの祖先ウィンドウを若い順に取得する
+
+        @param wnd  子ウィンドウ
+        @return     祖先ウィンドウを若い順に返すイテレーター
         """
         parent = wnd
         while True:
-            try:
-                parent = self._get_parent_of(parent)
-            except WindowNotFoundError:
+            parent = self.get_parent_of(parent)
+            if parent is None:
                 break
             yield parent
 
-    def _get_origin_of(self, wnd: WindowWin32) -> Optional[WindowWin32]:
-        ancestor_wnds = deque(self._get_ancestors_of(wnd), maxlen=1)
+    def get_origin_of(self, wnd: Window) -> Optional[WindowWin32]:
+        """
+        wndの始祖ウィンドウを取得する
+
+        @param wnd  子ウィンドウ
+        @return     始祖ウィンドウ（無ければNone）
+        """
+        ancestor_wnds = deque(self.get_ancestors_of(wnd), maxlen=1)
         try:
             return ancestor_wnds.pop()
         except IndexError:
             return None
 
+    def get_owner_of(self, wnd: Window) -> Optional[WindowWin32]:
+        """
+        wndの所有者ウィンドウを取得する
 
-class Cursor():
-    @property
-    def point(self) -> POINT:
-        point = POINT()
-        GetCursorPos(pointer(point))
-        return point
+        @param wnd  被所有ウィンドウ
+        @return     所有者ウィンドウ（無ければNone）
+        """
+        hwnd = GetWindow(wnd.window_id.value, GetWindowCmd.GW_OWNER)
+        try:
+            window_id = WindowId(hwnd)
+        except DomainValueError:
+            return None
+        return WindowWin32(window_id)
+
+    def restore_window(self, wnd: Window) -> None:
+        """
+        最小化、最大化、または配置されている場合は、元のサイズと位置に復元する
+
+        @param wnd  対象ウィンドウ
+        """
+        ShowWindow(wnd.window_id.value, ShowWindowCmd.SW_RESTORE)
 
 
 class IME():
