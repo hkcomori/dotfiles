@@ -11,4 +11,4 @@ ensure_link \
 
 autopep8 --version && flake8 --version && mypy --version && exit 0
 sudo apt-get install -y python3 python3-pip
-sudo -HE pip3 install autopep8 flake8 mypy poetry pytest
+sudo -HE pip3 install autopep8 flake8 mypy poetry pytest tox
