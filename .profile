@@ -65,3 +65,8 @@ export ANSIBLE_ROLES_PATH=./.ansible/roles:~/.ansible/roles:/usr/share/ansible/r
 
 gpgconf --launch gpg-agent
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
+if which podman &>/dev/null; then
+    # Launch PlantUML Server
+    podman run -d --rm --name=plantuml -p 8080:8080 docker.io/plantuml/plantuml-server
+fi
