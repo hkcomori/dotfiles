@@ -3,7 +3,7 @@
 # Run on WSL only
 which wslpath &>/dev/null || exit 0
 
-pytest windows/Documents/Keyhac/tests
+OneDrive=${HOME}/OneDrive pytest windows/Documents/Keyhac/tests
 
 WIN_APPDATA_DIR="$(powershell.exe -Command '[Environment]::GetFolderPath("ApplicationData")' | sed -e 's/\r//g')"
 WSL_APPDATA_DIR="$(wslpath "${WIN_APPDATA_DIR}")"

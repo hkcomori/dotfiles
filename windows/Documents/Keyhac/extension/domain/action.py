@@ -292,7 +292,7 @@ class ActionService(Service):
 
     def open_documents(self) -> Action:
         """Documentsフォルダを開く"""
-        file = self._get_special_folder('MyDocuments')
+        file = os.path.join(os.getenv("OneDrive"), 'Documents')
         return CommandAction(self._shell_service, Command(file))
 
     def launch_obsidian(self) -> Action:
