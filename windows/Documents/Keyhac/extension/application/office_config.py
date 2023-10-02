@@ -19,9 +19,9 @@ class OfficeConfig(AbstractConfig):
         ))
 
         excel['A-WheelDown'] = act.send('PageDown')
-        excel['U0-WheelDown'] = act.send('PageDown')
+        excel['U2-WheelDown'] = act.send('PageDown')
         excel['A-WheelUp'] = act.send('PageUp')
-        excel['U0-WheelUp'] = act.send('PageUp')
+        excel['U2-WheelUp'] = act.send('PageUp')
 
         excel_search.applying_func = act.ime_off()
 

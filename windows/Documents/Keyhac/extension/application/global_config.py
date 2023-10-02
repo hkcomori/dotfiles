@@ -69,27 +69,31 @@ class GlobalConfig(AbstractConfig):
         global_keymap["A-Tab"] = act.send("C-A-Tab")
 
         # Expand window
+        global_keymap["W-S-Up"] = act.send("W-C-A-Up")
         global_keymap["W-S-Left"] = act.send("W-C-A-Left")
-        global_keymap["W-S-Right"] = act.send("W-C-A-Right")
         global_keymap["W-S-Down"] = act.send("W-C-A-Down")
-
-        # Vertical maximize window
-        global_keymap["W-S-Up"] = act.send("W-S-Up")
+        global_keymap["W-S-Right"] = act.send("W-C-A-Right")
+        global_keymap["U2-S-I"] = act.send("W-C-A-Up")
+        global_keymap["U2-S-J"] = act.send("W-C-A-Left")
+        global_keymap["U2-S-K"] = act.send("W-C-A-Down")
+        global_keymap["U2-S-L"] = act.send("W-C-A-Right")
 
         # Disable minimize window
         global_keymap["W-C-Down"] = act.nop()
 
+        # Move window to adjacent zone
+        global_keymap["U2-I"] = act.send("W-Up")
+        global_keymap["U2-J"] = act.send("W-Left")
+        global_keymap["U2-K"] = act.send("W-Down")
+        global_keymap["U2-L"] = act.send("W-Right")
+
         # Switch virtual desktop
-        global_keymap["W-Home"] = act.send("W-C-Left")
-        global_keymap["W-End"] = act.send("W-C-Right")
-        global_keymap["U0-Home"] = act.send("W-C-Left")
-        global_keymap["U0-End"] = act.send("W-C-Right")
-        global_keymap["U0-XButton1"] = act.send("W-C-Left")
-        global_keymap["U0-XButton2"] = act.send("W-C-Right")
+        global_keymap["U2-Comma"] = act.send("W-C-Left")
+        global_keymap["U2-Period"] = act.send("W-C-Right")
 
         # Switch window in current zone
-        global_keymap["U0-PageUp"] = act.send("W-PageUp")
-        global_keymap["U0-PageDown"] = act.send("W-PageDown")
+        global_keymap["U2-OpenBracket"] = act.send("W-PageUp")
+        global_keymap["U2-CloseBracket"] = act.send("W-PageDown")
 
         global_keymap["U0-F1"] = act.send("MediaPlay")
         global_keymap["U0-F2"] = act.send("VolumeMute")
@@ -100,8 +104,6 @@ class GlobalConfig(AbstractConfig):
         global_keymap["W-D"] = act.open_documents()
         global_keymap["W-O"] = act.open_onedrive()
 
-        global_keymap["W-F11"] = act.launch_obsidian()
-        global_keymap["U0-F11"] = act.launch_obsidian()
-        global_keymap["W-F12"] = act.launch_calc()
-        global_keymap["U0-F12"] = act.launch_calc()
+        global_keymap["U2-9"] = act.launch_obsidian()
+        global_keymap["U2-0"] = act.launch_calc()
         global_keymap["LaunchApp2"] = act.launch_calc()
