@@ -1,4 +1,4 @@
-from itertools import combinations
+from itertools import combinations, chain
 
 from extension.domain.window import WindowQuery
 from .abstract_config import AbstractConfig
@@ -40,31 +40,61 @@ class GlobalConfig(AbstractConfig):
         global_keymap["U2-Comma"] = act.send("C-Home")
         global_keymap["U2-Period"] = act.send("C-End")
         global_keymap["U2-W"] = act.send("C-C")
-        global_keymap["U2-V"] = act.send("PageUp")
-        global_keymap["U3-B"] = act.send("Left")
-        global_keymap["U3-P"] = act.send("Up")
-        global_keymap["U3-N"] = act.send("Down")
-        global_keymap["U3-F"] = act.send("Right")
-        global_keymap["U3-A"] = act.send("Home")
-        global_keymap["U3-E"] = act.send("End")
-        global_keymap["U3-V"] = act.send("PageDown")
-        global_keymap["U3-M"] = act.send("Enter")
-        global_keymap["U3-H"] = act.send("BackSpace")
-        global_keymap["U3-D"] = act.send("Delete")
-        global_keymap["U3-S"] = act.send("C-F")
-        global_keymap["U3-Y"] = act.send("C-V")
-        global_keymap["U3-OpenBracket"] = act.send("Esc")
-        global_keymap["U3-Slash"] = act.send("C-Z")
-        global_keymap["U3-Underscore"] = act.send("C-Y")
-        global_keymap["U3-Left"] = act.send("C-Left")
-        global_keymap["U3-Right"] = act.send("C-Right")
-        global_keymap["U3-Up"] = act.send("Up", "Up", "Up", "Up", "Up")
-        global_keymap["U3-Down"] = act.send("Down", "Down", "Down", "Down", "Down")
-        global_keymap["U3-PageUp"] = act.send("C-PageUp")
-        global_keymap["U3-PageDown"] = act.send("C-PageDown")
-        global_keymap["U3-Atmark"] = act.send("C-Atmark")
-        global_keymap["U3-BackSpace"] = act.send("C-BackSpace")
-        global_keymap["U3-Delete"] = act.send("C-Delete")
+
+        global_keymap["C-A-I"] = act.send("C-A-Up")
+        global_keymap["C-A-J"] = act.send("C-A-Left")
+        global_keymap["C-A-K"] = act.send("C-A-Down")
+        global_keymap["C-A-L"] = act.send("C-A-Right")
+
+        mods = ['C-', 'A-', 'S-']
+        for comb in chain(*(
+            combinations(mods, i)
+            for i in range(len(mods)+1)
+        )):
+            m = ''.join(comb)
+            global_keymap[f"U3-{m}I"] = act.send(f"{m}Up")
+            global_keymap[f"U3-{m}J"] = act.send(f"{m}Left")
+            global_keymap[f"U3-{m}K"] = act.send(f"{m}Down")
+            global_keymap[f"U3-{m}L"] = act.send(f"{m}Right")
+
+            global_keymap[f"U3-{m}P"] = act.send(f"{m}BackSpace")
+            global_keymap[f"U3-{m}SemiColon"] = act.send(f"{m}Enter")
+            global_keymap[f"U3-{m}Colon"] = act.send(f"{m}Delete")
+
+            global_keymap[f"U3-{m}Q"] = act.send(f"{m}Escape")
+            global_keymap[f"U3-{m}A"] = act.send(f"{m}Aapps")
+
+            global_keymap[f"U3-{m}W"] = act.send(f"{m}Home")
+            global_keymap[f"U3-{m}S"] = act.send(f"{m}End")
+            global_keymap[f"U3-{m}E"] = act.send(f"{m}PageUp")
+            global_keymap[f"U3-{m}D"] = act.send(f"{m}PageDown")
+
+            global_keymap[f"U3-{m}1"] = act.send(f"{m}F1")
+            global_keymap[f"U3-{m}2"] = act.send(f"{m}F2")
+            global_keymap[f"U3-{m}3"] = act.send(f"{m}F3")
+            global_keymap[f"U3-{m}4"] = act.send(f"{m}F4")
+            global_keymap[f"U3-{m}5"] = act.send(f"{m}F5")
+            global_keymap[f"U3-{m}6"] = act.send(f"{m}F6")
+            global_keymap[f"U3-{m}7"] = act.send(f"{m}F7")
+            global_keymap[f"U3-{m}8"] = act.send(f"{m}F8")
+            global_keymap[f"U3-{m}9"] = act.send(f"{m}F9")
+            global_keymap[f"U3-{m}0"] = act.send(f"{m}F10")
+            global_keymap[f"U3-{m}Minus"] = act.send(f"{m}F11")
+            global_keymap[f"U3-{m}Tilde"] = act.send(f"{m}F12")
+
+        mods = ['A-', 'S-']
+        for comb in chain(*(
+            combinations(mods, i)
+            for i in range(len(mods)+1)
+        )):
+            m = ''.join(comb)
+            global_keymap[f"U3-{m}U"] = act.send(f"C-{m}Left")
+            global_keymap[f"U3-{m}O"] = act.send(f"C-{m}Right")
+
+        global_keymap["U3-F"] = act.send("C-A-Tab")
+
+        global_keymap["U3-G"] = act.send("W-C-Left")
+        global_keymap["U3-H"] = act.send("W-C-Right")
 
         global_keymap["A-Tab"] = act.send("C-A-Tab")
 
