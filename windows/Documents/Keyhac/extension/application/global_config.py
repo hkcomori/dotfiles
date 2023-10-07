@@ -46,7 +46,7 @@ class GlobalConfig(AbstractConfig):
         global_keymap["C-A-K"] = act.send("C-A-Down")
         global_keymap["C-A-L"] = act.send("C-A-Right")
 
-        mods = ['C-', 'A-', 'S-']
+        mods = ['', 'C-', 'A-', 'S-']
         for comb in chain(*(
             combinations(mods, i)
             for i in range(len(mods)+1)
@@ -82,7 +82,7 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}Minus"] = act.send(f"{m}F11")
             global_keymap[f"U3-{m}Tilde"] = act.send(f"{m}F12")
 
-        mods = ['A-', 'S-']
+        mods = ['', 'A-', 'S-']
         for comb in chain(*(
             combinations(mods, i)
             for i in range(len(mods)+1)
