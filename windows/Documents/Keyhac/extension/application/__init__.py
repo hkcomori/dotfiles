@@ -20,20 +20,21 @@ from .line_config import LineConfig
 class AllConfig(AbstractConfig):
     @inject
     def __init__(self, keymap_service: KeymapService, action_service: ActionService):
-        self._configs = (
-            GlobalConfig(keymap_service, action_service),
-            ExplorerConfig(keymap_service, action_service),
-            CalculatorConfig(keymap_service, action_service),
-            BrowserConfig(keymap_service, action_service),
-            VScodeConfig(keymap_service, action_service),
-            SparkConfig(keymap_service, action_service),
-            OfficeConfig(keymap_service, action_service),
-            AcrobatConfig(keymap_service, action_service),
-            ObsidianConfig(keymap_service, action_service),
-            TouchConfig(keymap_service, action_service),
-            HoneyviewConfig(keymap_service, action_service),
-            LineConfig(keymap_service, action_service),
-        )
+        self._configs = tuple((
+            c(keymap_service, action_service) for c in (
+                GlobalConfig,
+                ExplorerConfig,
+                CalculatorConfig,
+                BrowserConfig,
+                VScodeConfig,
+                SparkConfig,
+                OfficeConfig,
+                AcrobatConfig,
+                ObsidianConfig,
+                TouchConfig,
+                HoneyviewConfig,
+                LineConfig,
+        )))
         keymap_service.user_modifier0 = 'Apps'
         keymap_service.user_modifier1 = 'Kana'
         keymap_service.user_modifier2 = 'Henkan'
