@@ -63,7 +63,7 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}OpenBracket"] = act.send(f"{m}PageUp")
             global_keymap[f"U3-{m}CloseBracket"] = act.send(f"{m}PageDown")
 
-            global_keymap[f"U3-{m}M"] = act.send(f"{m}Enter")
+            global_keymap[f"U3-{m}Space"] = act.send(f"{m}Enter")
 
             global_keymap[f"U3-{m}P"] = act.send(f"{m}BackSpace")
             global_keymap[f"U3-{m}Colon"] = act.send(f"{m}Delete")
@@ -99,6 +99,11 @@ class GlobalConfig(AbstractConfig):
         global_keymap["U3-D"] = act.send("W-C-Right")
         global_keymap["U3-W"] = act.send("W-A-Left")
         global_keymap["U3-E"] = act.send("W-A-Right")
+
+        global_keymap["U3-F9"] = act.send('MediaPlay')
+        global_keymap["U3-F10"] = act.send('VolumeMute')
+        global_keymap["U3-F11"] = act.send('VolumeDown')
+        global_keymap["U3-F12"] = act.send('VolumeUp')
 
         global_keymap["A-Tab"] = act.send("C-A-Tab")
 
@@ -138,6 +143,6 @@ class GlobalConfig(AbstractConfig):
         global_keymap["W-D"] = act.open_documents()
         global_keymap["W-O"] = act.open_onedrive()
 
-        global_keymap["U2-9"] = act.launch_obsidian()
-        global_keymap["U2-0"] = act.launch_calc()
+        global_keymap["W-F11"] = act.launch_obsidian()
+        global_keymap["W-F12"] = act.launch_calc()
         global_keymap["LaunchApp2"] = act.launch_calc()
