@@ -63,7 +63,7 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}OpenBracket"] = act.send(f"{m}PageUp")
             global_keymap[f"U3-{m}CloseBracket"] = act.send(f"{m}PageDown")
 
-            global_keymap[f"U3-{m}Space"] = act.send(f"{m}Enter")
+            global_keymap[f"U3-{m}M"] = act.send(f"{m}Enter")
 
             global_keymap[f"U3-{m}P"] = act.send(f"{m}BackSpace")
             global_keymap[f"U3-{m}Colon"] = act.send(f"{m}Delete")
