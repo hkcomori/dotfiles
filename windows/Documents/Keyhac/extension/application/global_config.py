@@ -105,6 +105,11 @@ class GlobalConfig(AbstractConfig):
         global_keymap["U3-F11"] = act.send('VolumeDown')
         global_keymap["U3-F12"] = act.send('VolumeUp')
 
+        global_keymap["U0-F9"] = act.send("MediaPlay")
+        global_keymap["U0-F10"] = act.send("VolumeMute")
+        global_keymap["U0-F11"] = act.send("VolumeDown")
+        global_keymap["U0-F12"] = act.send("VolumeUp")
+
         global_keymap["A-Tab"] = act.send("C-A-Tab")
 
         # Expand window
@@ -133,11 +138,6 @@ class GlobalConfig(AbstractConfig):
         # Switch window in current zone
         global_keymap["U2-OpenBracket"] = act.send("W-PageUp")
         global_keymap["U2-CloseBracket"] = act.send("W-PageDown")
-
-        global_keymap["U0-F1"] = act.send("MediaPlay")
-        global_keymap["U0-F2"] = act.send("VolumeMute")
-        global_keymap["U0-F3"] = act.send("VolumeDown")
-        global_keymap["U0-F4"] = act.send("VolumeUp")
 
         # global_keymap["W-Z"] = act.toggle_always_on_top
         global_keymap["W-D"] = act.open_documents()
