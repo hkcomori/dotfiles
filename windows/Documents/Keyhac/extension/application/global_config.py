@@ -26,9 +26,9 @@ class GlobalConfig(AbstractConfig):
 
         global_keymap["BackSlash"] = act.send("S-BackSlash")
 
-        global_keymap["O-Kana"] = act.ime_on()
-        global_keymap["O-Henkan"] = act.ime_on()
-        global_keymap["O-Muhenkan"] = act.ime_off()
+        global_keymap["O-Kana"] = act.send('Kana')
+        global_keymap["O-Henkan"] = act.send('Henkan')
+        global_keymap["O-Muhenkan"] = act.send('Muhenkan')
 
         global_keymap["U2-Left"] = act.send("A-Left")
         global_keymap["U2-Right"] = act.send("A-Right")
@@ -58,17 +58,18 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}K"] = act.send(f"{m}Down")
             global_keymap[f"U3-{m}L"] = act.send(f"{m}Right")
 
+            global_keymap[f"U3-{m}H"] = act.send(f"{m}Home")
+            global_keymap[f"U3-{m}Semicolon"] = act.send(f"{m}End")
+            global_keymap[f"U3-{m}OpenBracket"] = act.send(f"{m}PageUp")
+            global_keymap[f"U3-{m}CloseBracket"] = act.send(f"{m}PageDown")
+
+            global_keymap[f"U3-{m}M"] = act.send(f"{m}Enter")
+
             global_keymap[f"U3-{m}P"] = act.send(f"{m}BackSpace")
-            global_keymap[f"U3-{m}SemiColon"] = act.send(f"{m}Enter")
             global_keymap[f"U3-{m}Colon"] = act.send(f"{m}Delete")
 
             global_keymap[f"U3-{m}Q"] = act.send(f"{m}Escape")
             global_keymap[f"U3-{m}A"] = act.send(f"{m}Aapps")
-
-            global_keymap[f"U3-{m}W"] = act.send(f"{m}Home")
-            global_keymap[f"U3-{m}S"] = act.send(f"{m}End")
-            global_keymap[f"U3-{m}E"] = act.send(f"{m}PageUp")
-            global_keymap[f"U3-{m}D"] = act.send(f"{m}PageDown")
 
             global_keymap[f"U3-{m}1"] = act.send(f"{m}F1")
             global_keymap[f"U3-{m}2"] = act.send(f"{m}F2")
@@ -94,8 +95,10 @@ class GlobalConfig(AbstractConfig):
 
         global_keymap["U3-F"] = act.send("C-A-Tab")
 
-        global_keymap["U3-G"] = act.send("W-C-Left")
-        global_keymap["U3-H"] = act.send("W-C-Right")
+        global_keymap["U3-S"] = act.send("W-C-Left")
+        global_keymap["U3-D"] = act.send("W-C-Right")
+        global_keymap["U3-W"] = act.send("W-A-Left")
+        global_keymap["U3-E"] = act.send("W-A-Right")
 
         global_keymap["A-Tab"] = act.send("C-A-Tab")
 
