@@ -372,7 +372,7 @@ class WindowPlatform:
     def find_window(
         self,
         query: WindowQuery,
-        parent: Optional[WindowWin32],
+        parent: Optional[Window],
     ) -> WindowWin32:
         """
         queryに合致する最初のウィンドウを取得する
