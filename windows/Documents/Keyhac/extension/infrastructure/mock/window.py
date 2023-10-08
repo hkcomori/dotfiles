@@ -49,6 +49,9 @@ class WindowMock(Window):
         self.ime_enabled = False
         return True
 
+    def close(self) -> bool:
+        return True
+
 
 class WindowServiceMock(WindowService):
     def from_id(self, window_id: WindowId) -> 'Window':

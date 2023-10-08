@@ -1,4 +1,5 @@
 import enum
+from typing import Final
 from ctypes import (    # type: ignore  # noqa: F401
     windll,             # type: ignore
     WINFUNCTYPE,        # type: ignore
@@ -23,6 +24,10 @@ from typing import (
 
 
 HWND = LONG
+
+WM_CLOSE: Final = 0x0010
+WM_SYSCOMMAND: Final = 0x0112
+SC_CLOSE: Final = 0xF060
 
 
 class HRESULT:

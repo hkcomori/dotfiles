@@ -247,6 +247,24 @@ class WindowActivateAction(Action):
             return wnd.activate()
 
 
+class WindowCloseAction(Action):
+    """ウィンドウを閉じる"""
+
+    def __init__(self, get_window_func: Callable[[], Window]):
+        self.get_window_func = get_window_func
+
+    def __hash__(self) -> int:
+        return hash(self.get_window_func)
+
+    def perform(self) -> bool:
+        try:
+            wnd = self.get_window_func()
+        except WindowNotFoundError:
+            return False
+        else:
+            return wnd.close()
+
+
 class MonitorOffAction(Action):
     """モニターをOFFにする"""
     @inject
@@ -329,6 +347,10 @@ class ActionService(Service):
     def activate_window(self) -> Action:
         """マウスカーソル下のウィンドウをアクティブにする"""
         return WindowActivateAction(self._window_service.from_pointer)
+
+    def close_window(self) -> Action:
+        """Winsowを閉じる"""
+        return WindowCloseAction(self._window_service.from_active)
 
     def turn_off_monitor(self) -> Action:
         """モニターの電源を切る"""

@@ -25,7 +25,7 @@ class OfficeConfig(AbstractConfig):
 
         excel_search.applying_func = act.ime_off()
 
-        office['F22'] = act.send('A-F4')
+        office['F22'] = act.close_window()
 
         outlook_main['C-E'] = act.send('C-E') + act.ime_off()
 
@@ -33,7 +33,7 @@ class OfficeConfig(AbstractConfig):
         outlook_child['C-F'] = act.send('F4')
 
         # Close message window by pressing both back and forward
-        outlook_child['F22'] = act.send('A-F4')
+        outlook_child['F22'] = act.close_window()
 
         outlook_child['XButton1'] = act.send('C-S-Comma')
         outlook_child['XButton2'] = act.send('C-S-Period')

@@ -136,6 +136,11 @@ class Window(Entity):
         """IMEをOFFにする"""
         raise NotImplementedError
 
+    @abstractmethod
+    def close(self) -> bool:
+        """Windowを閉じる"""
+        raise NotImplementedError
+
 
 class WindowService(Service):
     """ウィンドウを取得するためのインターフェース"""

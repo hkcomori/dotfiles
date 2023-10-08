@@ -13,6 +13,7 @@ class GlobalConfig(AbstractConfig):
         global_keymap["Insert"] = act.nop()
 
         global_keymap["F19"] = act.activate_window() + act.trigger("F22")
+        global_keymap["F22"] = act.close_window()
         mods = ['C', 'A', 'S', 'W', 'U0', 'U1', 'U2', 'U3']
         for n in range(1, len(mods) + 1):
             for c in combinations(mods, n):

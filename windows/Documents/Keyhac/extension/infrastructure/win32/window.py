@@ -35,6 +35,9 @@ from extension.domain.window import (
 )
 from .share import (
     SystemError,
+    WM_CLOSE,
+    WM_SYSCOMMAND,
+    SC_CLOSE,
     POINT,
     BOOL,
     LPARAM,
@@ -65,6 +68,7 @@ from .share import (
     GetCursorPos,
     AttachThreadInput,
     ImmGetDefaultIMEWnd,
+    PostMessage,
 )
 
 
@@ -204,6 +208,26 @@ class WindowWin32(Window):
     def ime_off(self) -> bool:
         ime = IME(self.window_id)
         ime.status = IME.Status.OFF
+        return True
+
+    def close(self) -> bool:
+        ignores = tuple((
+            WindowQuery('explorer.exe', 'SysListView32', 'FolderView'),
+        ))
+        if any((w.match(self) for w in ignores)):
+            return False
+
+        platform = WindowPlatform()
+        garbages = tuple(
+            platform.find_ancestor_window(WindowQuery('explorer.exe', 'CabinetWClass'), self),
+        )
+
+        SendMessage(self.window_id.value, WM_CLOSE, 0, 0)
+
+        wnd = WindowServiceWin32().from_active()
+        if any((w == wnd for w in garbages)):
+            SendMessage(wnd.window_id.value, WM_CLOSE, 0, 0)
+
         return True
 
     @property
@@ -429,6 +453,22 @@ class WindowPlatform:
             if parent is None:
                 break
             yield parent
+
+    def find_ancestor_window(
+        self,
+        query: WindowQuery,
+        child: Window,
+    ) -> Iterator[WindowWin32]:
+        """
+        queryに合致する最初の祖先ウィンドウを取得する
+
+        @param query    検索条件
+        @param child    子ウィンドウ
+        @return         queryに合致した最初のウィンドウ
+        """
+        for w in self.get_ancestors_of(child):
+            if query.match(w):
+                yield w
 
     def get_origin_of(self, wnd: Window) -> Optional[WindowWin32]:
         """

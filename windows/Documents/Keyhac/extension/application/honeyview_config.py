@@ -11,4 +11,4 @@ class HoneyviewConfig(AbstractConfig):
         ))
 
         # Close window
-        honeyview['F22'] = act.send('C-W')
+        honeyview['F22'] = act.close_window()

@@ -11,4 +11,4 @@ class CalculatorConfig(AbstractConfig):
             class_name='Windows.UI.Core.CoreWindow',
             window_text='電卓',
         ))
-        explorer['F22'] = act.send('A-F4')
+        explorer['F22'] = act.close_window()
