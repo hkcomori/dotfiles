@@ -9,6 +9,10 @@ class GlobalConfig(AbstractConfig):
         act = self._action_service
 
         global_keymap = self._keymap_service.from_query(WindowQuery())
+        global_keymap.replace('MediaPrevTrack', 'BrowserSearch')
+        global_keymap.replace('MediaPlay', 'BrowserSearch')
+        global_keymap.replace('MediaStop', 'LaunchApp2')
+        global_keymap.replace('VolumeMute', 'MediaPlay')
 
         global_keymap["Insert"] = act.nop()
 
@@ -100,13 +104,19 @@ class GlobalConfig(AbstractConfig):
         global_keymap["U3-W"] = act.send("W-A-Left")
         global_keymap["U3-E"] = act.send("W-A-Right")
 
-        global_keymap["U3-F9"] = act.send('MediaPlay')
-        global_keymap["U3-F10"] = act.send('VolumeMute')
+        global_keymap["U3-F6"] = act.send('BrowserSearch')
+        global_keymap["U3-F7"] = act.send('BrowserSearch')
+        global_keymap["U3-F8"] = act.launch_obsidian()
+        global_keymap["U3-F9"] = act.launch_calc()
+        global_keymap["U3-F10"] = act.send('MediaPlay')
         global_keymap["U3-F11"] = act.send('VolumeDown')
         global_keymap["U3-F12"] = act.send('VolumeUp')
 
-        global_keymap["U0-F9"] = act.send("MediaPlay")
-        global_keymap["U0-F10"] = act.send("VolumeMute")
+        global_keymap["U0-F6"] = act.send('BrowserSearch')
+        global_keymap["U0-F7"] = act.send('BrowserSearch')
+        global_keymap["U0-F8"] = act.launch_obsidian()
+        global_keymap["U0-F9"] = act.launch_calc()
+        global_keymap["U0-F10"] = act.send("MediaPlay")
         global_keymap["U0-F11"] = act.send("VolumeDown")
         global_keymap["U0-F12"] = act.send("VolumeUp")
 
@@ -143,6 +153,9 @@ class GlobalConfig(AbstractConfig):
         global_keymap["W-D"] = act.open_documents()
         global_keymap["W-O"] = act.open_onedrive()
 
-        global_keymap["W-F11"] = act.launch_obsidian()
-        global_keymap["W-F12"] = act.launch_calc()
+        global_keymap["W-F6"] = act.send('BrowserSearch')
+        global_keymap["W-F7"] = act.send('BrowserSearch')
+        global_keymap["W-F8"] = act.launch_obsidian()
+        global_keymap["W-F9"] = act.launch_calc()
+        global_keymap["MediaNextTrack"] = act.launch_obsidian()
         global_keymap["LaunchApp2"] = act.launch_calc()
