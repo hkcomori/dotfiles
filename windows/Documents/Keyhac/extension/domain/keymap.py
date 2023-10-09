@@ -26,6 +26,10 @@ class KeymapRegistry(Repository):
     def __setitem__(self, key: str, action: Action):
         raise NotImplementedError
 
+    @abstractmethod
+    def update(self) -> None:
+        raise NotImplementedError
+
     @property
     @abstractmethod
     def applying_func(self):
@@ -54,6 +58,10 @@ class KeymapRegistryGroup(KeymapRegistry):
     def __setitem__(self, key: str, action: Action):
         for reg in self._regs:
             reg[key] = action
+
+    def update(self) -> None:
+        for reg in self._regs:
+            reg.update()
 
     @property
     def applying_func(self):
