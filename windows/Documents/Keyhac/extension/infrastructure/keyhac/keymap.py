@@ -29,6 +29,11 @@ class KeymapRegistryKeyhac(KeymapRegistry):
         input = Input(key)
         self._window_keymap[input.value] = action.value
 
+    def replace(self, src: str, dst: str) -> None:
+        src_ = Input(src).value
+        dst_ = Input(dst).value
+        return self._keymap.replaceKey(src_, dst_)
+
     def update(self) -> None:
         self._keymap.updateKeymap()
 

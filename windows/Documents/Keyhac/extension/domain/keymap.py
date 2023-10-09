@@ -27,6 +27,10 @@ class KeymapRegistry(Repository):
         raise NotImplementedError
 
     @abstractmethod
+    def replace(self, src: str, dst: str) -> None:
+        raise NotImplementedError
+
+    @abstractmethod
     def update(self) -> None:
         raise NotImplementedError
 
@@ -58,6 +62,10 @@ class KeymapRegistryGroup(KeymapRegistry):
     def __setitem__(self, key: str, action: Action):
         for reg in self._regs:
             reg[key] = action
+
+    def replace(self, src: str, dst: str) -> None:
+        for reg in self._regs:
+            reg.replace(src, dst)
 
     def update(self) -> None:
         for reg in self._regs:
