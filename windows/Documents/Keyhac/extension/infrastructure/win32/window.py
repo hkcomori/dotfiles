@@ -7,6 +7,7 @@ from ctypes import (
     sizeof,
     create_unicode_buffer,
 )
+import itertools
 from threading import currentThread
 from typing import (
     Generic,
@@ -218,9 +219,10 @@ class WindowWin32(Window):
             return False
 
         platform = WindowPlatform()
-        garbages = tuple(
+        garbages = tuple(itertools.chain(
             platform.find_ancestor_window(WindowQuery('explorer.exe', 'CabinetWClass'), self),
-        )
+            platform.find_ancestor_window(WindowQuery('OUTLOOK.EXE', 'rctrl_renwnd32'), self),
+        ))
 
         SendMessage(self.window_id.value, WM_CLOSE, 0, 0)
 
