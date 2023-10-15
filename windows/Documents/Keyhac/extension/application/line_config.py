@@ -12,3 +12,4 @@ class LineConfig(AbstractConfig):
         ))
 
         line_main['C-Enter'] = act.send('A-Enter')
+        line_main['U3-C-M'] = act.send('A-Enter')
