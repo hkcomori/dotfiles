@@ -51,6 +51,9 @@ class GlobalConfig(AbstractConfig):
         global_keymap["C-A-K"] = act.send("C-A-Down")
         global_keymap["C-A-L"] = act.send("C-A-Right")
 
+        # Emoji
+        global_keymap[f"U3-Period"] = act.send(f"W-Period")
+
         mods = ['', 'C-', 'A-', 'S-']
         for comb in chain(*(
             combinations(mods, i)
@@ -98,6 +101,7 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}O"] = act.send(f"C-{m}Right")
 
         global_keymap["U3-F"] = act.send("C-A-Tab")
+        global_keymap["U3-S-F"] = act.send("C-A-S-Tab")
 
         global_keymap["U3-S"] = act.send("W-C-Left")
         global_keymap["U3-D"] = act.send("W-C-Right")
