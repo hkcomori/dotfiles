@@ -76,7 +76,7 @@ class GlobalConfig(AbstractConfig):
             global_keymap[f"U3-{m}Colon"] = act.send(f"{m}Delete")
 
             global_keymap[f"U3-{m}Q"] = act.send(f"{m}Escape")
-            global_keymap[f"U3-{m}A"] = act.send(f"{m}Aapps")
+            global_keymap[f"U3-{m}A"] = act.send(f"{m}Apps")
 
             global_keymap[f"U3-{m}1"] = act.send(f"{m}F1")
             global_keymap[f"U3-{m}2"] = act.send(f"{m}F2")
