@@ -30,6 +30,7 @@ class GlobalConfig(AbstractConfig):
 
         global_keymap["BackSlash"] = act.send("S-BackSlash")
 
+        global_keymap["O-Apps"] = act.send('Apps')
         global_keymap["O-Kana"] = act.send('Kana')
         global_keymap["O-Henkan"] = act.send('Henkan')
         global_keymap["O-Muhenkan"] = act.send('Muhenkan')
