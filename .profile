@@ -63,5 +63,4 @@ export ANSIBLE_ENABLE_TASK_DEBUGGER=yes
 export ANSIBLE_COLLECTIONS_PATHS=./.ansible/collections:~/.ansible/collections:/usr/share/ansible/collections
 export ANSIBLE_ROLES_PATH=./.ansible/roles:~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
 
-gpgconf --launch gpg-agent
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
