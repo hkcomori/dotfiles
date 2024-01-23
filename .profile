@@ -33,11 +33,6 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
-# ensure ramdisk for user
-if [ ! -d "/run/shm/user/$(whoami)" ] ; then
-    mkdir -p "/run/shm/user/$(whoami)"
-fi
-
 if [ -d "$HOME/.fly" ] ; then
     export FLYCTL_INSTALL="$HOME/.fly"
     export PATH="$FLYCTL_INSTALL/bin:$PATH"
