@@ -55,7 +55,7 @@ if which wslpath &>/dev/null; then
 fi
 
 export ANSIBLE_ENABLE_TASK_DEBUGGER=yes
-export ANSIBLE_COLLECTIONS_PATHS=./.ansible/collections:~/.ansible/collections:/usr/share/ansible/collections
+export ANSIBLE_COLLECTIONS_PATH=./.ansible/collections:~/.ansible/collections:/usr/share/ansible/collections
 export ANSIBLE_ROLES_PATH=./.ansible/roles:~/.ansible/roles:/usr/share/ansible/roles:/etc/ansible/roles
 
 export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
