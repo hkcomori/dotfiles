@@ -1,0 +1,12 @@
+[Unit]
+Description=Ensure ssh tunnel
+Requires=gpg-agent.service
+After=gpg-agent.service
+
+[Service]
+ExecStart=/usr/bin/ssh -NT %i
+RestartSec=3
+Restart=always
+
+[Install]
+WantedBy=default.target
