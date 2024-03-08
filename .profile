@@ -33,6 +33,9 @@ if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# set PATH so it includes project's private bin
+PATH=".venv/bin:$PATH"
+
 if [ -d "$HOME/.fly" ] ; then
     export FLYCTL_INSTALL="$HOME/.fly"
     export PATH="$FLYCTL_INSTALL/bin:$PATH"
