@@ -9,6 +9,5 @@ ensure_link \
     .config/flake8 \
     .config/pep8
 
-autopep8 --version && flake8 --version && mypy --version && exit 0
-sudo apt-get install -y python3 python3-pip
-sudo -HE pip3 install autopep8 flake8 mypy poetry pytest tox
+sudo apt-get install -y python3-dev python3-venv python3.11-dev python3.11-venv
+sudo update-alternatives --install /usr/bin/python python "$(which python3.11)" 1
