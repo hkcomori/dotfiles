@@ -1,0 +1,8 @@
+[Unit]
+Description=Send magick packets
+
+[Timer]
+OnCalendar=Mon,Tue,Wed,Thu,Fri 08:30
+
+[Install]
+WantedBy=timers.target

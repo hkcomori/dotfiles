@@ -1,0 +1,9 @@
+[Unit]
+Description=Send magick packets
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/wakeonlan %i
+
+[Install]
+WantedBy=default.target
