@@ -1,0 +1,23 @@
+#!/bin/bash
+#
+# Backup Obsidian
+#
+# Backup Obsidian files to cloud storage.
+# Files are encrypted with a public key then sent to cloud.
+#
+# Environments:
+#   BACKUP_DIR    Directory to mount cloud storage
+#   OBSIDIAN_DIR  Obsidian vault directory
+
+set -euo pipefail
+
+for dir in "${BACKUP_DIR}" "${OBSIDIAN_DIR}"; do
+  if [[ ! -d "${dir}" ]]; then
+    echo "Directory not found: '${dir}'" >&2
+    exit 1
+  fi
+done
+
+dest="${BACKUP_DIR}/obsidian_backup.tar.gz.gpg"
+
+tar -cvzf - -C "${OBSIDIAN_DIR}" ./ | gpg -e > "${dest}"

@@ -1,0 +1,10 @@
+[Unit]
+Description=Backup
+
+[Service]
+Type=oneshot
+EnvironmentFile=%h/.local/etc/backup/env
+ExecStart=%h/.local/bin/backup_%i
+
+[Install]
+WantedBy=default.target
