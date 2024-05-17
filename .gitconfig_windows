@@ -1,0 +1,4 @@
+[core]
+	filemode = false
+	editor = "code --wait"
+	ignorecase = false

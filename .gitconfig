@@ -39,11 +39,27 @@
 	fe = fetch
 	pl = pull
 	st = status
+
+# Machine specified configuration
+[includeIf "gitdir:"]
+	path = ~/.gitconfig_local
+
+# Global scope configuration for Windows
+[includeIf "gitdir/i:C:/"]
+	path = ~/.gitconfig_windows
+[includeIf "gitdir/i:D:/"]
+	path = ~/.gitconfig_windows
+
+# Repository scope configuration
 [includeIf "gitdir:~/repos/"]
 	path = ~/repos/.gitconfig
 [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir:~/mnt/"]
-	path = ~/mnt/.gitconfig
-[includeIf "gitdir:/mnt/"]
-	path = ~/mnt/.gitconfig
+[includeIf "gitdir/i:C:/**/repos/"]
+	path = ~/repos/.gitconfig
+[includeIf "gitdir/i:D:/**/repos/"]
+	path = ~/repos/.gitconfig
+[includeIf "gitdir/i:C:/**/work/"]
+	path = ~/work/.gitconfig
+[includeIf "gitdir/i:D:/**/work/"]
+	path = ~/work/.gitconfig
