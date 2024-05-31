@@ -32,10 +32,6 @@ class BrowserConfig(AbstractConfig):
         browser['C-F22'] = act.send('C-T')
         browser['S-F22'] = act.send('C-S-T')
 
-        # Switch tabs by wheel
-        browser['C-WheelUp'] = act.activate_window() + act.send('C-S-Tab')
-        browser['C-WheelDown'] = act.activate_window() + act.send('C-Tab')
-
         devtools = (
             self._keymap_service.from_query(WindowQuery(exe_name='msedge.exe', window_text='DevTools - *'))             # noqa: W503
             + self._keymap_service.from_query(WindowQuery(exe_name='chrome.exe', window_text='DevTools - *'))           # noqa: W503
