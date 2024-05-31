@@ -6,10 +6,10 @@ which wslpath &>/dev/null || exit 0
 OneDrive=${HOME}/OneDrive pytest windows/Documents/Keyhac/tests
 
 WIN_APPDATA_DIR="$(powershell.exe -Command '[Environment]::GetFolderPath("ApplicationData")' | sed -e 's/\r//g')"
-WSL_APPDATA_DIR="$(wslpath "${WIN_APPDATA_DIR}")"
+WSL_APPDATA_DIR="$(wslpath "${WIN_APPDATA_DIR}" | iconv -f sjis -t utf8 -)"
 
 WIN_DOCUMENTS_DIR="$(powershell.exe -Command '[Environment]::GetFolderPath("MyDocuments")' | sed -e 's/\r//g')"
-WSL_DOCUMENTS_DIR="$(wslpath "${WIN_DOCUMENTS_DIR}")"
+WSL_DOCUMENTS_DIR="$(wslpath "${WIN_DOCUMENTS_DIR}" | iconv -f sjis -t utf8 -)"
 
 echo [Install Keyhac config]
 
