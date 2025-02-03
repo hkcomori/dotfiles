@@ -27,7 +27,7 @@ ensure_copy() {
     for file; do
         ensure_intermediate_dir "${file}" "${HOME}"
         target="${HOME}"/"${file}"
-        cp --preserve=mode -nv "$(pwd)"/"${file}" "${target}"
+        cp --preserve=mode --update=none -v "$(pwd)"/"${file}" "${target}"
     done
 }
 
