@@ -39,6 +39,9 @@
 	fe = fetch
 	pl = pull
 	st = status
+[credential]
+	helper = cache --timeout 15552000
+	helper = git-credential-manager
 
 # Machine specified configuration
 [includeIf "gitdir:"]

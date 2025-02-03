@@ -15,3 +15,10 @@ ensure_copy \
 
 sudo apt-get install -y \
     git
+
+if command -v "git-credential-manager" > /dev/null 2>&1; then
+    echo git-credential-manager is already installed
+else
+    dotnet tool install -g \
+        git-credential-manager
+fi
