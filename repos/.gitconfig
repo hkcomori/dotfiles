@@ -1,8 +1,0 @@
-[commit]
-    gpgsign = true
-[user]
-    name = hkcomori
-    email = hkcomori@gmail.com
-    signingkey = 68D41F010773460C
-[gpg]
-    program = gpg

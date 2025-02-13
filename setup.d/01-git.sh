@@ -6,8 +6,7 @@ umask 022
 export DEBIAN_FRONTEND=noninteractive
 
 ensure_link \
-    .gitconfig \
-    repos/.gitconfig
+    .gitconfig
 
 ensure_copy \
     work/.gitkeep \

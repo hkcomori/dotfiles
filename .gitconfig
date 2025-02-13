@@ -1,3 +1,11 @@
+[commit]
+    gpgsign = true
+[user]
+    name = hkcomori
+    email = hkcomori@gmail.com
+    signingkey = 68D41F010773460C
+[gpg]
+    program = gpg
 [core]
 	autocrlf = false
 	filemode = true
@@ -56,14 +64,8 @@
 	path = ~/.gitconfig_windows
 
 # Repository scope configuration
-[includeIf "gitdir:~/repos/"]
-	path = ~/repos/.gitconfig
 [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir/i:C:/**/repos/"]
-	path = ~/repos/.gitconfig
-[includeIf "gitdir/i:D:/**/repos/"]
-	path = ~/repos/.gitconfig
 [includeIf "gitdir/i:C:/**/work/"]
 	path = ~/work/.gitconfig
 [includeIf "gitdir/i:D:/**/work/"]
