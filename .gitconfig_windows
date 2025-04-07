@@ -1,3 +1,5 @@
+[commit]
+    gpgsign = false
 [core]
 	filemode = false
 	editor = "code --wait"
