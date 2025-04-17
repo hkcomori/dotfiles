@@ -9,14 +9,12 @@ sudo apt-get install -y \
     nodejs \
     npm
 
-# Install packages in your home directory with `npm install -g`
-ln -sr ~/.local/lib/node_modules ~/.node_modules
+npm --prefix="$HOME/.local" config -g set prefix "$HOME/.local"
 
 npm install -g n
-n stable
+N_PREFIX="$HOME/.local" n stable
 
 sudo apt-get purge -y \
     nodejs \
     npm
 
-npm config set prefix "$HOME/.local"

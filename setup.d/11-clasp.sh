@@ -2,4 +2,4 @@
 
 umask 022
 
-sudo npm install @google/clasp --location=global
+npm install -g @google/clasp
