@@ -58,13 +58,3 @@ fi
 if [ -f ~/.zsh.d/prompt ]; then
     source ~/.zsh.d/prompt
 fi
-
-# Search history by peco
-if which peco &>/dev/null; then
-    peco-select-history () {
-        BUFFER=$(peco_history)
-        CURSOR=$#BUFFER
-    }
-    zle -N peco-select-history
-    bindkey '^r' peco-select-history
-fi

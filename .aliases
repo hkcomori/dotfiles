@@ -30,23 +30,6 @@ alias umount='fusermount -u'
 
 alias g='git'
 
-# Change directory by search
-peco_cd() {
-    cd "$(find "${1:-.}" -type d -maxdepth 5 2>/dev/null | peco)" || return
-}
-alias pcd='peco_cd'
-
-peco_history() {
-    history -n -r 1 | peco --layout=bottom-up --query "$1"
-}
-alias ph='$(peco_history)'
-
-# Kill processes by search
-kill() {
-    # shellcheck disable=SC2068
-    builtin kill ${@:-$(ps afhx -o user,pid,%cpu,%mem,command | peco | tr -s ' ' | awk '{print $2; system("cat /proc/" $2 "/cmdline 2>/dev/null | xargs -0 echo killed: " $2 ": >&2")}')}
-}
-
 # GnuPG aliases
 alias encrypt='gpg -es'
 alias decrypt='gpg -d'
