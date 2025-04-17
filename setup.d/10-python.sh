@@ -9,5 +9,5 @@ ensure_link \
     .config/flake8 \
     .config/pep8
 
-sudo apt-get install -y python3-dev python3-venv python3.11-dev python3.11-venv
-sudo update-alternatives --install /usr/bin/python python "$(which python3.11)" 1
+sudo apt-get install -y python3-dev python3-venv python3.12-dev python3.12-venv
+sudo update-alternatives --install /usr/bin/python python "$(which python3.12)" 1
