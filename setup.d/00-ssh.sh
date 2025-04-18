@@ -8,6 +8,7 @@ export DEBIAN_FRONTEND=noninteractive
 ensure_link \
     .gnupg/gpg-agent.conf \
     .gnupg/gpg.conf \
+    .gnupg/sshcontrol \
     .ssh/config
 
 ensure_copy \
