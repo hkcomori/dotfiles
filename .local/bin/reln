@@ -1,0 +1,67 @@
+#!/bin/bash
+
+# Script to re-create symbolic links using relative paths.
+
+set -euo pipefail
+
+usage() {
+    echo "Usage: $(basename "$0") LINK [LINK2...]"
+    echo ""
+    echo "Re-create symlinks by relative path."
+    echo ""
+    echo "Example:"
+    echo "  $(basename "$0") /path/to/a /path/to/b"
+    echo ""
+    echo "  Before run:"
+    echo "    /path/to/a -> /path/to/sub1/a"
+    echo "    /path/to/b -> /path/to/sub2/b"
+    echo "  After run:"
+    echo "    /path/to/a -> sub1/a"
+    echo "    /path/to/b -> sub2/b"
+    exit 1
+}
+
+# Check if at least one path is provided as a non-option argument
+if [ $# -eq 0 ]; then
+    echo "Error: No symbolic link paths provided." >&2
+    usage
+fi
+
+# Process each provided path
+for symlink_path in "$@"; do
+    if [ ! -L "$symlink_path" ]; then
+        echo "Warning: '$symlink_path' is not a symbolic link or does not exist. Skipping." >&2
+        continue
+    fi
+
+    current_target=$(readlink "$symlink_path")
+
+    # Check if readlink command was successful
+    if [ $? -ne 0 ]; then
+        echo "Error: Could not read the target of symbolic link '$symlink_path'." >&2
+        exit 1
+    fi
+
+    symlink_dir=$(dirname "$symlink_path")
+    relative_target=$(realpath --relative-to="$symlink_dir" "$current_target")
+
+    if [ $? -ne 0 ]; then
+        echo "Error: Could not calculate the relative path for '$symlink_path' -> '$current_target'." >&2
+        exit 1
+    fi
+
+    if [ "$relative_target" == "$current_target" ]; then
+        echo "Already relative symlink '$symlink_path' -> '$current_target'"
+        continue
+    fi
+
+    if ! ln -Fs "$relative_target" "$symlink_path"; then
+        echo "Error: Could not create the new symbolic link '$symlink_path' -> '$relative_target'." >&2
+        exit 1
+    fi
+
+    # Report successful re-creation
+    echo "Successfully re-created symlink '$symlink_path' -> '$relative_target'"
+done
+
+exit 0
