@@ -1,0 +1,8 @@
+[Unit]
+Description=Backup user data
+
+[Timer]
+OnCalendar=Mon,Tue,Wed,Thu,Fri 07:00
+
+[Install]
+WantedBy=timers.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Backup user data
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/runenv %h/.config/runenv.d/user-backup.conf
+
+[Install]
+WantedBy=default.target
