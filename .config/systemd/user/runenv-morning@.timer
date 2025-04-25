@@ -1,0 +1,9 @@
+[Unit]
+Description=Run commands defined in the external conf file at morning
+
+[Timer]
+OnCalendar=*-*-* 07:00
+RandomizedDelaySec=30m
+
+[Install]
+WantedBy=timers.target

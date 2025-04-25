@@ -1,0 +1,9 @@
+[Unit]
+Description=Run commands defined in the external conf file
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/runenv %h/.config/runenv.d/%i.conf
+
+[Install]
+WantedBy=default.target
