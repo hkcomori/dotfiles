@@ -1,8 +1,0 @@
-[Unit]
-Description=Backup system settings
-
-[Timer]
-OnCalendar=Mon,Tue,Wed,Thu,Fri 08:00
-
-[Install]
-WantedBy=timers.target
