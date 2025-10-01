@@ -1,5 +1,5 @@
 [Unit]
-Description=Run commands defined in the external conf file at morning
+Description=Snapshot defined in the external conf file at morning
 
 [Timer]
 OnCalendar=*-*-* 07:00

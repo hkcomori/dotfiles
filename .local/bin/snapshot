@@ -4,4 +4,4 @@ set -euo pipefail
 
 mapfile -t cmdline < <(envsubst < "$1")
 
-"${cmdline[@]}"
+tar -czPvf "${cmdline[@]}"

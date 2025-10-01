@@ -3,13 +3,13 @@
 . "$(dirname "$0")"/lib.sh
 
 ensure_link \
-    .local/bin/runenv \
-    .config/systemd/user/runenv@.service \
-    .config/systemd/user/runenv-morning@.timer \
+    .local/bin/snapshot \
+    .config/systemd/user/snapshot@.service \
+    .config/systemd/user/snapshot-morning@.timer \
     .config/systemd/user/ssh-tunnel@.service
 
-ln -fFs runenv@.service $HOME/.config/systemd/user/runenv-morning@.service
+ln -fFs snapshot@.service $HOME/.config/systemd/user/snapshot-morning@.service
 
 mkdir -p \
     "$HOME/.config/environment.d" \
-    "$HOME/.config/runenv.d"
+    "$HOME/.config/snapshot.d"
