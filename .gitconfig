@@ -71,3 +71,7 @@
 	path = ~/work/.gitconfig
 [includeIf "gitdir/i:D:/**/work/"]
 	path = ~/work/.gitconfig
+[includeIf "gitdir/i:/mnt/c/**/work/"]
+	path = ~/work/.gitconfig
+[includeIf "gitdir/i:/mnt/d/**/work/"]
+	path = ~/work/.gitconfig
