@@ -8,7 +8,7 @@ ensure_link \
     .config/systemd/user/runenv-morning@.timer \
     .config/systemd/user/ssh-tunnel@.service
 
-ln -Fs runenv@.service $HOME/.config/systemd/user/runenv-morning@.service
+ln -fFs runenv@.service $HOME/.config/systemd/user/runenv-morning@.service
 
 mkdir -p \
     "$HOME/.config/environment.d" \
