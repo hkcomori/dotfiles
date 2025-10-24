@@ -67,11 +67,11 @@
 # Repository scope configuration
 [includeIf "gitdir:~/work/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir/i:C:/**/work/"]
+[includeIf "gitdir/i:C:/Users/*.*/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir/i:D:/**/work/"]
+[includeIf "gitdir/i:D:/*.*/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir/i:/mnt/c/**/work/"]
+[includeIf "gitdir/i:/mnt/c/Users/*.*/"]
 	path = ~/work/.gitconfig
-[includeIf "gitdir/i:/mnt/d/**/work/"]
+[includeIf "gitdir/i:/mnt/d/*.*/"]
 	path = ~/work/.gitconfig
