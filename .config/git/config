@@ -56,22 +56,22 @@
 
 # Machine specified configuration
 [includeIf "gitdir:"]
-	path = ~/.gitconfig_local
+	path = ~/.config/git/local
 
 # Global scope configuration for Windows
 [includeIf "gitdir/i:C:/"]
-	path = ~/.gitconfig_windows
+	path = ~/.config/git/windows
 [includeIf "gitdir/i:D:/"]
-	path = ~/.gitconfig_windows
+	path = ~/.config/git/windows
 
 # Repository scope configuration
 [includeIf "gitdir:~/work/"]
-	path = ~/work/.gitconfig
+	path = ~/.config/git/work
 [includeIf "gitdir/i:C:/Users/*.*/"]
-	path = ~/work/.gitconfig
+	path = ~/.config/git/work
 [includeIf "gitdir/i:D:/*.*/"]
-	path = ~/work/.gitconfig
+	path = ~/.config/git/work
 [includeIf "gitdir/i:/mnt/c/Users/*.*/"]
-	path = ~/work/.gitconfig
+	path = ~/.config/git/work
 [includeIf "gitdir/i:/mnt/d/*.*/"]
-	path = ~/work/.gitconfig
+	path = ~/.config/git/work
