@@ -11,7 +11,7 @@ ensure_link() {
     for file; do
         ensure_intermediate_dir "${file}" "${HOME}"
         target="${HOME}"/"${file}"
-        [ -e "${target}" ] || ln -sTv "$(pwd)"/"${file}" "${target}"
+        [ -L "${target}" ] || ln -fsTv "$(pwd)"/"${file}" "${target}"
         chmod -v "$(stat -c '%a' "${file}")" "${target}"
     done
 }
