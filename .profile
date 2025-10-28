@@ -36,6 +36,9 @@ fi
 # set PATH so it includes project's private bin
 PATH=".venv/bin:$PATH"
 
+# Remove trailing slash in XDG_RUNTIME_DIR (for WSL)
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR%/}"
+
 if [ -d "$HOME/.fly" ] ; then
     export FLYCTL_INSTALL="$HOME/.fly"
     export PATH="$FLYCTL_INSTALL/bin:$PATH"
