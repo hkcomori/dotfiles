@@ -15,6 +15,16 @@ if which code &>/dev/null; then
     export EDITOR='code -w'
 fi
 
+# Load profiles for each environment (not managed in this repository)
+if [ -d "$HOME/.config/profile.d" ]; then
+    for i in "$HOME/.config/profile.d/"*.sh; do
+        if [ -r $i ]; then
+            . $i
+        fi
+    done
+    unset i
+fi
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
