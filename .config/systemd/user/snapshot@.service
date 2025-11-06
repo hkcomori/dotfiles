@@ -3,6 +3,7 @@ Description=Snapshot defined in the external conf file
 
 [Service]
 Type=oneshot
+ExecStartPre=run-parts -v --exit-on-error --regex '\\.env\\.sh$' %h/.config/snapshot.d
 ExecStart=%h/.local/bin/snapshot %h/.config/snapshot.d/%i.conf
 
 [Install]

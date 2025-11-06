@@ -4,6 +4,7 @@
 
 ensure_link \
     .local/bin/snapshot \
+    .config/snapshot.d/windows.env.sh \
     .config/systemd/user/snapshot@.service \
     .config/systemd/user/snapshot-morning@.timer \
     .config/systemd/user/ssh-tunnel@.service
