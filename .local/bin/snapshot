@@ -4,4 +4,4 @@ set -euo pipefail
 
 mapfile -t cmdline < <(envsubst < "$1")
 
-tar -czPvf "${cmdline[@]}"
+tar --ignore-failed-read -czPvf "${cmdline[@]}"
