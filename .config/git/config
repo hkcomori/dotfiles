@@ -1,11 +1,3 @@
-[commit]
-    gpgsign = true
-[user]
-    name = hkcomori
-    email = hkcomori@gmail.com
-    signingkey = 68D41F010773460C
-[gpg]
-    program = gpg
 [core]
 	autocrlf = false
 	filemode = true
@@ -55,23 +47,27 @@
 	cacheOptions  = "--timeout 15552000"
 
 # Machine specified configuration
-[includeIf "gitdir:"]
-	path = ~/.config/git/local
+[include]
+	path = ~/.config/git/local.conf
 
-# Global scope configuration for Windows
+# Repository scope configuration based of local condition
 [includeIf "gitdir/i:C:/"]
-	path = ~/.config/git/windows
+	path = ~/.config/git/windows.conf
 [includeIf "gitdir/i:D:/"]
-	path = ~/.config/git/windows
+	path = ~/.config/git/windows.conf
+[includeIf "gitdir/i:/mnt/c/"]
+	path = ~/.config/git/windows.conf
+[includeIf "gitdir/i:/mnt/d/"]
+	path = ~/.config/git/windows.conf
 
-# Repository scope configuration
-[includeIf "gitdir:~/work/"]
-	path = ~/.config/git/work
-[includeIf "gitdir/i:C:/Users/*.*/"]
-	path = ~/.config/git/work
-[includeIf "gitdir/i:D:/*.*/"]
-	path = ~/.config/git/work
-[includeIf "gitdir/i:/mnt/c/Users/*.*/"]
-	path = ~/.config/git/work
-[includeIf "gitdir/i:/mnt/d/*.*/"]
-	path = ~/.config/git/work
+# Repository scope configuration based on remote url
+[includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
+	path = ~/.config/git/hkcomori.conf
+[includeIf "hasconfig:remote.*.url:https://github.com/**"]
+	path = ~/.config/git/hkcomori.conf
+[includeIf "hasconfig:remote.*.url:git@totoro:*/**"]
+	# It matches `git@totoro:user/repo.git` but does not match `git@totoro:repo.git`
+	path = ~/.config/git/work.conf
+[includeIf "hasconfig:remote.*.url:git@totoro:**"]
+	# It matches `git@totoro:repo.git` but does not match `git@totoro:user/repo.git`
+	path = ~/.config/git/work.conf

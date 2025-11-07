@@ -6,7 +6,8 @@ umask 022
 export DEBIAN_FRONTEND=noninteractive
 
 ensure_link \
-    .config/git/windows \
+    .config/git/hkcomori.conf \
+    .config/git/windows.conf \
     .config/git/config
 
 ensure_copy \
