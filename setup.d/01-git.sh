@@ -6,6 +6,7 @@ umask 022
 export DEBIAN_FRONTEND=noninteractive
 
 ensure_link \
+    .config/git/delta.conf \
     .config/git/hkcomori.conf \
     .config/git/windows.conf \
     .config/git/config
@@ -15,6 +16,7 @@ ensure_copy \
     mnt/.gitkeep
 
 sudo apt-get install -y \
+    git-delta \
     git
 
 if command -v "git-credential-manager" > /dev/null 2>&1; then

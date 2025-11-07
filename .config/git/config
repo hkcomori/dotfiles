@@ -2,16 +2,8 @@
 	autocrlf = false
 	filemode = true
 	quotepath = false
-	pager = delta
 [init]
 	defaultBranch = main
-[interactive]
-	diffFilter = delta --color-only
-[delta]
-	navigate = true  # use n and N to move between diff sections
-	light = false    # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
-	side-by-side = true
-	line-numbers = false
 [diff]
 	algorithm = histogram
 [merge]
@@ -55,10 +47,16 @@
 	path = ~/.config/git/windows.conf
 [includeIf "gitdir/i:D:/"]
 	path = ~/.config/git/windows.conf
+[includeIf "gitdir:/"]
+	# Include delta configuration on Linux
+	# Dev container without delta support does not mount `delta.conf`, so it is excluded
+	path = ~/.config/git/delta.conf
 [includeIf "gitdir/i:/mnt/c/"]
 	path = ~/.config/git/windows.conf
+	path = ~/.config/git/delta.conf
 [includeIf "gitdir/i:/mnt/d/"]
 	path = ~/.config/git/windows.conf
+	path = ~/.config/git/delta.conf
 
 # Repository scope configuration based on remote url
 [includeIf "hasconfig:remote.*.url:git@github.com:*/**"]
