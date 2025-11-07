@@ -1,7 +1,7 @@
 [Unit]
 Description=Ensure ssh tunnel
-Requires=gpg-agent.service
-After=gpg-agent.service
+Requires=gpg-agent-ssh.socket
+After=gpg-agent-ssh.socket
 
 [Service]
 ExecStart=/usr/bin/ssh -NT %i
